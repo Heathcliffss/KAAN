@@ -7,38 +7,48 @@ public class MissileFollow : MonoBehaviour
     public float maxLifetime = 10f;
 
     private bool isTracking = true;
-    private Vector3 randomDirection;
+    private Vector3 moveDirection;
 
     void Start()
     {
         Destroy(gameObject, maxLifetime);
+
+        // İlk hareket yönü hedefe doğru
+        if (target != null)
+        {
+            moveDirection = (target.position - transform.position).normalized;
+        }
     }
 
     void Update()
     {
+        transform.position += moveDirection * speed * Time.deltaTime;
+
+        // Sadece izleme aktifken yönü hedefe çevir
         if (isTracking && target != null)
         {
-            // Hedefe doğru gider
-            Vector3 direction = (target.position - transform.position).normalized;
-            transform.position += direction * speed * Time.deltaTime;
-            transform.forward = Vector3.Lerp(transform.forward, direction, Time.deltaTime * 5f);
+            Vector3 targetDirection = (target.position - transform.position).normalized;
+            moveDirection = Vector3.Lerp(moveDirection, targetDirection, Time.deltaTime * 2f);
         }
-        else
-        {
-            // Artık hedefe gitmiyor, rastgele hareket ediyor
-            transform.position += randomDirection * speed * Time.deltaTime;
-            transform.forward = Vector3.Lerp(transform.forward, randomDirection, Time.deltaTime * 2f);
-        }
+
+        transform.forward = moveDirection;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == "HitArea")
+        if (other.CompareTag("HitArea") && isTracking)
         {
-            Debug.Log("🔄 Missile entered TrackingZone — stop tracking!");
-            isTracking = false;
-            randomDirection = Random.onUnitSphere;
-            randomDirection.y = Mathf.Clamp(randomDirection.y, -0.1f, 0.2f); // Uçuş yüksekliğini sınırlayarak daha iyi kontrol
+            float missChance = 0.3f;
+            if (Random.value < missChance)
+            {
+                Debug.Log("🚫 Missile lost tracking — will miss.");
+                isTracking = false;
+                // Mevcut yönünde devam et (moveDirection korunuyor)
+            }
+            else
+            {
+                Debug.Log("🎯 Missile continues tracking.");
+            }
         }
 
         if (other.CompareTag("Player"))
