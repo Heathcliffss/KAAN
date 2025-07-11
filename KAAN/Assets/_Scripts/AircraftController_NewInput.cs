@@ -1,74 +1,143 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class AircraftController_NewInput : MonoBehaviour
+[RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
+public class AircraftController_Takeoff : MonoBehaviour
 {
-    [Header("Movement Settings")]
-    public float forwardSpeed = 50f;
-    public float acceleration = 30f;
-    public float deceleration = 20f;
-    public float maxSpeed = 150f;
-    public float minSpeed = 30f;
+    /* -------- Ayarlar -------- */
+    [Header("Hız")]
+    public float maxSpeed = 220f;
+    public float accelRate = 100f;   // Shift
+    public float decelRate = 60f;   // Ctrl
+    public float idleDecay = 10f;   // Motor açık, gaz yok
+    public float takeoffSpeed = 120f;
 
-    [Header("Rotation Settings")]
-    public float pitchSpeed = 60f;   // Move1.Y
-    public float yawSpeed = 40f;   // Yaw axis
-    public float rollSpeed = 80f;   // Move1.X
+    [Header("Dönüş")]
+    public float pitchRate = 50f;
+    public float rollRate = 70f;
+    public float yawRate = 40f;
 
-    /* ---------------- Dahili ---------------- */
-    float currentSpeed;
-    Vector2 moveInput;      // Move1 : X=Roll, Y=Pitch
-    float yawInput;       // Yaw axis  (Q/E)
-    float throttleInput;  // Throttle (Shift/Ctrl veya gamepad trigger)
+    [Header("Zemin")]
+    public float rayOffset = 1.0f;         // gövdeden ne kadar yukarıdan ray atılsın
+    public LayerMask groundLayer;                  // runway layer’ı
+    public float groundedDrag = 5f;           // yerdeyken fren etkisi
 
-    /* -------- PlayerInput Callback’leri ------ */
-    public void OnMove1(InputAction.CallbackContext c) => moveInput = c.ReadValue<Vector2>();
-    public void OnYaw(InputAction.CallbackContext c) => yawInput = c.ReadValue<float>();
-    public void OnThrottle(InputAction.CallbackContext c) => throttleInput = c.ReadValue<float>();
+    /* -------- Dahili -------- */
+    float curSpeed;
+    bool engineOn = false;
+    bool isGrounded = true;
 
-    /* --------------- Yaşam Döngüsü --------------- */
-    void Start() => currentSpeed = minSpeed;
+    Vector2 moveInp;
+    float yawInp;
+    float throttleInp;
 
+    Rigidbody rb;
+
+    /* -------- Input Callbacks (PlayerInput) -------- */
+    public void OnMove1(InputAction.CallbackContext c) => moveInp = c.ReadValue<Vector2>();
+    public void OnYaw(InputAction.CallbackContext c) => yawInp = c.ReadValue<float>();
+    public void OnThrottle(InputAction.CallbackContext c) => throttleInp = c.ReadValue<float>();
+
+    /* ---------------- Başlangıç ---------------- */
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        rb.mass = 1500;
+        rb.useGravity = true;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        rb.centerOfMass = new Vector3(0, -0.5f, 0);   // gövdenin altına
+
+        // İniş öncesi dengede tutmak için:
+        rb.constraints = RigidbodyConstraints.FreezeRotationX |
+                         RigidbodyConstraints.FreezeRotationZ;
+    }
+
+    void Start()
+    {
+        curSpeed = 0;
+        engineOn = false;
+    }
+
+    /* ---------------- Ana Döngü ---------------- */
     void Update()
     {
-        HandleThrottle();
-        HandleRotation();
+        ToggleEngine();     // Space
+        CheckGround();      // Raycast
+        HandleThrottle();   // Shift / Ctrl / Trigger
+        HandleRotation();   // W A S D  Q E
+    }
+
+    void FixedUpdate()      // Fiziksel ileri itme
+    {
         MoveForward();
     }
 
-    /* ------------- Hız (Shift / Ctrl veya Axis) ------------- */
+    /* ------------ Motor ON/OFF (Space) ---------- */
+    void ToggleEngine()
+    {
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            engineOn = !engineOn;
+            Debug.Log(engineOn ? "Motor ÇALIŞTI" : "Motor KAPANDI");
+        }
+    }
+
+    /* ------------ Zemin Algılama (raycast) ------ */
+    void CheckGround()
+    {
+        Vector3 rayOrigin = transform.position + Vector3.up * rayOffset;
+        isGrounded = Physics.Raycast(rayOrigin, Vector3.down, rayOffset + 0.2f, groundLayer);
+
+        // Yerdeyken fren drag’i uygula
+        rb.linearDamping = isGrounded ? groundedDrag : 0f;
+    }
+
+    /* ------------ Gaz / Hız --------------------- */
     void HandleThrottle()
     {
-        /* 1)  Input Actions’tan gelen Throttle değeri  */
-        if (Mathf.Abs(throttleInput) > 0.01f)
-            currentSpeed += throttleInput * acceleration * Time.deltaTime;
+        if (!engineOn)
+        {
+            curSpeed = Mathf.MoveTowards(curSpeed, 0f, decelRate * Time.deltaTime);
+            return;
+        }
 
-        /* 2)  Klavye yedeği (Shift/Ctrl)  */
-        else
+        if (Mathf.Abs(throttleInp) > 0.01f)              // Input Actions’tan geliyorsa
+            curSpeed += throttleInp * accelRate * Time.deltaTime;
+
+        else                                             // Klavye yedeği
         {
             var kb = Keyboard.current;
             if (kb.leftShiftKey.isPressed || kb.rightShiftKey.isPressed)
-                currentSpeed += acceleration * Time.deltaTime;
+                curSpeed += accelRate * Time.deltaTime;
             else if (kb.leftCtrlKey.isPressed || kb.rightCtrlKey.isPressed)
-                currentSpeed -= deceleration * Time.deltaTime;
+                curSpeed -= decelRate * Time.deltaTime;
+            else
+                curSpeed -= idleDecay * Time.deltaTime;
         }
 
-        currentSpeed = Mathf.Clamp(currentSpeed, minSpeed, maxSpeed);
+        curSpeed = Mathf.Clamp(curSpeed, 0f, maxSpeed);
     }
 
-    /* ---------------- Dönüş ------------------- */
+    /* ------------ Dönüş ------------------------- */
     void HandleRotation()
     {
-        float pitch = -moveInput.y * pitchSpeed * Time.deltaTime;   // W/S
-        float roll = -moveInput.x * rollSpeed * Time.deltaTime;   // A/D
-        float yaw = yawInput * yawSpeed * Time.deltaTime;    // Q/E
+        bool canPitch = !isGrounded || curSpeed >= takeoffSpeed;
+
+        float pitch = canPitch ? -moveInp.y * pitchRate * Time.deltaTime : 0f;
+        float roll = -moveInp.x * rollRate * Time.deltaTime;
+        float yaw = yawInp * yawRate * Time.deltaTime;
 
         transform.Rotate(pitch, yaw, roll, Space.Self);
     }
 
-    /* --------------- İleri İtme --------------- */
+    /* ------------ İleri İtme (Physics) ---------- */
     void MoveForward()
     {
-        transform.position += transform.forward * currentSpeed * Time.deltaTime;
+        if (curSpeed <= 0.01f) { rb.linearVelocity = Vector3.zero; return; }
+
+        Vector3 vel = transform.forward * curSpeed;
+        vel.y = rb.linearVelocity.y;                  // dikey hızı koru (gravity)
+        rb.linearVelocity = vel;
     }
 }

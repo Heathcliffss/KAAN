@@ -410,6 +410,7 @@ GameObject:
   - component: {fileID: 7119264810951480867}
   - component: {fileID: 3975425861509435354}
   - component: {fileID: 8014152628657793219}
+  - component: {fileID: 8169981614505682650}
   m_Layer: 3
   m_Name: KAAN 1 1
   m_TagString: Player
@@ -707,14 +708,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 241e2c1553d2dfa42bf954a603300726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forwardSpeed: 50
-  acceleration: 30
-  deceleration: 20
-  maxSpeed: 80
-  minSpeed: 10
-  pitchSpeed: 60
-  yawSpeed: 40
-  rollSpeed: 80
+  maxSpeed: 20
+  minSpeed: 0
+  accelRate: 100
+  decelRate: 60
+  idleDecay: 10
+  takeoffSpeed: 120
+  pitchRate: 50
+  yawRate: 100
+  rollRate: 100
+  groundCheckHeight: 1.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &8014152628657793219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -727,8 +733,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63bebeaa00554b847bf80b8699302541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 15
+  moveSpeed: 50
   rotationSpeed: 5
   mainCamera: {fileID: 1601250759026823251}
-  aimDistance: 15
+  aimDistance: 75
   aimTarget: {fileID: 6580537015535783748}
+--- !u!54 &8169981614505682650
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7805882652405909580}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
