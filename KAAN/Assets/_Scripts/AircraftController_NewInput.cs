@@ -1,58 +1,73 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;   // ↩︎ yeni sistem API’si
+using UnityEngine.InputSystem;
 
 public class AircraftController_NewInput : MonoBehaviour
 {
-    [Header("Tunables")]
-    public float maxSpeed = 200f;
-    public float acceleration = 100f;
-    public float pitchRate = 60f;
-    public float rollRate = 80f;
-    public float yawRate = 50f;
+    [Header("Movement Settings")]
+    public float forwardSpeed = 50f;
+    public float acceleration = 30f;
+    public float deceleration = 20f;
+    public float maxSpeed = 150f;
+    public float minSpeed = 30f;
 
-    private float currentSpeed;
+    [Header("Rotation Settings")]
+    public float pitchSpeed = 60f;   // Move1.Y
+    public float yawSpeed = 40f;   // Yaw axis
+    public float rollSpeed = 80f;   // Move1.X
 
-    /* — Input verilerini depolayan değişkenler — */
-    private Vector2 moveInput;     // Move1  →  X=Roll, Y=Pitch
-    private Vector2 lookInput;     // Look1  →  Mouse Delta (kamera amaçlı)
-    private float yawInput;      // Yaw    →  Q / E
-    private float throttleInput; // Throttle → Shift / Ctrl
+    /* ---------------- Dahili ---------------- */
+    float currentSpeed;
+    Vector2 moveInput;      // Move1 : X=Roll, Y=Pitch
+    float yawInput;       // Yaw axis  (Q/E)
+    float throttleInput;  // Throttle (Shift/Ctrl veya gamepad trigger)
 
-    /* ---------------------- Unity‑Event callback’leri --------------------- */
-    /*  PlayerInput bileşeninin Events sekmesinden bağlanacak */
-    public void OnMove1(InputAction.CallbackContext ctx) => moveInput = ctx.ReadValue<Vector2>();
-    public void OnLook1(InputAction.CallbackContext ctx) => lookInput = ctx.ReadValue<Vector2>();
-    public void OnYaw(InputAction.CallbackContext ctx) => yawInput = ctx.ReadValue<float>();
-    public void OnThrottle(InputAction.CallbackContext ctx) => throttleInput = ctx.ReadValue<float>();
-    public void OnFire(InputAction.CallbackContext ctx)
-    {
-        if (ctx.performed) Debug.Log("🔫 Ateş!");
-    }
+    /* -------- PlayerInput Callback’leri ------ */
+    public void OnMove1(InputAction.CallbackContext c) => moveInput = c.ReadValue<Vector2>();
+    public void OnYaw(InputAction.CallbackContext c) => yawInput = c.ReadValue<float>();
+    public void OnThrottle(InputAction.CallbackContext c) => throttleInput = c.ReadValue<float>();
 
-    /* --------------------------- Uçuş fiziği ------------------------------ */
+    /* --------------- Yaşam Döngüsü --------------- */
+    void Start() => currentSpeed = minSpeed;
+
     void Update()
     {
         HandleThrottle();
         HandleRotation();
-        HandleTranslation();
+        MoveForward();
     }
 
+    /* ------------- Hız (Shift / Ctrl veya Axis) ------------- */
     void HandleThrottle()
     {
-        currentSpeed += throttleInput * acceleration * Time.deltaTime;
-        currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
+        /* 1)  Input Actions’tan gelen Throttle değeri  */
+        if (Mathf.Abs(throttleInput) > 0.01f)
+            currentSpeed += throttleInput * acceleration * Time.deltaTime;
+
+        /* 2)  Klavye yedeği (Shift/Ctrl)  */
+        else
+        {
+            var kb = Keyboard.current;
+            if (kb.leftShiftKey.isPressed || kb.rightShiftKey.isPressed)
+                currentSpeed += acceleration * Time.deltaTime;
+            else if (kb.leftCtrlKey.isPressed || kb.rightCtrlKey.isPressed)
+                currentSpeed -= deceleration * Time.deltaTime;
+        }
+
+        currentSpeed = Mathf.Clamp(currentSpeed, minSpeed, maxSpeed);
     }
 
+    /* ---------------- Dönüş ------------------- */
     void HandleRotation()
     {
-        float pitch = -moveInput.y * pitchRate * Time.deltaTime;  // W/S
-        float roll = -moveInput.x * rollRate * Time.deltaTime;  // A/D
-        float yaw = yawInput * yawRate * Time.deltaTime;   // Q/E
+        float pitch = -moveInput.y * pitchSpeed * Time.deltaTime;   // W/S
+        float roll = -moveInput.x * rollSpeed * Time.deltaTime;   // A/D
+        float yaw = yawInput * yawSpeed * Time.deltaTime;    // Q/E
 
         transform.Rotate(pitch, yaw, roll, Space.Self);
     }
 
-    void HandleTranslation()
+    /* --------------- İleri İtme --------------- */
+    void MoveForward()
     {
         transform.position += transform.forward * currentSpeed * Time.deltaTime;
     }
