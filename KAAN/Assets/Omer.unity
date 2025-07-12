@@ -1523,6 +1523,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 413022977675296043, guid: da6b1af6502d0cd4f83f1c57070dfe84, type: 3}
+      propertyPath: aimDistance
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 6331166856074642416, guid: da6b1af6502d0cd4f83f1c57070dfe84, type: 3}
       propertyPath: m_Name
       value: Ucak
@@ -1570,6 +1574,18 @@ PrefabInstance:
     - target: {fileID: 6585777758123513583, guid: da6b1af6502d0cd4f83f1c57070dfe84, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748410589752203826, guid: da6b1af6502d0cd4f83f1c57070dfe84, type: 3}
+      propertyPath: maxSpeed
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748410589752203826, guid: da6b1af6502d0cd4f83f1c57070dfe84, type: 3}
+      propertyPath: accelRate
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748410589752203826, guid: da6b1af6502d0cd4f83f1c57070dfe84, type: 3}
+      propertyPath: takeoffSpeed
+      value: 150
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
