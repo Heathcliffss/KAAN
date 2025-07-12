@@ -314,12 +314,11 @@ MonoBehaviour:
   accelRate: 15
   decelRate: 30
   idleDecay: 10
-  turnResponsiveness: 3
-  rollSpeed: 45
-  throttleInput: 0
-  aimSensitivity: 0.2
-  cameraTransform: {fileID: 351224864331083679}
-  aimTarget: {fileID: 8960692858645136909}
+  takeoffSpeed: 90
+  pitchRate: 35
+  rollRate: 55
+  yawRate: 30
+  mouseSensitivity: 0.005
 --- !u!1 &2734149433108213973
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,7 +362,7 @@ GameObject:
   - component: {fileID: 6585777758123513583}
   m_Layer: 0
   m_Name: Ucak
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
