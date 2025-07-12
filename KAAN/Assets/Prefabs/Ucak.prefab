@@ -314,11 +314,12 @@ MonoBehaviour:
   accelRate: 15
   decelRate: 30
   idleDecay: 10
-  takeoffSpeed: 150
-  groundY: 0.35
-  pitchRate: 20
-  rollRate: 20
-  yawRate: 20
+  turnResponsiveness: 3
+  rollSpeed: 45
+  throttleInput: 0
+  aimSensitivity: 0.2
+  cameraTransform: {fileID: 351224864331083679}
+  aimTarget: {fileID: 8960692858645136909}
 --- !u!1 &2734149433108213973
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,7 +345,7 @@ Transform:
   m_GameObject: {fileID: 2734149433108213973}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.14311506, y: -0.19891104, z: 1.6750404}
+  m_LocalPosition: {x: -0.273407, y: 2.629999, z: -7.199996}
   m_LocalScale: {x: 0.5234506, y: 0.5234506, z: 0.5234506}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -395,6 +396,7 @@ GameObject:
   - component: {fileID: 8985928633262507451}
   - component: {fileID: 8670509252940521336}
   - component: {fileID: 8419949944191142560}
+  - component: {fileID: 7379478894888909135}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -615,6 +617,21 @@ MonoBehaviour:
       enableFptlForForwardOpaque: 0
       enableBigTilePrepass: 0
       isFptlEnabled: 0
+--- !u!114 &7379478894888909135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8360467866832214519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f60f32502b7afc41969a8a00633c1b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 8960692858645136909}
+  followSpeed: 0.5
+  lookSpeed: 0.5
 --- !u!1 &8398547759046185746
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,4 +698,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e4f57496d46464438d3b8f7c9b3ad6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  airDefenseSystem: {fileID: 0}
+  airDefenseSystem: {fileID: 1965502515821978045, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}

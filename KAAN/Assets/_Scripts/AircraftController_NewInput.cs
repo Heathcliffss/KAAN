@@ -17,6 +17,9 @@ public class AircraftController_NewInput : MonoBehaviour
     public float rollRate = 55f;
     public float yawRate = 30f;
 
+    [Header("Mouse Ayarları")]
+    [SerializeField] private float mouseSensitivity = 0.005f;
+
     private bool engineOn = false;
     private float curSpeed = 0f;
 
@@ -34,7 +37,6 @@ public class AircraftController_NewInput : MonoBehaviour
         engineOn = false;
         curSpeed = 0f;
 
-        // Mouse kilitlenir
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -43,7 +45,7 @@ public class AircraftController_NewInput : MonoBehaviour
     {
         ToggleEngine();
         HandleThrottle();
-        HandleRotation();  // MOUSE delta + roll (A/D)
+        HandleRotation();
         MoveForward();
     }
 
@@ -83,10 +85,27 @@ public class AircraftController_NewInput : MonoBehaviour
 
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
 
-        float pitch = -mouseDelta.y * pitchRate * 0.01f;
-        float yaw = mouseDelta.x * yawRate * 0.01f;
+        float pitch = -mouseDelta.y * pitchRate * mouseSensitivity;
+        float yaw = mouseDelta.x * yawRate * mouseSensitivity;
 
-        float roll = -moveInp.x * rollRate * Time.deltaTime;
+        float rollInput = -moveInp.x;
+        float roll = 0f;
+
+        if (Mathf.Abs(rollInput) > 0.01f)
+        {
+            // Kullanıcı roll yapıyor
+            roll = rollInput * rollRate * Time.deltaTime;
+        }
+        else
+        {
+            // Otomatik roll düzeltme
+            float currentZ = transform.localEulerAngles.z;
+            if (currentZ > 180f) currentZ -= 360f;
+
+            float correctedZ = Mathf.Lerp(currentZ, 0f, Time.deltaTime * 2f);
+            float deltaZ = correctedZ - currentZ;
+            roll = deltaZ;
+        }
 
         transform.Rotate(pitch, yaw, roll, Space.Self);
     }
