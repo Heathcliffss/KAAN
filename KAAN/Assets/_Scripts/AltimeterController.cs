@@ -13,7 +13,7 @@ public class AltimeterController : MonoBehaviour
         float altitude = Ucak.position.y;
 
         // Ölçek çizelgesini yukarý/aþaðý kaydýr
-        float offset = -altitude / scaleStep * altitudeUnitSize;
+        float offset = altitude / scaleStep * altitudeUnitSize;
         altitudeScale.anchoredPosition = new Vector2(0f, offset);
     }
 }
