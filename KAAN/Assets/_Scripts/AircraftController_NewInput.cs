@@ -20,8 +20,17 @@ public class AircraftController_NewInput : MonoBehaviour
     [Header("Mouse Ayarları")]
     [SerializeField] private float mouseSensitivity = 0.005f;
 
+    [Header("Fiziksel Simülasyon")]
+    [SerializeField] private float gravity = 9.81f;
+    [SerializeField] private float groundCheckDistance = 3f;
+
+    [Header("Zemin Kontrol Noktaları")]
+    public Transform[] groundCheckPoints;  // ✅ Alt noktaları dışarıdan atayacaksın
+
     private bool engineOn = false;
     private float curSpeed = 0f;
+    private float verticalVelocity = 0f;
+    private bool isGrounded = false;
 
     private Vector2 moveInp = Vector2.zero;
     private float yawInp = 0f;
@@ -36,6 +45,7 @@ public class AircraftController_NewInput : MonoBehaviour
     {
         engineOn = false;
         curSpeed = 0f;
+        verticalVelocity = 0f;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -43,9 +53,11 @@ public class AircraftController_NewInput : MonoBehaviour
 
     void Update()
     {
+        GroundCheck();
         ToggleEngine();
         HandleThrottle();
         HandleRotation();
+        SimulateGravity();
         MoveForward();
     }
 
@@ -84,7 +96,6 @@ public class AircraftController_NewInput : MonoBehaviour
         if (!engineOn) return;
 
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-
         float pitch = -mouseDelta.y * pitchRate * mouseSensitivity;
         float yaw = mouseDelta.x * yawRate * mouseSensitivity;
 
@@ -93,12 +104,10 @@ public class AircraftController_NewInput : MonoBehaviour
 
         if (Mathf.Abs(rollInput) > 0.01f)
         {
-            // Kullanıcı roll yapıyor
             roll = rollInput * rollRate * Time.deltaTime;
         }
         else
         {
-            // Otomatik roll düzeltme
             float currentZ = transform.localEulerAngles.z;
             if (currentZ > 180f) currentZ -= 360f;
 
@@ -107,12 +116,49 @@ public class AircraftController_NewInput : MonoBehaviour
             roll = deltaZ;
         }
 
+        if (curSpeed < takeoffSpeed && isGrounded)
+            pitch = 0f;
+
         transform.Rotate(pitch, yaw, roll, Space.Self);
     }
 
     void MoveForward()
     {
         if (!engineOn || curSpeed <= 0.01f) return;
+
         transform.position += transform.forward * curSpeed * Time.deltaTime;
+    }
+
+    void SimulateGravity()
+    {
+        if (isGrounded)
+        {
+            verticalVelocity = 0f;
+            return;
+        }
+
+        verticalVelocity -= gravity * Time.deltaTime;
+        transform.position += Vector3.up * verticalVelocity * Time.deltaTime;
+    }
+
+    void GroundCheck()
+    {
+        isGrounded = false;
+
+        if (groundCheckPoints == null || groundCheckPoints.Length == 0)
+        {
+            Debug.LogWarning("⚠️ Ground check noktaları atanmadı!");
+            return;
+        }
+
+        foreach (var point in groundCheckPoints)
+        {
+            Debug.DrawRay(point.position, Vector3.down * groundCheckDistance, Color.red);
+            if (Physics.Raycast(point.position, Vector3.down, groundCheckDistance))
+            {
+                isGrounded = true;
+                break;
+            }
+        }
     }
 }
