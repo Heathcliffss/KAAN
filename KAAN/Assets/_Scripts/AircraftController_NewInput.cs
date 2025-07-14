@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class AircraftController_NewInput : MonoBehaviour
 {
@@ -25,7 +26,10 @@ public class AircraftController_NewInput : MonoBehaviour
     [SerializeField] private float groundCheckDistance = 3f;
 
     [Header("Zemin Kontrol Noktaları")]
-    public Transform[] groundCheckPoints;  // ✅ Alt noktaları dışarıdan atayacaksın
+    public Transform[] groundCheckPoints;
+
+    [Header("UI")]
+    public TMP_Text speedText; // 🎯 Hızı gösterecek UI text
 
     private bool engineOn = false;
     private float curSpeed = 0f;
@@ -59,6 +63,7 @@ public class AircraftController_NewInput : MonoBehaviour
         HandleRotation();
         SimulateGravity();
         MoveForward();
+        UpdateSpeedUI();
     }
 
     void ToggleEngine()
@@ -125,7 +130,6 @@ public class AircraftController_NewInput : MonoBehaviour
     void MoveForward()
     {
         if (!engineOn || curSpeed <= 0.01f) return;
-
         transform.position += transform.forward * curSpeed * Time.deltaTime;
     }
 
@@ -159,6 +163,14 @@ public class AircraftController_NewInput : MonoBehaviour
                 isGrounded = true;
                 break;
             }
+        }
+    }
+
+    void UpdateSpeedUI()
+    {
+        if (speedText != null)
+        {
+            speedText.text = $"Speed: {Mathf.RoundToInt(curSpeed)} km/h";
         }
     }
 }
