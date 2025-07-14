@@ -170,7 +170,7 @@ public class AircraftController_NewInput : MonoBehaviour
     {
         if (speedText != null)
         {
-            speedText.text = $"Speed: {Mathf.RoundToInt(curSpeed)} km/h";
+            speedText.text = $"HIZ: {Mathf.RoundToInt(curSpeed)} km/h";
         }
     }
 }
