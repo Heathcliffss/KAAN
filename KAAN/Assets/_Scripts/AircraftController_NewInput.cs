@@ -4,57 +4,59 @@ using TMPro;
 
 public class AircraftController_NewInput : MonoBehaviour
 {
-    [Header("Hız Parametreleri")]
+    /* ───────── Uçuş Parametreleri ───────── */
+    [Header("Hız")]
     public float maxSpeed = 160f;
     public float accelRate = 40f;
     public float decelRate = 30f;
     public float idleDecay = 8f;
-
-    [Header("Kalkış Eşiği")]
     public float takeoffSpeed = 90f;
 
-    [Header("Dönüş Hızları")]
+    [Header("Dönüş")]
     public float pitchRate = 35f;
     public float rollRate = 55f;
     public float yawRate = 30f;
-
-    [Header("Mouse Ayarları")]
     [SerializeField] private float mouseSensitivity = 0.005f;
 
-    [Header("Fiziksel Simülasyon")]
-    [SerializeField] private float gravity = 9.81f;
-    [SerializeField] private float groundCheckDistance = 3f;
-
-    [Header("Zemin Kontrol Noktaları")]
+    [Header("Zemin Kontrolü")]
     public Transform[] groundCheckPoints;
+    [SerializeField] private float groundCheckDistance = 3f;
+    [SerializeField] private float gravity = 9.81f;
+
+    /* ───────── Ateşleme Parametreleri ───────── */
+    [Header("Silah Sistemi")]
+    public GameObject bulletPrefab;         // 🔫 Prefab’in kendisi
+    public Transform firePoint;             // 🔫 Uçağın burnundaki çıkış
+    public float bulletSpeed = 300f;        // mermi hızı
+    public float fireRate = 0.2f;           // dakikada kaç saniye? (0.2 = 5/sn)
 
     [Header("UI")]
-    public TMP_Text speedText; // 🎯 Hızı gösterecek UI text
+    public TMP_Text speedText;
 
-    private bool engineOn = false;
-    private float curSpeed = 0f;
-    private float verticalVelocity = 0f;
-    private bool isGrounded = false;
+    /* ───────── Dahili Değişkenler ───────── */
+    bool engineOn = false;
+    bool isGrounded = false;
+    float curSpeed = 0f;
+    float verticalVelocity = 0f;
+    float fireTimer = 0f;
 
-    private Vector2 moveInp = Vector2.zero;
-    private float yawInp = 0f;
-    private float throttleInp = 0f;
+    Vector2 moveInp = Vector2.zero;
+    float yawInp = 0f;
+    float throttleInp = 0f;
 
-    // INPUT CALLBACKS
+    /* ───────── INPUT CALLBACK’LER ───────── */
     public void OnMove1(InputAction.CallbackContext c) => moveInp = c.ReadValue<Vector2>();
     public void OnYaw(InputAction.CallbackContext c) => yawInp = c.ReadValue<float>();
     public void OnThrottle(InputAction.CallbackContext c) => throttleInp = c.ReadValue<float>();
 
+    /* ───────── START ───────── */
     void Start()
     {
-        engineOn = false;
-        curSpeed = 0f;
-        verticalVelocity = 0f;
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
+    /* ───────── UPDATE ───────── */
     void Update()
     {
         GroundCheck();
@@ -64,20 +66,21 @@ public class AircraftController_NewInput : MonoBehaviour
         SimulateGravity();
         MoveForward();
         UpdateSpeedUI();
+        HandleShooting();        // 🔫 Ateş
     }
 
+    /* ───────── Motor ON/OFF ───────── */
     void ToggleEngine()
     {
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             engineOn = !engineOn;
-            if (!engineOn)
-                curSpeed = 0f;
-
-            Debug.Log(engineOn ? "<color=green>Motor ON</color>" : "<color=red>Motor OFF</color>");
+            if (!engineOn) curSpeed = 0f;
+            Debug.Log(engineOn ? "🟢 Motor ON" : "🔴 Motor OFF");
         }
     }
 
+    /* ───────── Gaz / Hız ───────── */
     void HandleThrottle()
     {
         if (!engineOn) return;
@@ -86,16 +89,14 @@ public class AircraftController_NewInput : MonoBehaviour
             curSpeed += throttleInp * accelRate * Time.deltaTime;
 
         var kb = Keyboard.current;
-        if (kb.leftShiftKey.isPressed || kb.rightShiftKey.isPressed)
-            curSpeed += accelRate * Time.deltaTime;
-        else if (kb.leftCtrlKey.isPressed || kb.rightCtrlKey.isPressed)
-            curSpeed -= decelRate * Time.deltaTime;
-        else
-            curSpeed -= idleDecay * Time.deltaTime;
+        if (kb.leftShiftKey.isPressed) curSpeed += accelRate * Time.deltaTime;
+        else if (kb.leftCtrlKey.isPressed) curSpeed -= decelRate * Time.deltaTime;
+        else curSpeed -= idleDecay * Time.deltaTime;
 
         curSpeed = Mathf.Clamp(curSpeed, 0f, maxSpeed);
     }
 
+    /* ───────── Dönüş ───────── */
     void HandleRotation()
     {
         if (!engineOn) return;
@@ -105,72 +106,76 @@ public class AircraftController_NewInput : MonoBehaviour
         float yaw = mouseDelta.x * yawRate * mouseSensitivity;
 
         float rollInput = -moveInp.x;
-        float roll = 0f;
+        float roll = Mathf.Abs(rollInput) > 0.01f ? rollInput * rollRate * Time.deltaTime : AutoLevelRoll();
 
-        if (Mathf.Abs(rollInput) > 0.01f)
-        {
-            roll = rollInput * rollRate * Time.deltaTime;
-        }
-        else
-        {
-            float currentZ = transform.localEulerAngles.z;
-            if (currentZ > 180f) currentZ -= 360f;
-
-            float correctedZ = Mathf.Lerp(currentZ, 0f, Time.deltaTime * 2f);
-            float deltaZ = correctedZ - currentZ;
-            roll = deltaZ;
-        }
-
-        if (curSpeed < takeoffSpeed && isGrounded)
-            pitch = 0f;
+        if (curSpeed < takeoffSpeed && isGrounded) pitch = 0f;
 
         transform.Rotate(pitch, yaw, roll, Space.Self);
     }
 
+    float AutoLevelRoll()
+    {
+        float z = transform.localEulerAngles.z;
+        if (z > 180f) z -= 360f;
+        return Mathf.Lerp(z, 0f, Time.deltaTime * 2f) - z;
+    }
+
+    /* ───────── İleri Hareket ───────── */
     void MoveForward()
     {
         if (!engineOn || curSpeed <= 0.01f) return;
         transform.position += transform.forward * curSpeed * Time.deltaTime;
     }
 
+    /* ───────── Yerçekimi ───────── */
     void SimulateGravity()
     {
-        if (isGrounded)
-        {
-            verticalVelocity = 0f;
-            return;
-        }
-
+        if (isGrounded) { verticalVelocity = 0f; return; }
         verticalVelocity -= gravity * Time.deltaTime;
         transform.position += Vector3.up * verticalVelocity * Time.deltaTime;
     }
 
+    /* ───────── Zemin Algılama ───────── */
     void GroundCheck()
     {
         isGrounded = false;
-
-        if (groundCheckPoints == null || groundCheckPoints.Length == 0)
+        foreach (var p in groundCheckPoints)
         {
-            Debug.LogWarning("⚠️ Ground check noktaları atanmadı!");
-            return;
-        }
-
-        foreach (var point in groundCheckPoints)
-        {
-            Debug.DrawRay(point.position, Vector3.down * groundCheckDistance, Color.red);
-            if (Physics.Raycast(point.position, Vector3.down, groundCheckDistance))
+            Debug.DrawRay(p.position, Vector3.down * groundCheckDistance, Color.red);
+            if (Physics.Raycast(p.position, Vector3.down, groundCheckDistance))
             {
-                isGrounded = true;
-                break;
+                isGrounded = true; break;
             }
         }
     }
 
+    /* ───────── UI Hız Güncelle ───────── */
     void UpdateSpeedUI()
     {
-        if (speedText != null)
+        if (speedText) speedText.text = $"HIZ: {Mathf.RoundToInt(curSpeed)} km/h";
+    }
+
+    /* ─────────🔫 Ateşleme Sistemi───────── */
+    void HandleShooting()
+    {
+        fireTimer += Time.deltaTime;
+
+        if (Mouse.current.leftButton.isPressed && engineOn && fireTimer >= fireRate)
         {
-            speedText.text = $"HIZ: {Mathf.RoundToInt(curSpeed)} km/h";
+            fireTimer = 0f;
+            if (bulletPrefab && firePoint)
+            {
+                GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+
+                // Mermiye Rigidbody varsa hız ver
+                Rigidbody brb = bullet.GetComponent<Rigidbody>();
+                if (brb)
+                    brb.linearVelocity = firePoint.forward * bulletSpeed;
+                else
+                    bullet.transform.forward = firePoint.forward;  // fallback
+
+                Destroy(bullet, 5f); // 5 sn sonra temizle
+            }
         }
     }
 }

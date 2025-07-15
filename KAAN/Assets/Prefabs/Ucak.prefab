@@ -37,6 +37,7 @@ Transform:
   - {fileID: 7579686162928691932}
   - {fileID: 8960692858645136909}
   - {fileID: 8233595564846000283}
+  - {fileID: 5176977487278136211}
   m_Father: {fileID: 6585777758123513583}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6804264175263120228
@@ -320,10 +321,46 @@ MonoBehaviour:
   rollRate: 55
   yawRate: 30
   mouseSensitivity: 0.005
-  gravity: 5
-  groundCheckDistance: 2
   groundCheckPoints:
   - {fileID: 8233595564846000283}
+  groundCheckDistance: 2
+  gravity: 5
+  bulletPrefab: {fileID: 8606558849398042415, guid: 6b4d4d47f15802c42b222a27831fece5, type: 3}
+  firePoint: {fileID: 5176977487278136211}
+  bulletSpeed: 300
+  fireRate: 0.2
+  speedText: {fileID: 0}
+--- !u!1 &2477530617392315729
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5176977487278136211}
+  m_Layer: 3
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5176977487278136211
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2477530617392315729}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7880336721797836607}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2734149433108213973
 GameObject:
   m_ObjectHideFlags: 0
