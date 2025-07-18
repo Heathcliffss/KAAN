@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class AirplaneController : MonoBehaviour
@@ -32,6 +33,13 @@ public class AirplaneController : MonoBehaviour
     AircraftPhysics aircraftPhysics;
     Rigidbody rb;
 
+    bool IsSpace;
+
+    Gamepad gamepad = Gamepad.current;
+
+
+    
+
     private void Start()
     {
         aircraftPhysics = GetComponent<AircraftPhysics>();
@@ -42,26 +50,65 @@ public class AirplaneController : MonoBehaviour
     {
         Pitch = Input.GetAxis("Vertical");
         Roll = Input.GetAxis("Horizontal");
-       // Yaw = Input.GetAxis("Yaw");
+        // Yaw = Input.GetAxis("Yaw");
+
+        float R2 = Input.GetAxis("RightTrigger");
+        float L2 = Input.GetAxis("LeftTrigger");
+
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //thrustPercent = thrustPercent > 0 ? 0 : 1f;
+
+       // }
+        thrustPercent += R2 * Time.deltaTime;
+        thrustPercent -= L2 * Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            thrustPercent = thrustPercent > 0 ? 0 : 1f;
+            Debug.Log("spacee");
+            if(IsSpace)
+            {
+                thrustPercent = 1;
+                
+            }
+            else
+            {
+                thrustPercent = 0;
+                
+            }
+            IsSpace = !IsSpace;
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
+        
+        //_______________Titreþim______________________
+        if (thrustPercent < 0.5)
+        {
+            gamepad.SetMotorSpeeds(thrustPercent / 2f, thrustPercent / 2f);
+        }
+        else if (thrustPercent > 0.5)
+        {
+            gamepad.SetMotorSpeeds(thrustPercent, thrustPercent);
+        }
+
+        
+
+
+        thrustPercent = Mathf.Clamp(thrustPercent, 0f, 1f);
+
+        if (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("YButton"))
         {
             Flap = Flap > 0 ? 0 : 0.3f;
         }
 
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B) || Input.GetButtonDown("BButton"))
         {
             brakesTorque = brakesTorque > 0 ? 0 : 100f;
         }
 
         displayText.text = "V: " + ((int)rb.linearVelocity.magnitude).ToString("D3") + " m/s\n";
         displayText.text += "A: " + ((int)transform.position.y).ToString("D4") + " m\n";
-        displayText.text += "T: " + (int)(thrustPercent * 100) + "%\n";
+         displayText.text += "T: " + (int)(thrustPercent * 100) + "%\n";
+        //displayText.text += "T: " + (int)(thrustPercent) + "%\n";
         displayText.text += brakesTorque > 0 ? "B: ON" : "B: OFF";
     }
 
@@ -72,7 +119,7 @@ public class AirplaneController : MonoBehaviour
         foreach (var wheel in wheels)
         {
             wheel.brakeTorque = brakesTorque;
-            // small torque to wake up wheel collider
+            
             wheel.motorTorque = 0.01f;
         }
     }

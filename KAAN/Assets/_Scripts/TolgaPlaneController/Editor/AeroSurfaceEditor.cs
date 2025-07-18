@@ -1,6 +1,10 @@
-using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+using UnityEngine;
 
+// Senin sýnýf tanýmýn burada
+
+#endif
 [CustomEditor(typeof(AeroSurface)), CanEditMultipleObjects()]
 public class AeroSurfaceEditor : Editor
 {

@@ -1,5 +1,10 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
+
+
+#endif
+
 
 [CustomEditor(typeof(AeroSurfaceConfig)), CanEditMultipleObjects()]
 public class AeroSurfaceConfigEditor : Editor

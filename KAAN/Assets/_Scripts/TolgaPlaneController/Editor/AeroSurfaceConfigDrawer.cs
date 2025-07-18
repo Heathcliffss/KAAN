@@ -1,5 +1,11 @@
-using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+using UnityEngine;
+
+// Senin sýnýf tanýmýn burada
+
+#endif
+
 
 [CustomPropertyDrawer(typeof(AeroSurfaceConfig), true)]
 public class AeroSurfaceConfigDrawer : PropertyDrawer
