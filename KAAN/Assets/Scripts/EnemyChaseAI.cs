@@ -20,6 +20,11 @@ public class EnemyChaseAI : MonoBehaviour
     private bool isChasing = false;
     private int wpIndex = 0;
 
+    public GameObject missilePrefab;
+    public Transform firePoint;
+    public float missileCooldown = 3f;
+    private float lastMissileTime;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -44,6 +49,11 @@ public class EnemyChaseAI : MonoBehaviour
     void ChasePlayer()
     {
         FlyTowards(player.position, chaseSpeed);
+
+        if (Vector3.Distance(transform.position, player.position) < 100f)
+        {
+            FireMissile();
+        }
     }
 
     void Patrol()
@@ -92,4 +102,14 @@ public class EnemyChaseAI : MonoBehaviour
         // 8. Rigidbody ile ileri doðru sabit hýzda hareket
         rb.linearVelocity = transform.forward * speed;
     }
+
+    void FireMissile()
+    {
+        if (Time.time - lastMissileTime < missileCooldown) return;
+        lastMissileTime = Time.time;
+
+        GameObject missile = Instantiate(missilePrefab, firePoint.position, firePoint.rotation);
+        missile.GetComponent<EnemyMissile>().SetTarget(player);
+    }
+
 }

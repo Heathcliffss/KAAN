@@ -7,6 +7,7 @@ TagManager:
   - HitArea
   - Enemy
   - GroundLayer
+  - EnemyMissile
   layers:
   - Default
   - TransparentFX
