@@ -47,7 +47,23 @@ public class EnemyMissile : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             // hasar vs. eklenecekse buraya
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
+
+    private void OnEnable()
+    {
+        Invoke("DisableSelf", 20f); // 20 saniye sonra havuza geri gönder
+    }
+
+    void DisableSelf()
+    {
+        RocketPool.Instance.ReturnRocket(gameObject);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        RocketPool.Instance.ReturnRocket(gameObject);
+    }
+
 }
