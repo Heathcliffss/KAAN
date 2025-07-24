@@ -3,17 +3,21 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - HitArea
+  - Enemy
+  - GroundLayer
+  - b
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
+  - GroundLayer
+  - Dusman
+  - Bomb
   - 
   - 
   - 
