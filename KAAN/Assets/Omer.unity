@@ -3930,6 +3930,22 @@ PrefabInstance:
       propertyPath: 'groundCheckPoints.Array.data[0]'
       value: 
       objectReference: {fileID: 1858224395}
+    - target: {fileID: 7379478894888909135, guid: 6e72e6c5be199e34f99275a0efb751db, type: 3}
+      propertyPath: lookSpeed
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8985928633262507451, guid: 6e72e6c5be199e34f99275a0efb751db, type: 3}
+      propertyPath: field of view
+      value: 110
+      objectReference: {fileID: 0}
+    - target: {fileID: 8985928633262507451, guid: 6e72e6c5be199e34f99275a0efb751db, type: 3}
+      propertyPath: m_FOVAxisMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8985928633262507451, guid: 6e72e6c5be199e34f99275a0efb751db, type: 3}
+      propertyPath: far clip plane
+      value: 10000
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7823227396962518827, guid: 6e72e6c5be199e34f99275a0efb751db, type: 3}
     m_RemovedGameObjects: []
