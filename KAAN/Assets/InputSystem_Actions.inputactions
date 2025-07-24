@@ -617,6 +617,17 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "",
+                    "id": "2e961eb0-0505-4037-baf4-60050247cc85",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Yaw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "1D Axis",
                     "id": "ced81285-5b86-4dee-b953-2c8469562f7c",
                     "path": "1DAxis",

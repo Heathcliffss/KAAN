@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class AirplaneController : MonoBehaviour
 {
@@ -27,18 +28,21 @@ public class AirplaneController : MonoBehaviour
     [SerializeField]
     Text displayText = null;
 
-    float thrustPercent;
+    public float thrustPercent;
     float brakesTorque;
 
     AircraftPhysics aircraftPhysics;
     Rigidbody rb;
 
-    bool IsSpace;
+    bool IsSpace = true;
 
-    Gamepad gamepad = Gamepad.current;
+    public InputActionReference yawkey;
+    public InputActionReference pankey;
 
 
-    
+    // Remove the gamepad field declaration and handle it safely in Update
+    private float lastVibrateTime;
+    private const float VIBRATE_COOLDOWN = 0.1f; // Prevent excessive vibration calls
 
     private void Start()
     {
@@ -48,68 +52,104 @@ public class AirplaneController : MonoBehaviour
 
     private void Update()
     {
-        Pitch = Input.GetAxis("Vertical");
+        float yawkey2 = Gamepad.current.rightStick.x.ReadValue();
+        float pankey2 = Gamepad.current.leftStick.y.ReadValue();
+        float flap2 = Gamepad.current.rightStick.y.ReadValue();
+        float newflap2 = flap2 * -1f;
+        newflap2 = Mathf.Clamp(newflap2, 0f, 1f);
+
+        
+
+
+        //Pitch = Input.GetAxis("Vertical");
+        Pitch = pankey2;
         Roll = Input.GetAxis("Horizontal");
-        // Yaw = Input.GetAxis("Yaw");
+        Yaw = -yawkey2;
 
         float R2 = Input.GetAxis("RightTrigger");
         float L2 = Input.GetAxis("LeftTrigger");
 
-        // if (Input.GetKeyDown(KeyCode.Space))
-        // {
-        //thrustPercent = thrustPercent > 0 ? 0 : 1f;
+       
+        
 
-       // }
         thrustPercent += R2 * Time.deltaTime;
         thrustPercent -= L2 * Time.deltaTime;
+        thrustPercent = Mathf.Clamp(thrustPercent, 0f, 1f);
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("spacee");
-            if(IsSpace)
+            if (IsSpace)
             {
                 thrustPercent = 1;
-                
             }
             else
             {
                 thrustPercent = 0;
-                
             }
             IsSpace = !IsSpace;
         }
 
-        
-        //_______________Titreþim______________________
-        if (thrustPercent < 0.5)
-        {
-            gamepad.SetMotorSpeeds(thrustPercent / 2f, thrustPercent / 2f);
-        }
-        else if (thrustPercent > 0.5)
-        {
-            gamepad.SetMotorSpeeds(thrustPercent, thrustPercent);
-        }
+        // Fixed gamepad vibration handling
+        HandleGamepadVibration();
 
-        
+        /* if (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("YButton"))
+         {
+             Flap = Flap > 0 ? 0 : 0.3f;
+         }
+     */
 
-
-        thrustPercent = Mathf.Clamp(thrustPercent, 0f, 1f);
-
-        if (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("YButton"))
-        {
-            Flap = Flap > 0 ? 0 : 0.3f;
-        }
+        Flap = newflap2;
 
         if (Input.GetKeyDown(KeyCode.B) || Input.GetButtonDown("BButton"))
         {
             brakesTorque = brakesTorque > 0 ? 0 : 100f;
         }
 
-        displayText.text = "V: " + ((int)rb.linearVelocity.magnitude).ToString("D3") + " m/s\n";
-        displayText.text += "A: " + ((int)transform.position.y).ToString("D4") + " m\n";
-         displayText.text += "T: " + (int)(thrustPercent * 100) + "%\n";
-        //displayText.text += "T: " + (int)(thrustPercent) + "%\n";
-        displayText.text += brakesTorque > 0 ? "B: ON" : "B: OFF";
+        // Update display
+        if (displayText != null)
+        {
+            displayText.text = "V: " + ((int)rb.linearVelocity.magnitude).ToString("D3") + " m/s\n";
+            displayText.text += "A: " + ((int)transform.position.y).ToString("D4") + " m\n";
+            displayText.text += "T: " + (int)(thrustPercent * 100) + "%\n";
+            displayText.text += brakesTorque > 0 ? "B: ON" : "B: OFF";
+        }
+    }
+
+    private void HandleGamepadVibration()
+    {
+        // Only update vibration every VIBRATE_COOLDOWN seconds to prevent excessive calls
+        if (Time.time - lastVibrateTime < VIBRATE_COOLDOWN) return;
+
+        try
+        {
+            // Safely check for gamepad
+            Gamepad currentGamepad = Gamepad.current;
+            if (currentGamepad != null && currentGamepad.added)
+            {
+                float motorSpeed = 0f;
+
+                if (thrustPercent < 0.5f)
+                {
+                    motorSpeed = thrustPercent * 0.5f; // Reduced intensity
+                }
+                else
+                {
+                    motorSpeed = Mathf.Lerp(0.25f, 0.8f, (thrustPercent - 0.5f) * 2f); // Clamped max intensity
+                }
+
+                // Clamp to safe values
+                motorSpeed = Mathf.Clamp(motorSpeed, 0f, 0.8f);
+
+                currentGamepad.SetMotorSpeeds(motorSpeed, motorSpeed);
+                lastVibrateTime = Time.time;
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning($"Gamepad vibration error: {e.Message}");
+            // Don't let gamepad errors crash the game
+        }
     }
 
     private void FixedUpdate()
@@ -119,7 +159,6 @@ public class AirplaneController : MonoBehaviour
         foreach (var wheel in wheels)
         {
             wheel.brakeTorque = brakesTorque;
-            
             wheel.motorTorque = 0.01f;
         }
     }
@@ -151,5 +190,22 @@ public class AirplaneController : MonoBehaviour
     {
         if (!Application.isPlaying)
             SetControlSurfecesAngles(Pitch, Roll, Yaw, Flap);
+    }
+
+    // Clean up gamepad vibration when the object is destroyed
+    private void OnDestroy()
+    {
+        try
+        {
+            Gamepad currentGamepad = Gamepad.current;
+            if (currentGamepad != null && currentGamepad.added)
+            {
+                currentGamepad.SetMotorSpeeds(0f, 0f);
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning($"Error stopping gamepad vibration on destroy: {e.Message}");
+        }
     }
 }
