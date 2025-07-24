@@ -39,7 +39,7 @@ public class AirDefenseSystem : MonoBehaviour
         MissileFollow follow = missile.GetComponent<MissileFollow>();
         if (follow != null)
         {
-            follow.target = target;
+            //follow.target = target;
         }
 
         Debug.Log("🚀 Missile fired at: " + Time.time);

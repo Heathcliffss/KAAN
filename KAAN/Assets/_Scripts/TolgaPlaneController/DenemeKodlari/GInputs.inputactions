@@ -1,0 +1,67 @@
+{
+    "version": 1,
+    "name": "GInputs",
+    "maps": [
+        {
+            "name": "Gameplay",
+            "id": "62c51e64-c674-48aa-915c-8c6f48d130f4",
+            "actions": [
+                {
+                    "name": "Yaw",
+                    "type": "PassThrough",
+                    "id": "d1d35891-4036-4f72-85d7-7f067d9e1948",
+                    "expectedControlType": "Axis",
+                    "processors": "Clamp(min=-1,max=1),AxisDeadzone",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Pan",
+                    "type": "PassThrough",
+                    "id": "e5c18909-01dc-499b-b6fa-487e3b8d3f34",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "64b996c5-8e3b-4052-abe9-f5e5646ff423",
+                    "path": "<Gamepad>/rightStick/x",
+                    "interactions": "",
+                    "processors": "AxisDeadzone",
+                    "groups": ";Gamepad",
+                    "action": "Yaw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9018d4a7-2624-4499-aaf2-b7126ca99227",
+                    "path": "<Gamepad>/rightStick/y",
+                    "interactions": "",
+                    "processors": "AxisDeadzone",
+                    "groups": ";Gamepad",
+                    "action": "Pan",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Gamepad",
+            "bindingGroup": "Gamepad",
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}
