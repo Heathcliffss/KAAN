@@ -5,12 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/TolgPlaneController.unity
     guid: 12770474e6532944f9660a809826526f
   - enabled: 0
     path: Assets/OutdoorsScene.unity
     guid: 8124e5870f4fd4c779e7a5f994e84ad1
+  - enabled: 1
+    path: Assets/MainMenu.unity
+    guid: 2f92710be0a280b47a38ae6bfdb17b3f
+  - enabled: 1
+    path: Assets/Cem.unity
+    guid: a6ddd40d98544d44480807637014a95e
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9c1765abd988e854ab44351c6298e02e, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 35845fe01580c41289b024647b1d1c53, type: 3}
