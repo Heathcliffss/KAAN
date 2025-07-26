@@ -660,7 +660,7 @@ MonoBehaviour:
   jetParticle: {fileID: 76541542}
   maxRateOverTime: 1000
   maxStartSpeed: 15
-  responseSpeed: 0.2
+  responseSpeed: 0.12
 --- !u!199 &76541541
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -4587,7 +4587,7 @@ ParticleSystem:
     intensityCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.77
+      scalar: 2.93
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4637,7 +4637,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    maxLights: 6
+    maxLights: 21
   TrailModule:
     enabled: 0
     mode: 0
@@ -13286,7 +13286,7 @@ Light:
   serializedVersion: 11
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 5234.488
+  m_Intensity: 559.2019
   m_Range: 50.75
   m_SpotAngle: 31.000038
   m_InnerSpotAngle: 21.80208
@@ -13329,9 +13329,9 @@ Light:
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 19.58
-  m_ColorTemperature: 3907.46
+  m_ColorTemperature: 4508.9
   m_UseColorTemperature: 1
-  m_BoundingSphereOverride: {x: 4.5916e-41, y: 5.166571e+29, z: 2.7106712e-20, w: 6.42954e-40}
+  m_BoundingSphereOverride: {x: 2.7105054e-20, y: 1.83733e-40, z: 4.1645e-41, w: 4e-45}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
@@ -19104,7 +19104,7 @@ ParticleSystem:
     intensityCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.77
+      scalar: 2.93
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -19154,7 +19154,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    maxLights: 6
+    maxLights: 21
   TrailModule:
     enabled: 0
     mode: 0
@@ -20008,7 +20008,7 @@ MonoBehaviour:
   jetParticle: {fileID: 2050869504}
   maxRateOverTime: 1000
   maxStartSpeed: 15
-  responseSpeed: 0.2
+  responseSpeed: 0.12
 --- !u!1 &2056913768 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6900775217389659585, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
