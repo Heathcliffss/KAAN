@@ -22,16 +22,18 @@ public class GameManager : MonoBehaviour
     public AirplaneController AirplaneController;
 
     public Vector3 planeSpeed;
-   
 
-    
-
+    bool RightShoulderPressed = false;
 
 
 
 
 
-    
+
+
+
+
+
     void Start()
     {
         Cam2UI.SetActive(false);
@@ -66,9 +68,16 @@ public class GameManager : MonoBehaviour
 
         }
 
-        
+        if (Gamepad.current != null)
+        {
+            if (Gamepad.current.rightShoulder.wasPressedThisFrame)
+            {
+                RightShoulderPressed = true;
+            }
+            else { RightShoulderPressed = false; };
+        }
 
-        Rigidbody rb2 = Plane.GetComponent<Rigidbody>();
+            Rigidbody rb2 = Plane.GetComponent<Rigidbody>();
         float speed2 = rb2.linearVelocity.magnitude;
 
         float egim = AirplaneController.Pitch;
@@ -76,7 +85,7 @@ public class GameManager : MonoBehaviour
 
         planeSpeed = Plane.GetComponent<Rigidbody>().linearVelocity;
         
-        if (Input.GetKeyDown(KeyCode.V) & egim < 0.2|| Gamepad.current.rightShoulder.wasPressedThisFrame & egim < 0.2)
+        if (Input.GetKeyDown(KeyCode.V) & egim < 0.2|| RightShoulderPressed & egim < 0.2)
         {
             GameObject instantiatedBomb = Instantiate(Bomb, BombLocation.position, BombRotation.rotation);
 
