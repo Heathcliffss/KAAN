@@ -36,9 +36,7 @@ public class AirplaneController : MonoBehaviour
 
     bool IsSpace = true;
 
-    public InputActionReference yawkey;
-    public InputActionReference pankey;
-
+    
 
     // Remove the gamepad field declaration and handle it safely in Update
     private float lastVibrateTime;
@@ -52,9 +50,30 @@ public class AirplaneController : MonoBehaviour
 
     private void Update()
     {
-        float yawkey2 = Gamepad.current.rightStick.x.ReadValue();
-        float pankey2 = Gamepad.current.leftStick.y.ReadValue();
-        float flap2 = Gamepad.current.rightStick.y.ReadValue();
+        float yawKey2 = 0f;
+
+        if (Gamepad.current != null)
+        {
+            yawKey2 = Gamepad.current.rightStick.x.ReadValue();
+        }
+        else {  };
+
+        float pankey2 = 0f;
+
+        if (Gamepad.current != null)
+        {
+            pankey2 = Gamepad.current.leftStick.y.ReadValue();
+        }
+        else { Debug.Log("Gamepad Bagli Degil"); pankey2 = Input.GetAxis("Vertical"); }
+
+        float flap2 = 0f;
+
+        if (Gamepad.current != null)
+        {
+            flap2 = Gamepad.current.rightStick.y.ReadValue();
+        }
+        
+
         float newflap2 = flap2 * -1f;
         newflap2 = Mathf.Clamp(newflap2, 0f, 1f);
 
@@ -64,7 +83,7 @@ public class AirplaneController : MonoBehaviour
         //Pitch = Input.GetAxis("Vertical");
         Pitch = pankey2;
         Roll = Input.GetAxis("Horizontal");
-        Yaw = -yawkey2;
+        Yaw = -yawKey2;
 
         float R2 = Input.GetAxis("RightTrigger");
         float L2 = Input.GetAxis("LeftTrigger");
@@ -78,7 +97,7 @@ public class AirplaneController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("spacee");
+            
             if (IsSpace)
             {
                 thrustPercent = 1;
