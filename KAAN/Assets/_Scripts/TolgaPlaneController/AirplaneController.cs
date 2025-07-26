@@ -227,4 +227,9 @@ public class AirplaneController : MonoBehaviour
             Debug.LogWarning($"Error stopping gamepad vibration on destroy: {e.Message}");
         }
     }
+    public float GetThrustPercent()
+    {
+        return thrustPercent;
+    }
+
 }
