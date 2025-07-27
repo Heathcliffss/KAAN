@@ -1,19 +1,27 @@
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ScoreListUI : MonoBehaviour
 {
-    public Transform listParent;           // ScrollView içindeki Content objesi
-    public GameObject scoreEntryPrefab;    // Tek satýrlýk skor prefabý
+    public Transform listParent;
+    public GameObject scoreEntryPrefab;
 
     void Start()
     {
-        var data = ScoreManager.LoadScores();
+        ScoreData scoreData = ScoreManager.LoadScores();
+        List<ScoreEntry> scores = scoreData.scores;
 
-        foreach (var entry in data.scores)
+        foreach (Transform child in listParent)
         {
-            GameObject item = Instantiate(scoreEntryPrefab, listParent);
-            item.GetComponent<Text>().text = $"{entry.playerName} - {entry.score}";
+            Destroy(child.gameObject); // eski satýrlarý sil
+        }
+
+        foreach (var entry in scores)
+        {
+            GameObject go = Instantiate(scoreEntryPrefab, listParent);
+            go.GetComponent<TMP_Text>().text = $"{entry.playerName} - {entry.score}";
         }
     }
 }

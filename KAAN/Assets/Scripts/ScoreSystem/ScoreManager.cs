@@ -6,16 +6,23 @@ public static class ScoreManager
 {
     public static string FilePath => Application.persistentDataPath + "/scores.json";
 
-    public static void SaveScore(string name, int score)
+    public static void SaveScore(string playerName, int score)
     {
         ScoreData data = LoadScores();
 
-        data.scores.Add(new ScoreEntry { playerName = name, score = score });
-        data.scores = data.scores.OrderByDescending(s => s.score).ToList(); // Skora göre sýrala
+        data.scores.Add(new ScoreEntry
+        {
+            playerName = playerName,
+            score = score
+        });
 
-        string json = JsonUtility.ToJson(data);
+        // Sýralama: Skor büyükten küçüðe
+        data.scores.Sort((a, b) => b.score.CompareTo(a.score));
+
+        string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(FilePath, json);
     }
+
 
     public static ScoreData LoadScores()
     {
