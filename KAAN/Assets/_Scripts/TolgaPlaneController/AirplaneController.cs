@@ -16,6 +16,8 @@ public class AirplaneController : MonoBehaviour
     float pitchControlSensitivity = 0.2f;
     [SerializeField]
     float yawControlSensitivity = 0.2f;
+    [SerializeField]
+    float YawAssist = 1000f;
 
     [Range(-1, 1)]
     public float Pitch;
@@ -33,10 +35,15 @@ public class AirplaneController : MonoBehaviour
 
     AircraftPhysics aircraftPhysics;
     Rigidbody rb;
-
-    bool IsSpace = true;
-
     
+    bool IsSpace = true;
+    [SerializeField]
+    private Transform IsGround;
+    [SerializeField]
+    private bool onGround;
+
+
+
 
     // Remove the gamepad field declaration and handle it safely in Update
     private float lastVibrateTime;
@@ -80,16 +87,29 @@ public class AirplaneController : MonoBehaviour
         
 
 
-        //Pitch = Input.GetAxis("Vertical");
-        Pitch = pankey2;
+       
+        //Pitch = pankey2;
         Roll = Input.GetAxis("Horizontal");
         Yaw = -yawKey2;
+        Pitch = Input.GetAxis("Vertical");
+
 
         float R2 = Input.GetAxis("RightTrigger");
         float L2 = Input.GetAxis("LeftTrigger");
 
-       
+        float mutlakYaw = Mathf.Abs(Yaw);
+        onGround = Physics.Raycast(IsGround.position, Vector3.down, 1f);
+
+        if (mutlakYaw > 0.1f || onGround)
+        {
+            rb.AddForce(Vector3.up * YawAssist, ForceMode.Force);
+             
+            
+        }
         
+        
+
+
 
         thrustPercent += R2 * Time.deltaTime;
         thrustPercent -= L2 * Time.deltaTime;
@@ -226,5 +246,9 @@ public class AirplaneController : MonoBehaviour
         {
             Debug.LogWarning($"Error stopping gamepad vibration on destroy: {e.Message}");
         }
+    }
+    public float GetThrustPercent()
+    {
+        return thrustPercent;
     }
 }

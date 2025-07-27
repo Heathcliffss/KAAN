@@ -3194,7 +3194,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 3000
-  field of view: 68.79611
+  field of view: 50.1
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -5442,7 +5442,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 68.79611
+    FieldOfView: 50.1
     OrthographicSize: 5
     NearClipPlane: 0.1
     FarClipPlane: 3000
@@ -5488,7 +5488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36d1163fa822e8b418a0a603ec078d5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damping: 0.1
+  Damping: 0.27
 --- !u!114 &1343864372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5537,7 +5537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4afa82ae3200b82408d605c3dbdd1e38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damping: 0.2
+  Damping: 0.14
 --- !u!1 &1362733055
 GameObject:
   m_ObjectHideFlags: 0
@@ -6799,15 +6799,19 @@ PrefabInstance:
       objectReference: {fileID: 1299660755}
     - target: {fileID: 5191297074654481537, guid: 53ae75ab9e6361c41876acd8a2601aa9, type: 3}
       propertyPath: chaseSpeed
-      value: 90
+      value: 144.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5191297074654481537, guid: 53ae75ab9e6361c41876acd8a2601aa9, type: 3}
+      propertyPath: loseDistance
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 5191297074654481537, guid: 53ae75ab9e6361c41876acd8a2601aa9, type: 3}
       propertyPath: viewDistance
-      value: 300
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 5191297074654481537, guid: 53ae75ab9e6361c41876acd8a2601aa9, type: 3}
       propertyPath: rotationSpeed
-      value: 1
+      value: 0.67
       objectReference: {fileID: 0}
     - target: {fileID: 5191297074654481537, guid: 53ae75ab9e6361c41876acd8a2601aa9, type: 3}
       propertyPath: waypoints.Array.size
@@ -7334,7 +7338,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1724477244}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41cff2cb888bbdd48b01d835a7acac0e, type: 3}
   m_Name: 
@@ -9034,9 +9038,49 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1416251904708632062, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+      propertyPath: Yaw
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 1416251904708632062, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+      propertyPath: IsGround
+      value: 
+      objectReference: {fileID: 734798007}
+    - target: {fileID: 1416251904708632062, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+      propertyPath: YawAssist
+      value: 6000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1416251904708632062, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
       propertyPath: displayText
       value: 
       objectReference: {fileID: 965925457}
+    - target: {fileID: 1416251904708632062, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+      propertyPath: yawControlSensitivity
+      value: 2.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3729527407972516659, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+      propertyPath: thrust
+      value: 6836
+      objectReference: {fileID: 0}
+    - target: {fileID: 4036230397920117247, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4457403302642856923, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.001745389
+      objectReference: {fileID: 0}
+    - target: {fileID: 4457403302642856923, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 4457403302642856923, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4457403302642856923, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 179.8
+      objectReference: {fileID: 0}
     - target: {fileID: 6900775217389659585, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
       propertyPath: m_Name
       value: KaanAircraft
@@ -9086,6 +9130,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9088323586185899598, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9088323586185899598, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
@@ -9126,7 +9174,7 @@ Transform:
   m_GameObject: {fileID: 5177035060036362949}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -298.1, y: 425.51, z: 23.915653}
+  m_LocalPosition: {x: -298.1, y: 4205.51, z: 23.915653}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
