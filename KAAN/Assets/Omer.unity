@@ -12882,13 +12882,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1568129721}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.9906863, y: 0.06955347, z: -0.0081983125, w: -0.11677284}
-  m_LocalPosition: {x: -1.61, y: 10.174, z: 13.597}
+  m_LocalRotation: {x: -0.9898573, y: 0.08049416, z: -0.009487932, w: -0.116675526}
+  m_LocalPosition: {x: -1.55, y: 10.18, z: 13.6}
   m_LocalScale: {x: 0.5900357, y: 0.41664, z: 0.41664004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2056913773}
-  m_LocalEulerAnglesHint: {x: -193.445, y: 0, z: 8.031998}
+  m_LocalEulerAnglesHint: {x: -193.445, y: 0, z: 9.298004}
 --- !u!114 &1568129723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12905,7 +12905,7 @@ MonoBehaviour:
   rightWingEffect: {fileID: 1977027174}
   airplaneController: {fileID: 2056913770}
   rollThreshold: 10
-  maxRoll: 45
+  maxRoll: 60
   minEmissionRate: 0
   maxEmissionRate: 5000
 --- !u!199 &1568129724
@@ -13705,7 +13705,7 @@ ParticleSystem:
     radius:
       value: 1
       mode: 0
-      spread: 0.07
+      spread: 1
       speed:
         serializedVersion: 2
         minMaxState: 0
@@ -20513,7 +20513,7 @@ ParticleSystem:
     radius:
       value: 1
       mode: 0
-      spread: 0.07
+      spread: 1
       speed:
         serializedVersion: 2
         minMaxState: 0
@@ -24525,7 +24525,7 @@ Transform:
   m_GameObject: {fileID: 1977027172}
   serializedVersion: 2
   m_LocalRotation: {x: -0.9898576, y: -0.0804913, z: 0.009487563, w: -0.11667517}
-  m_LocalPosition: {x: 1.595, y: 10.163, z: 13.601471}
+  m_LocalPosition: {x: 2.204, y: 10.26, z: 13.578}
   m_LocalScale: {x: 0.5900357, y: 0.41664, z: 0.41664004}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24547,7 +24547,7 @@ MonoBehaviour:
   rightWingEffect: {fileID: 1977027174}
   airplaneController: {fileID: 2056913770}
   rollThreshold: 10
-  maxRoll: 45
+  maxRoll: 60
   minEmissionRate: 0
   maxEmissionRate: 5000
 --- !u!1 &2004594558
