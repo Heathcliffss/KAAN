@@ -8,8 +8,12 @@ public class WingWindEffectController : MonoBehaviour
     public AirplaneController airplaneController;
 
     [Header("Roll Ayarlarý")]
-    public float rollThreshold = 10f; // Etkinleþme eþiði (derece)
-    public float maxRoll = 45f;       // Maksimum etki eþiði
+    public float rollThreshold = 10f;
+    public float maxRoll = 45f;
+
+    [Header("Pitch Ayarlarý")]
+    public float pitchThreshold = 10f;
+    public float maxPitch = 45f;
 
     [Header("Emission Ayarlarý")]
     public float minEmissionRate = 0f;
@@ -19,19 +23,24 @@ public class WingWindEffectController : MonoBehaviour
     {
         if (!airplaneController || !leftWingEffect || !rightWingEffect) return;
 
-        // Roll deðerini al (-1 ile 1 arasý)
-        float rollInput = airplaneController.Roll;
+        float rollInput = airplaneController.Roll;   // -1 (sola yatýþ) ila 1 (saða yatýþ)
+        float pitchInput = airplaneController.Pitch; // -1 (burun aþaðý) ila 1 (burun yukarý)
 
-        // Ýzin verilen aralýkla çarp, dereceye çevir
         float rollAngle = rollInput * maxRoll;
+        float pitchAngle = pitchInput * maxPitch;
 
-        // Emission oranýný hesapla (normalize edip mutlak deðer kullanýyoruz)
-        float intensity = Mathf.InverseLerp(rollThreshold, maxRoll, Mathf.Abs(rollAngle));
-        float emissionRate = Mathf.Lerp(minEmissionRate, maxEmissionRate, intensity);
+        // Sol kanat için hem sola roll hem de pitch etkisini hesapla
+        float leftRollIntensity = rollAngle < 0 ? Mathf.InverseLerp(rollThreshold, maxRoll, Mathf.Abs(rollAngle)) : 0f;
+        float leftPitchIntensity = Mathf.InverseLerp(pitchThreshold, maxPitch, Mathf.Abs(pitchAngle));
+        float leftEmission = Mathf.Lerp(minEmissionRate, maxEmissionRate, Mathf.Max(leftRollIntensity, leftPitchIntensity));
 
-        // Sol ve sað efekti güncelle
-        SetEmissionRate(leftWingEffect, rollAngle < 0 ? emissionRate : 0f);
-        SetEmissionRate(rightWingEffect, rollAngle > 0 ? emissionRate : 0f);
+        // Sað kanat için hem saða roll hem de pitch etkisini hesapla
+        float rightRollIntensity = rollAngle > 0 ? Mathf.InverseLerp(rollThreshold, maxRoll, Mathf.Abs(rollAngle)) : 0f;
+        float rightPitchIntensity = Mathf.InverseLerp(pitchThreshold, maxPitch, Mathf.Abs(pitchAngle));
+        float rightEmission = Mathf.Lerp(minEmissionRate, maxEmissionRate, Mathf.Max(rightRollIntensity, rightPitchIntensity));
+
+        SetEmissionRate(leftWingEffect, leftEmission);
+        SetEmissionRate(rightWingEffect, rightEmission);
     }
 
     private void SetEmissionRate(ParticleSystem ps, float rate)

@@ -12906,8 +12906,10 @@ MonoBehaviour:
   airplaneController: {fileID: 2056913770}
   rollThreshold: 10
   maxRoll: 60
+  pitchThreshold: 10
+  maxPitch: 60
   minEmissionRate: 0
-  maxEmissionRate: 5000
+  maxEmissionRate: 250
 --- !u!199 &1568129724
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -12994,7 +12996,7 @@ ParticleSystem:
   m_GameObject: {fileID: 1568129721}
   serializedVersion: 8
   lengthInSec: 1
-  simulationSpeed: 5
+  simulationSpeed: 20
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -13121,7 +13123,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 4.3
+      scalar: 7
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -13563,7 +13565,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: -0.15
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -19802,7 +19804,7 @@ ParticleSystem:
   m_GameObject: {fileID: 1977027172}
   serializedVersion: 8
   lengthInSec: 1
-  simulationSpeed: 5
+  simulationSpeed: 20
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -19929,7 +19931,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 4.3
+      scalar: 7
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -20371,7 +20373,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: -0.15
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -24548,8 +24550,10 @@ MonoBehaviour:
   airplaneController: {fileID: 2056913770}
   rollThreshold: 10
   maxRoll: 60
+  pitchThreshold: 10
+  maxPitch: 60
   minEmissionRate: 0
-  maxEmissionRate: 5000
+  maxEmissionRate: 250
 --- !u!1 &2004594558
 GameObject:
   m_ObjectHideFlags: 0
