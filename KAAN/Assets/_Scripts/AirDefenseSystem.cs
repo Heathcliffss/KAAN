@@ -36,7 +36,7 @@ public class AirDefenseSystem : MonoBehaviour
     void ShootMissile()
     {
         GameObject missile = Instantiate(missilePrefab, firePoint.position, Quaternion.identity);
-        MissileFollow follow = missile.GetComponent<MissileFollow>();
+        MissileFollowHSS follow = missile.GetComponent<MissileFollowHSS>();
         if (follow != null)
         {
             //follow.target = target;
