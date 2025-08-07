@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.2548838, y: 12.912962, z: -12.4237585}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.21394368, y: 0.21394368, z: 0.21394368}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -125,6 +125,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b119a9c1191e5504781352421aecf0ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  speed: 30
+  rotationSpeed: 5
+  maxLifetime: 10
+  explosionEffect: {fileID: 0}
+  explosionSound: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!54 &8130774339022909215
 Rigidbody:
   m_ObjectHideFlags: 0

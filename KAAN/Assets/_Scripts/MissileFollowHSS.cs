@@ -4,6 +4,7 @@ public class MissileFollowHSS : MonoBehaviour
 {
     public Transform target;
     public float speed = 15f;
+    public float rotationSpeed = 5f;
     public float maxLifetime = 10f;
 
     public GameObject explosionEffect;
@@ -22,17 +23,22 @@ public class MissileFollowHSS : MonoBehaviour
     {
         if (isTracking && target != null)
         {
-            // Hedefe doğru gider
             Vector3 direction = (target.position - transform.position).normalized;
-            transform.position += direction * speed * Time.deltaTime;
-            transform.forward = Vector3.Lerp(transform.forward, direction, Time.deltaTime * 5f);
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            transform.position += transform.forward * speed * Time.deltaTime;
         }
         else
         {
-            // Rastgele hareket
             transform.position += randomDirection * speed * Time.deltaTime;
             transform.forward = Vector3.Lerp(transform.forward, randomDirection, Time.deltaTime * 2f);
         }
+    }
+
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+        isTracking = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -42,7 +48,7 @@ public class MissileFollowHSS : MonoBehaviour
             Debug.Log("🔄 Missile entered TrackingZone — stop tracking!");
             isTracking = false;
             randomDirection = Random.onUnitSphere;
-            randomDirection.y = Mathf.Clamp(randomDirection.y, -0.1f, 0.2f); // Daha kontrollü yükseklik
+            randomDirection.y = Mathf.Clamp(randomDirection.y, -0.1f, 0.2f);
         }
 
         if (other.CompareTag("Player"))
