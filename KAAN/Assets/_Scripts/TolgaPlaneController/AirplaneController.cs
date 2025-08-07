@@ -16,6 +16,8 @@ public class AirplaneController : MonoBehaviour
     float pitchControlSensitivity = 0.2f;
     [SerializeField]
     float yawControlSensitivity = 0.2f;
+    [SerializeField]
+    float YawAssist = 1000f;
 
     [Range(-1, 1)]
     public float Pitch;
@@ -33,11 +35,14 @@ public class AirplaneController : MonoBehaviour
 
     AircraftPhysics aircraftPhysics;
     Rigidbody rb;
-
+    
     bool IsSpace = true;
+    [SerializeField]
+    private Transform IsGround;
+    [SerializeField]
+    private bool onGround;
 
-    public InputActionReference yawkey;
-    public InputActionReference pankey;
+
 
 
     // Remove the gamepad field declaration and handle it safely in Update
@@ -52,25 +57,59 @@ public class AirplaneController : MonoBehaviour
 
     private void Update()
     {
-        float yawkey2 = Gamepad.current.rightStick.x.ReadValue();
-        float pankey2 = Gamepad.current.leftStick.y.ReadValue();
-        float flap2 = Gamepad.current.rightStick.y.ReadValue();
+        float yawKey2 = 0f;
+
+        if (Gamepad.current != null)
+        {
+            yawKey2 = Gamepad.current.rightStick.x.ReadValue();
+        }
+        else {  };
+
+        float pankey2 = 0f;
+
+        if (Gamepad.current != null)
+        {
+            pankey2 = Gamepad.current.leftStick.y.ReadValue();
+        }
+        else { Debug.Log("Gamepad Bagli Degil"); pankey2 = Input.GetAxis("Vertical"); }
+
+        float flap2 = 0f;
+
+        if (Gamepad.current != null)
+        {
+            flap2 = Gamepad.current.rightStick.y.ReadValue();
+        }
+        
+
         float newflap2 = flap2 * -1f;
         newflap2 = Mathf.Clamp(newflap2, 0f, 1f);
 
         
 
 
-        //Pitch = Input.GetAxis("Vertical");
-        Pitch = pankey2;
+       
+        //Pitch = pankey2;
         Roll = Input.GetAxis("Horizontal");
-        Yaw = -yawkey2;
+        Yaw = -yawKey2;
+        Pitch = Input.GetAxis("Vertical");
+
 
         float R2 = Input.GetAxis("RightTrigger");
         float L2 = Input.GetAxis("LeftTrigger");
 
-       
+        float mutlakYaw = Mathf.Abs(Yaw);
+        onGround = Physics.Raycast(IsGround.position, Vector3.down, 1f);
+
+        if (mutlakYaw > 0.1f || onGround)
+        {
+            rb.AddForce(Vector3.up * YawAssist, ForceMode.Force);
+             
+            
+        }
         
+        
+
+
 
         thrustPercent += R2 * Time.deltaTime;
         thrustPercent -= L2 * Time.deltaTime;
@@ -78,7 +117,7 @@ public class AirplaneController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("spacee");
+            
             if (IsSpace)
             {
                 thrustPercent = 1;
@@ -207,5 +246,9 @@ public class AirplaneController : MonoBehaviour
         {
             Debug.LogWarning($"Error stopping gamepad vibration on destroy: {e.Message}");
         }
+    }
+    public float GetThrustPercent()
+    {
+        return thrustPercent;
     }
 }
