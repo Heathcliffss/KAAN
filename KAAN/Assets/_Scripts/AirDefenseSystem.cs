@@ -1,62 +1,68 @@
-﻿using System.Collections;
-using System.Reflection;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AirDefenseSystem : MonoBehaviour
 {
     public GameObject missilePrefab;
-    public Transform missileLaunchPoint;
-    public float launchInterval = 3f;
+    public Transform firePoint;
+    public float fireRate = 2f;
+    public float detectionRange = 500f;
 
-    private Transform currentTarget;
-    private Coroutine firingCoroutine;
+    private float fireCooldown;
+    private Transform target;
+    private bool isFiring = false;
 
-    public void StartFiringAt(Transform target)
+    private void Update()
     {
-        currentTarget = target;
-
-        if (firingCoroutine == null)
-            firingCoroutine = StartCoroutine(FireAtTarget());
-    }
-
-    public void StopFiring()
-    {
-        if (firingCoroutine != null)
+        if (isFiring && target != null)
         {
-            StopCoroutine(firingCoroutine);
-            firingCoroutine = null;
-        }
-
-        currentTarget = null;
-    }
-
-    private IEnumerator FireAtTarget()
-    {
-        while (currentTarget != null)
-        {
-            GameObject missile = Instantiate(missilePrefab, missileLaunchPoint.position, Quaternion.identity);
-            missile.GetComponent<MissileFollowHSS>().SetTarget(currentTarget);
-
-            yield return new WaitForSeconds(launchInterval);
+            float dist = Vector3.Distance(transform.position, target.position);
+            if (dist <= detectionRange)
+            {
+                FireMissile();
+            }
         }
     }
 
-    // AirDefenseSystem.cs
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log(">> Oyuncu hava sahasına girdi, füze ateşi başlıyor.");
-            StartFiringAt(other.transform); // işte bu zaten Transform!
+            StartFiringAt(other.transform);
         }
     }
-
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             StopFiring();
+        }
+    }
+
+    public void StartFiringAt(Transform newTarget)
+    {
+        target = newTarget;
+        isFiring = true;
+    }
+
+    public void StopFiring()
+    {
+        target = null;
+        isFiring = false;
+    }
+
+    private void FireMissile()
+    {
+        if (Time.time >= fireCooldown)
+        {
+            GameObject missileObj = Instantiate(missilePrefab, firePoint.position, firePoint.rotation);
+            MissileFollowHSS missile = missileObj.GetComponent<MissileFollowHSS>();
+            if (missile != null)
+            {
+                missile.SetTarget(target);
+            }
+
+            fireCooldown = Time.time + fireRate;
         }
     }
 }
