@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - GroundLayer
   - b
+  - AircraftPart
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - GroundLayer
   - Dusman
   - Bomb
-  - 
-  - 
+  - WheelLayer
+  - Missile
   - 
   - 
   - 

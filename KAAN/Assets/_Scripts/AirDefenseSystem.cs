@@ -1,47 +1,62 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Reflection;
+using UnityEngine;
 
 public class AirDefenseSystem : MonoBehaviour
 {
-    public Transform firePoint;
     public GameObject missilePrefab;
-    public float fireInterval = 2f;
+    public Transform missileLaunchPoint;
+    public float launchInterval = 3f;
 
-    [HideInInspector] public Transform target;
-    private float timer = 0f;
-    private bool canShoot = false;
-
-    void Update()
-    {
-        if (!canShoot || target == null) return;
-
-        timer += Time.deltaTime;
-        if (timer >= fireInterval)
-        {
-            timer = 0f;
-            ShootMissile();
-        }
-    }
+    private Transform currentTarget;
+    private Coroutine firingCoroutine;
 
     public void StartFiringAt(Transform target)
     {
-        this.target = target;
-        canShoot = true;
+        currentTarget = target;
+
+        if (firingCoroutine == null)
+            firingCoroutine = StartCoroutine(FireAtTarget());
     }
 
     public void StopFiring()
     {
-        canShoot = false;
-    }
-
-    void ShootMissile()
-    {
-        GameObject missile = Instantiate(missilePrefab, firePoint.position, Quaternion.identity);
-        MissileFollowHSS follow = missile.GetComponent<MissileFollowHSS>();
-        if (follow != null)
+        if (firingCoroutine != null)
         {
-            follow.target = target;
+            StopCoroutine(firingCoroutine);
+            firingCoroutine = null;
         }
 
-        Debug.Log(" Missile fired at: " + Time.time);
+        currentTarget = null;
+    }
+
+    private IEnumerator FireAtTarget()
+    {
+        while (currentTarget != null)
+        {
+            GameObject missile = Instantiate(missilePrefab, missileLaunchPoint.position, Quaternion.identity);
+            missile.GetComponent<MissileFollowHSS>().SetTarget(currentTarget);
+
+            yield return new WaitForSeconds(launchInterval);
+        }
+    }
+
+    // AirDefenseSystem.cs
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log(">> Oyuncu hava sahasına girdi, füze ateşi başlıyor.");
+            StartFiringAt(other.transform); // işte bu zaten Transform!
+        }
+    }
+
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            StopFiring();
+        }
     }
 }
