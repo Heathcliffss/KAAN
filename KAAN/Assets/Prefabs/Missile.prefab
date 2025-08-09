@@ -151,6 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b119a9c1191e5504781352421aecf0ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  baseExtraSpeed: 110
   rotateSpeed: 5
   explosionEffect: {fileID: 0}

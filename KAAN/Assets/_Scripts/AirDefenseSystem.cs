@@ -11,23 +11,63 @@ public class AirDefenseSystem : MonoBehaviour
     private Transform target;
     private bool isFiring = false;
 
+    // Bu iki metot TriggerTest tarafından çağrılıyor — bunların PUBLIC ve doğru imzada olması şart.
+    public void StartFiringAt(Transform newTarget)
+    {
+        if (newTarget == null) return;
+        target = newTarget;
+        isFiring = true;
+        Debug.Log("AirDefenseSystem: StartFiringAt -> " + newTarget.name);
+    }
+
+    public void StopFiring()
+    {
+        isFiring = false;
+        target = null;
+        Debug.Log("AirDefenseSystem: StopFiring");
+    }
+
     private void Update()
     {
-        if (isFiring && target != null)
+        if (!isFiring || target == null) return;
+
+        float dist = Vector3.Distance(transform.position, target.position);
+        if (dist > detectionRange)
         {
-            float dist = Vector3.Distance(transform.position, target.position);
-            if (dist <= detectionRange)
-            {
-                FireMissile();
-            }
+            StopFiring();
+            return;
+        }
+
+        if (Time.time >= fireCooldown)
+        {
+            FireMissile();
+            fireCooldown = Time.time + fireRate;
         }
     }
 
+    private void FireMissile()
+    {
+        if (missilePrefab == null || firePoint == null)
+        {
+            Debug.LogWarning("AirDefenseSystem: missilePrefab veya firePoint atanmadı.");
+            return;
+        }
+
+        GameObject missileObj = Instantiate(missilePrefab, firePoint.position, firePoint.rotation);
+        var missile = missileObj.GetComponent<MissileFollowHSS>();
+        if (missile != null)
+            missile.SetTarget(target);
+
+        Debug.Log("AirDefenseSystem: Missile fired at " + (target != null ? target.name : "null"));
+    }
+
+    // Bu triggerlar opsiyonel — TriggerTest zaten Start/Stop çağırıyorsa gerek yok.
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            StartFiringAt(other.transform);
+            // otomatik başlatmak istersen burayı aç
+            // StartFiringAt(other.transform);
         }
     }
 
@@ -35,34 +75,7 @@ public class AirDefenseSystem : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            StopFiring();
-        }
-    }
-
-    public void StartFiringAt(Transform newTarget)
-    {
-        target = newTarget;
-        isFiring = true;
-    }
-
-    public void StopFiring()
-    {
-        target = null;
-        isFiring = false;
-    }
-
-    private void FireMissile()
-    {
-        if (Time.time >= fireCooldown)
-        {
-            GameObject missileObj = Instantiate(missilePrefab, firePoint.position, firePoint.rotation);
-            MissileFollowHSS missile = missileObj.GetComponent<MissileFollowHSS>();
-            if (missile != null)
-            {
-                missile.SetTarget(target);
-            }
-
-            fireCooldown = Time.time + fireRate;
+            // StopFiring();
         }
     }
 }
