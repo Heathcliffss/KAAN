@@ -8,8 +8,20 @@ public class AircraftPart : MonoBehaviour
     [Tooltip("Bu parça yok edildiðinde birlikte devre dýþý býrakýlacak obje (Opsiyonel)")]
     public GameObject additionalPartToDisable; // Kapatýlacak ek obje
 
+    [Header("Yok olma efekti")]
+    public ParticleSystem destroyEffect; // Partikül efekti
+
     private int hitCount = 0;
     private bool detached = false;
+
+    private void Start()
+    {
+        // Baþta efekt kapalý olsun
+        if (destroyEffect != null)
+        {
+            destroyEffect.gameObject.SetActive(false);
+        }
+    }
 
     public void TakeDamage()
     {
@@ -32,6 +44,13 @@ public class AircraftPart : MonoBehaviour
         if (detached) return;
         detached = true;
 
+        // Efekti çalýþtýr
+        if (destroyEffect != null)
+        {
+            destroyEffect.gameObject.SetActive(true);
+            destroyEffect.Play();
+        }
+
         // Ana objeyi devre dýþý býrak
         gameObject.SetActive(false);
 
@@ -41,6 +60,6 @@ public class AircraftPart : MonoBehaviour
             additionalPartToDisable.SetActive(false);
         }
 
-        Debug.Log(">> Kanat ve baðlý parça devre dýþý býrakýldý.");
+        Debug.Log(">> Kanat ve baðlý parça devre dýþý býrakýldý, efekt oynatýldý.");
     }
 }
