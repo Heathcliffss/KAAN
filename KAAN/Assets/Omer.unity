@@ -10164,8 +10164,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: f6fccf399211ab542bf88c0f132a11d0, type: 3}
-  m_Resource: {fileID: 8300000, guid: f6fccf399211ab542bf88c0f132a11d0, type: 3}
+  m_audioClip: {fileID: 8300000, guid: db565635783fba846b3f8ff800476588, type: 3}
+  m_Resource: {fileID: 8300000, guid: db565635783fba846b3f8ff800476588, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -12615,8 +12615,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 9575cb69c91249240a211e575a7a9974, type: 3}
-  m_Resource: {fileID: 8300000, guid: 9575cb69c91249240a211e575a7a9974, type: 3}
+  m_audioClip: {fileID: 8300000, guid: f6fccf399211ab542bf88c0f132a11d0, type: 3}
+  m_Resource: {fileID: 8300000, guid: f6fccf399211ab542bf88c0f132a11d0, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -19963,8 +19963,8 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 1
+      time: 0.18343163
+      value: 0.663887
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -19978,8 +19978,8 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 0
+      time: 0.020709991
+      value: 0.24880981
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -19994,7 +19994,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0.946
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -30216,16 +30216,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 794924cca5c98f9478a6ed995c8e46c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RunningSound: {fileID: 933779605}
-  RunningMaxVolume: 1
-  RunningMaxPitch: 0.54
-  idleSound: {fileID: 1431594057}
-  idleMaxVolume: 0.8
-  idleMaxPitch: 0.29
+  idleSound: {fileID: 933779605}
+  runningSound: {fileID: 1431594057}
   windSound: {fileID: 1945364309}
-  windMaxVolume: 0.6
-  windMinVolume: 0.1
-  windPitch: 1
+  idleMaxVolume: 1
+  runningMaxVolume: 0.8
+  windMinVolume: 0
+  windMaxVolume: 0.36
+  windFadeDuration: 1
 --- !u!1 &2060416593
 GameObject:
   m_ObjectHideFlags: 0
