@@ -251,4 +251,16 @@ public class AirplaneController : MonoBehaviour
     {
         return thrustPercent;
     }
+
+    //omer
+    public void Crash()
+    {
+        Debug.Log("Uçak vuruldu ve düþüyor!");
+        // Uçuþ kontrollerini devre dýþý býrak
+        GetComponent<AirplaneController>().enabled = false;
+        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+        rb.mass = 300f;
+        rb.useGravity = true;
+    }
+
 }

@@ -12,12 +12,11 @@ GameObject:
   - component: {fileID: 7848907420232218763}
   - component: {fileID: 8915878701480209488}
   - component: {fileID: 5010289201137073505}
-  - component: {fileID: -2243731086945679504}
   - component: {fileID: 8130774339022909215}
-  - component: {fileID: -8316844193663319649}
-  m_Layer: 0
+  - component: {fileID: 3021007564216868150}
+  m_Layer: 10
   m_Name: Missile
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.2548838, y: 12.912962, z: -12.4237585}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.16995813, y: 0.2037628, z: 0.16995813}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -113,18 +112,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-2243731086945679504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4397777840610830785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b119a9c1191e5504781352421aecf0ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &8130774339022909215
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -152,18 +139,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-8316844193663319649
+--- !u!114 &3021007564216868150
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4397777840610830785}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6119b8d3222a0cf4a900101282052582, type: 3}
+  m_Script: {fileID: 11500000, guid: b119a9c1191e5504781352421aecf0ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rb: {fileID: 8130774339022909215}
-  _size: 10
-  _speed: 10
+  baseExtraSpeed: 110
+  rotateSpeed: 5
+  explosionEffect: {fileID: 0}

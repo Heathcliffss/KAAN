@@ -2,46 +2,80 @@
 
 public class AirDefenseSystem : MonoBehaviour
 {
-    public Transform firePoint;
     public GameObject missilePrefab;
-    public float fireInterval = 2f;
+    public Transform firePoint;
+    public float fireRate = 2f;
+    public float detectionRange = 500f;
 
-    [HideInInspector] public Transform target;
-    private float timer = 0f;
-    private bool canShoot = false;
+    private float fireCooldown;
+    private Transform target;
+    private bool isFiring = false;
 
-    void Update()
+    // Bu iki metot TriggerTest tarafından çağrılıyor — bunların PUBLIC ve doğru imzada olması şart.
+    public void StartFiringAt(Transform newTarget)
     {
-        if (!canShoot || target == null) return;
-
-        timer += Time.deltaTime;
-        if (timer >= fireInterval)
-        {
-            timer = 0f;
-            ShootMissile();
-        }
-    }
-
-    public void StartFiringAt(Transform target)
-    {
-        this.target = target;
-        canShoot = true;
+        if (newTarget == null) return;
+        target = newTarget;
+        isFiring = true;
+        Debug.Log("AirDefenseSystem: StartFiringAt -> " + newTarget.name);
     }
 
     public void StopFiring()
     {
-        canShoot = false;
+        isFiring = false;
+        target = null;
+        Debug.Log("AirDefenseSystem: StopFiring");
     }
 
-    void ShootMissile()
+    private void Update()
     {
-        GameObject missile = Instantiate(missilePrefab, firePoint.position, Quaternion.identity);
-        MissileFollowHSS follow = missile.GetComponent<MissileFollowHSS>();
-        if (follow != null)
+        if (!isFiring || target == null) return;
+
+        float dist = Vector3.Distance(transform.position, target.position);
+        if (dist > detectionRange)
         {
-            //follow.target = target;
+            StopFiring();
+            return;
         }
 
-        Debug.Log("🚀 Missile fired at: " + Time.time);
+        if (Time.time >= fireCooldown)
+        {
+            FireMissile();
+            fireCooldown = Time.time + fireRate;
+        }
+    }
+
+    private void FireMissile()
+    {
+        if (missilePrefab == null || firePoint == null)
+        {
+            Debug.LogWarning("AirDefenseSystem: missilePrefab veya firePoint atanmadı.");
+            return;
+        }
+
+        GameObject missileObj = Instantiate(missilePrefab, firePoint.position, firePoint.rotation);
+        var missile = missileObj.GetComponent<MissileFollowHSS>();
+        if (missile != null)
+            missile.SetTarget(target);
+
+        Debug.Log("AirDefenseSystem: Missile fired at " + (target != null ? target.name : "null"));
+    }
+
+    // Bu triggerlar opsiyonel — TriggerTest zaten Start/Stop çağırıyorsa gerek yok.
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            // otomatik başlatmak istersen burayı aç
+            // StartFiringAt(other.transform);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            // StopFiring();
+        }
     }
 }

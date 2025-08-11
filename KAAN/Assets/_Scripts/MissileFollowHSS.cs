@@ -2,60 +2,56 @@
 
 public class MissileFollowHSS : MonoBehaviour
 {
-    public Transform target;
-    public float speed = 15f;
-    public float maxLifetime = 10f;
-
+    public float baseExtraSpeed = 5f; // Uçağın hızına eklenecek sabit miktar
+    public float rotateSpeed = 5f;
     public GameObject explosionEffect;
-    public AudioClip explosionSound;
-    public AudioSource audioSource;
 
-    private bool isTracking = true;
-    private Vector3 randomDirection;
+    private Transform target;
+    private Rigidbody targetRb;
 
-    void Start()
+    public void SetTarget(Transform target)
     {
-        Destroy(gameObject, maxLifetime);
+        this.target = target;
+        targetRb = target.GetComponent<Rigidbody>(); // Uçağın rigidbody'sini al
     }
 
-    void Update()
+    private void Update()
     {
-        if (isTracking && target != null)
-        {
-            // Hedefe doğru gider
-            Vector3 direction = (target.position - transform.position).normalized;
-            transform.position += direction * speed * Time.deltaTime;
-            transform.forward = Vector3.Lerp(transform.forward, direction, Time.deltaTime * 5f);
-        }
-        else
-        {
-            // Rastgele hareket
-            transform.position += randomDirection * speed * Time.deltaTime;
-            transform.forward = Vector3.Lerp(transform.forward, randomDirection, Time.deltaTime * 2f);
-        }
+        if (target == null) return;
+
+        // Hedefin hızına göre füze hızını ayarla
+        float currentTargetSpeed = 0f;
+        if (targetRb != null)
+            currentTargetSpeed = targetRb.linearVelocity.magnitude; // Uçağın anlık hızı
+
+        float currentMissileSpeed = currentTargetSpeed + baseExtraSpeed;
+
+        // Yönelme
+        Vector3 direction = (target.position - transform.position).normalized;
+        Quaternion rotateTo = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotateTo, rotateSpeed * Time.deltaTime);
+
+        // İlerleme
+        transform.position += transform.forward * currentMissileSpeed * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == "HitArea")
+        if (other.gameObject.name == "DetectionArea") return;
+
+        Debug.Log("Füze çarptı: " + other.name);
+
+        var part = other.GetComponent<AircraftPart>();
+        if (part != null)
         {
-            Debug.Log("🔄 Missile entered TrackingZone — stop tracking!");
-            isTracking = false;
-            randomDirection = Random.onUnitSphere;
-            randomDirection.y = Mathf.Clamp(randomDirection.y, -0.1f, 0.2f); // Daha kontrollü yükseklik
+            Debug.Log("AircraftPart bulundu, hasar veriliyor.");
+            part.TakeDamage();
+        }
+        else
+        {
+            Debug.Log("Çarpılan objede AircraftPart yok.");
         }
 
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("💥 Missile hit the aircraft!");
-
-            if (explosionEffect != null)
-                Instantiate(explosionEffect, transform.position, Quaternion.identity);
-
-            if (audioSource != null && explosionSound != null)
-                audioSource.PlayOneShot(explosionSound);
-
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 }
