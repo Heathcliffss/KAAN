@@ -9,17 +9,24 @@ public class AirDefenseSystem : MonoBehaviour
     [HideInInspector] public Transform target;
     private float timer = 0f;
     private bool canShoot = false;
-
+    public Transform Player;
+    public Transform SelfPosition;
+    public float SeeLocation = 500f;
     void Update()
     {
+
+        Vector3 offset = Player.position - target.position;
         if (!canShoot || target == null) return;
 
         timer += Time.deltaTime;
         if (timer >= fireInterval)
         {
             timer = 0f;
-            ShootMissile();
+            if (Vector3.Distance(Player.position, SelfPosition.position) < SeeLocation) { ShootMissile(); }
+
         }
+
+        
     }
 
     public void StartFiringAt(Transform target)

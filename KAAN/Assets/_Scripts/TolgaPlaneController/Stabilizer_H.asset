@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a60844fd3a21749a8f39457ff52fee, type: 3}
   m_Name: Stabilizer_H
   m_EditorClassIdentifier: 
-  liftSlope: 6.28
+  liftSlope: 6.15
   skinFriction: 0.02
   zeroLiftAoA: -1.53
   stallAngleHigh: 15

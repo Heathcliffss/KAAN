@@ -18,6 +18,7 @@ public class SmartMisille : MonoBehaviour
     [Header("MOVEMENT")]
     [SerializeField] private float _speed = 15;
     [SerializeField] private float _rotateSpeed = 95;
+    [SerializeField] private float BombLifeTime = 5;
 
     [Header("PREDICTION")]
     [SerializeField] private float _maxDistancePredict = 100;
@@ -30,17 +31,18 @@ public class SmartMisille : MonoBehaviour
     [SerializeField] private float _deviationSpeed = 2;
     public float buffertime = 2f;
 
-    private bool _canStart = false;  // Ýþlem yapmaya baþlamadan önce bekleme kontrolü
+
+    private bool _canStart = false;  // ??lem yapmaya ba?lamadan ?nce bekleme kontrol?
 
     public GameManager Gm;
 
     private void Start()
     {
-        // Merhaba mesajýný konsola yazdýr
-        Debug.Log("Merhaba");
 
-        // 3 saniye bekle sonra iþlemlere baþla
+        Gm = FindObjectOfType<GameManager>();
+        // 3 saniye bekle sonra i?lemlere ba?la
         StartCoroutine(bombbuffer(buffertime));
+        StartCoroutine(BombLife(BombLifeTime));
     }
 
     private IEnumerator bombbuffer(float buffertime)
@@ -50,13 +52,18 @@ public class SmartMisille : MonoBehaviour
         _canStart = true;
     }
 
+    private IEnumerator BombLife(float BombLifeTime)
+    {
+        yield return new WaitForSeconds(BombLifeTime);
+        Destroy(gameObject);
+    }
     private void FixedUpdate()
     {
         if (!_canStart) return;
 
          _rb.linearVelocity = transform.forward * _speed + Gm.planeSpeed;
         
-        // En yakýn hedefi bul
+        // En yak?n hedefi bul
         FindClosestTarget();
 
         if (_currentTarget != null)
@@ -69,7 +76,7 @@ public class SmartMisille : MonoBehaviour
         }
         else
         {
-            // Hedef yoksa rastgele yön
+            // Hedef yoksa rastgele y?n
             _deviatedPrediction = transform.position + (transform.forward + UnityEngine.Random.insideUnitSphere).normalized * 10f;
         }
 

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -2243731086945679504}
   - component: {fileID: 8130774339022909215}
   - component: {fileID: -8316844193663319649}
+  - component: {fileID: 4772682639052917345}
   m_Layer: 0
   m_Name: Missile
   m_TagString: Enemy
@@ -120,7 +121,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4397777840610830785}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b119a9c1191e5504781352421aecf0ac, type: 3}
   m_Name: 
@@ -159,11 +160,25 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4397777840610830785}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6119b8d3222a0cf4a900101282052582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 8130774339022909215}
-  _size: 10
-  _speed: 10
+  _size: 104.3
+  _speed: 331.4
+--- !u!114 &4772682639052917345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4397777840610830785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b44d17a31ea6342c79c4d7983f1e129c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 20
+  rotateSpeed: 20
