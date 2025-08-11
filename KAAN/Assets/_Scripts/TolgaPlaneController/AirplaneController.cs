@@ -40,7 +40,7 @@ public class AirplaneController : MonoBehaviour
     [SerializeField]
     private Transform IsGround;
     [SerializeField]
-    private bool onGround;
+    public bool onGround;
 
 
 
@@ -71,7 +71,7 @@ public class AirplaneController : MonoBehaviour
         {
             pankey2 = Gamepad.current.leftStick.y.ReadValue();
         }
-        else { Debug.Log("Gamepad Bagli Degil"); pankey2 = Input.GetAxis("Vertical"); }
+        else {  pankey2 = Input.GetAxis("Vertical"); }
 
         float flap2 = 0f;
 
@@ -84,9 +84,19 @@ public class AirplaneController : MonoBehaviour
         float newflap2 = flap2 * -1f;
         newflap2 = Mathf.Clamp(newflap2, 0f, 1f);
 
-        
+
+        //hızı 60 dan büyür ise arttırma (savrulmaması için)
+       /* if(rb.linearVelocity.magnitude > 45)
+        {
+            rb.linearVelocity = rb.linearVelocity.normalized * 45f;
+        };*/
 
 
+        if(transform.position.y < 300)
+        {
+            // aircraftPhysics.thrust = 0f;
+            if (rb.linearVelocity.magnitude > 45) { rb.linearVelocity = rb.linearVelocity.normalized * 45f; }
+        }
        
         //Pitch = pankey2;
         Roll = Input.GetAxis("Horizontal");
@@ -94,8 +104,14 @@ public class AirplaneController : MonoBehaviour
         Pitch = Input.GetAxis("Vertical");
 
 
-        float R2 = Input.GetAxis("RightTrigger");
-        float L2 = Input.GetAxis("LeftTrigger");
+        float R2 = 0f;
+        float L2 = 0f;
+
+        if (Gamepad.current != null)
+        {
+            R2 = Gamepad.current.rightTrigger.ReadValue(); // 0-1 arası
+            L2 = Gamepad.current.leftTrigger.ReadValue();  // 0-1 arası
+        }
 
         float mutlakYaw = Mathf.Abs(Yaw);
         onGround = Physics.Raycast(IsGround.position, Vector3.down, 1f);

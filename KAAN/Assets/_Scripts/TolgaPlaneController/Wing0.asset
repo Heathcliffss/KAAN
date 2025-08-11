@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a60844fd3a21749a8f39457ff52fee, type: 3}
   m_Name: Wing0
   m_EditorClassIdentifier: 
-  liftSlope: 2.09
+  liftSlope: 34
   skinFriction: 0.02
   zeroLiftAoA: -3
   stallAngleHigh: 15
