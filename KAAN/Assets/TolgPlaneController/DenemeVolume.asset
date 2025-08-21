@@ -644,6 +644,29 @@ MonoBehaviour:
   - {fileID: 2642417698391642496}
   - {fileID: 8163704445524680126}
   - {fileID: -2076438516644809661}
+  - {fileID: 1421262332878462620}
+--- !u!114 &1421262332878462620
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a76fd08475e21554b8f284f723dd7cf8, type: 3}
+  m_Name: WaterRendering
+  m_EditorClassIdentifier: 
+  active: 1
+  enable:
+    m_OverrideState: 1
+    m_Value: 1
+  triangleSize:
+    m_OverrideState: 0
+    m_Value: 30
+  ambientProbeDimmer:
+    m_OverrideState: 0
+    m_Value: 0.5
 --- !u!114 &1925669250946967489
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -692,7 +715,7 @@ MonoBehaviour:
     m_Value: 50
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 33
+    m_Value: 68.8
   enableVolumetricFog:
     m_OverrideState: 1
     m_Value: 1
@@ -756,7 +779,7 @@ MonoBehaviour:
     m_Value: {fileID: 0}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.354
+    m_Value: 0.131
   m_MaxSamples:
     m_OverrideState: 0
     m_Value: 6
@@ -929,7 +952,7 @@ MonoBehaviour:
     m_Value: 10
   intensity:
     m_OverrideState: 1
-    m_Value: 0.16
+    m_Value: 0.063
   response:
     m_OverrideState: 1
     m_Value: 1
@@ -1024,7 +1047,7 @@ MonoBehaviour:
     m_Value: 0.13
   intensity:
     m_OverrideState: 1
-    m_Value: 0.157
+    m_Value: 0.108
   scatter:
     m_OverrideState: 0
     m_Value: 0.7
