@@ -5864,11 +5864,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1721919030595903002, guid: 48ca096f13015e6489c4f3f60a46416d, type: 3}
   m_PrefabInstance: {fileID: 1837594997}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &184566876 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5469719206089498225, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
-  m_PrefabInstance: {fileID: 2133286745}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &212189065
 GameObject:
   m_ObjectHideFlags: 0
@@ -7967,11 +7962,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 638575721}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &658299717 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7430497509360011576, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
-  m_PrefabInstance: {fileID: 2133286745}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &674052387
 GameObject:
   m_ObjectHideFlags: 0
@@ -10889,11 +10879,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1202938280 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5946155347897744057, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
-  m_PrefabInstance: {fileID: 2133286745}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1209815664
 GameObject:
   m_ObjectHideFlags: 0
@@ -12270,7 +12255,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   partType: 0
-  additionalPartToDisable: {fileID: 184566876}
+  additionalPartsToDisable:
+  - {fileID: 1377030063}
   destroyEffect: {fileID: 967945196}
 --- !u!1 &1416620928
 GameObject:
@@ -17940,6 +17926,11 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!1 &1575587034 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7316466830623725813, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+  m_PrefabInstance: {fileID: 2133286745}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1578644406
 GameObject:
   m_ObjectHideFlags: 0
@@ -18541,7 +18532,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 930550250306530541, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1759
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 930550250306530541, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -18572,9 +18563,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1965502515821978045, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
+      propertyPath: Player
+      value: 
+      objectReference: {fileID: 2019310787}
+    - target: {fileID: 1965502515821978045, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
       propertyPath: fireRate
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 1965502515821978045, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
+      propertyPath: SelfPosition
+      value: 
+      objectReference: {fileID: 1930346305}
     - target: {fileID: 1965502515821978045, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
       propertyPath: fireInterval
       value: 4
@@ -18619,7 +18618,8 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1632668415967118390, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -19864,6 +19864,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1886263590}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1930346305 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 930550250306530541, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
+  m_PrefabInstance: {fileID: 1651834125}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1945364307
 GameObject:
   m_ObjectHideFlags: 0
@@ -25294,7 +25299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   partType: 1
-  additionalPartToDisable: {fileID: 658299717}
+  additionalPartsToDisable: []
   destroyEffect: {fileID: 0}
 --- !u!65 &2029177113
 BoxCollider:
@@ -30258,6 +30263,8 @@ MonoBehaviour:
   Enemy: {fileID: 0}
   AirplaneController: {fileID: 2056913770}
   planeSpeed: {x: 0, y: 0, z: 0}
+  cockpitVolume: {fileID: 0}
+  outsideVolume: {fileID: 0}
 --- !u!114 &2060416595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30714,7 +30721,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   partType: 0
-  additionalPartToDisable: {fileID: 1202938280}
+  additionalPartsToDisable:
+  - {fileID: 2146003538}
+  - {fileID: 1575587034}
   destroyEffect: {fileID: 1085932992}
 --- !u!1001 &1778031969277692282
 PrefabInstance:

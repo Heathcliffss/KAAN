@@ -5,8 +5,8 @@ public class AircraftPart : MonoBehaviour
     public enum PartType { Wing, Body }
     public PartType partType;
 
-    [Tooltip("Bu parça yok edildiðinde birlikte devre dýþý býrakýlacak obje (Opsiyonel)")]
-    public GameObject additionalPartToDisable; // Kapatýlacak ek obje
+    [Tooltip("Bu parça yok edildiðinde birlikte devre dýþý býrakýlacak objeler (Opsiyonel)")]
+    public GameObject[] additionalPartsToDisable; // Birden fazla ek obje
 
     [Header("Yok olma efekti")]
     public ParticleSystem destroyEffect; // Partikül efekti
@@ -54,12 +54,16 @@ public class AircraftPart : MonoBehaviour
         // Ana objeyi devre dýþý býrak
         gameObject.SetActive(false);
 
-        // Ek objeyi de devre dýþý býrak (eðer atanmýþsa)
-        if (additionalPartToDisable != null)
+        // Tüm ek objeleri devre dýþý býrak
+        if (additionalPartsToDisable != null && additionalPartsToDisable.Length > 0)
         {
-            additionalPartToDisable.SetActive(false);
+            foreach (var part in additionalPartsToDisable)
+            {
+                if (part != null)
+                    part.SetActive(false);
+            }
         }
 
-        Debug.Log(">> Kanat ve baðlý parça devre dýþý býrakýldý, efekt oynatýldý.");
+        Debug.Log(">> Kanat ve baðlý parçalar devre dýþý býrakýldý, efekt oynatýldý.");
     }
 }
