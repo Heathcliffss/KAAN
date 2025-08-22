@@ -520,8 +520,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 66785256}
-  _size: 20
-  _speed: 20
 --- !u!65 &66785258
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6974,8 +6972,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 463856330}
-  _size: 10
-  _speed: 10
 --- !u!65 &463856332
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9229,6 +9225,7 @@ MonoBehaviour:
   enemyTag: Enemy
   _speed: 25
   _rotateSpeed: 150
+  BombLifeTime: 5
   _maxDistancePredict: 100
   _minDistancePredict: 5
   _maxTimePrediction: 5
@@ -9952,8 +9949,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 883156997}
-  _size: 20
-  _speed: 20
 --- !u!65 &883156999
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18006,8 +18001,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 1578644407}
-  _size: 20
-  _speed: 20
 --- !u!65 &1578644409
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18307,7 +18300,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1642969807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18327,7 +18320,7 @@ MonoBehaviour:
   m_LightUnit: 0
   m_LuxAtDistance: 1
   m_Intensity: 0
-  m_InnerSpotPercent: 3.2258024
+  m_InnerSpotPercent: 56.349785
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
   m_VolumetricDimmer: 1
@@ -18339,7 +18332,7 @@ MonoBehaviour:
   m_ShapeWidth: 0.5
   m_ShapeHeight: 0.5
   m_AspectRatio: 1
-  m_ShapeRadius: 1.17
+  m_ShapeRadius: 122.57
   m_SoftnessScale: 1
   m_UseCustomSpotLightShadowCone: 0
   m_CustomSpotLightShadowCone: 30
@@ -18459,11 +18452,11 @@ Light:
   m_GameObject: {fileID: 1642969806}
   m_Enabled: 1
   serializedVersion: 11
-  m_Type: 0
+  m_Type: 3
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 559.2019
+  m_Intensity: 116.52774
   m_Range: 50.75
-  m_SpotAngle: 31.000038
+  m_SpotAngle: 68.72832
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
@@ -18506,11 +18499,11 @@ Light:
   m_BounceIntensity: 19.58
   m_ColorTemperature: 4508.9
   m_UseColorTemperature: 1
-  m_BoundingSphereOverride: {x: 1.3706427e-14, y: NaN, z: 5.1756184e-20, w: 1.5152962e-38}
-  m_UseBoundingSphereOverride: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 51.103554}
+  m_UseBoundingSphereOverride: 1
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 1.17
+  m_ShadowRadius: 122.57
   m_ShadowAngle: 0
   m_LightUnit: 0
   m_LuxAtDistance: 1
@@ -18524,7 +18517,7 @@ Transform:
   m_GameObject: {fileID: 1642969806}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.24680042, y: 1.7539138, z: 11.124748}
+  m_LocalPosition: {x: 0.24680042, y: 0.45, z: 11.124748}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19048,8 +19041,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 1743903344}
-  _size: 10
-  _speed: 10
 --- !u!65 &1743903346
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19437,8 +19428,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 1804229033}
-  _size: 20
-  _speed: 20
 --- !u!65 &1804229035
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19917,7 +19906,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7ce7b629a8aea854f81ce539c1ed9eb9, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 7ce7b629a8aea854f81ce539c1ed9eb9, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -30256,8 +30245,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   L1: 0
+  l3: 0
   Cam1: {fileID: 1102180971}
   Cam2: {fileID: 688870742}
+  Cam3: {fileID: 0}
   Cam2UI: {fileID: 555974314}
   Bomb: {fileID: 820894321}
   BombLocation: {fileID: 232825724}
