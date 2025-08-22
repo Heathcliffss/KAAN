@@ -1,7 +1,7 @@
-using System.Security.Cryptography;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,24 +27,20 @@ public class GameManager : MonoBehaviour
     public Vector3 planeSpeed;
 
     bool RightShoulderPressed = false;
-    
 
-
-
-
-
-
-
-
+    // 📌 Yeni eklenen Volume referansları
+    public Volume cockpitVolume;
+    public Volume outsideVolume;
 
 
     void Start()
     {
         Cam2UI.SetActive(false);
-        
         QualitySettings.vSyncCount = 1;
 
-
+        // Başlangıçta kokpit volume açık, dış volume kapalı
+        cockpitVolume.gameObject.SetActive(true);
+        outsideVolume.gameObject.SetActive(false);
     }
 
     void Update()
@@ -56,25 +52,22 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.JoystickButton4) || Input.GetKeyUp(KeyCode.Alpha1))
         {
-            
             L1 = false;
             l3 = false;
         }
-       
 
         if (Input.GetKeyDown(KeyCode.JoystickButton4) || Input.GetKeyDown(KeyCode.Alpha1))
         {
-            L1= true;
+            L1 = true;
             l3 = false;
         }
-        
 
         if (Mouse.current != null && Mouse.current.middleButton.isPressed || Gamepad.current != null && Gamepad.current.rightStickButton.isPressed)
         {
             L1 = false;
             l3 = true;
         }
-        else if(!L1)
+        else if (!L1)
         {
             l3 = false;
             L1 = false;
@@ -87,17 +80,24 @@ public class GameManager : MonoBehaviour
             Cam3.SetActive(false);
             Cam2UI.SetActive(true);
 
+            // 📌 Volume switch
+            cockpitVolume.gameObject.SetActive(false);
+            outsideVolume.gameObject.SetActive(true);
         }
 
-        if(!L1)
+        if (!L1)
         {
             Cam1.SetActive(true);
             Cam2.SetActive(false);
             Cam3.SetActive(false);
             Cam2UI.SetActive(false);
 
+            // 📌 Volume switch
+            cockpitVolume.gameObject.SetActive(true);
+            outsideVolume.gameObject.SetActive(false);
         }
-        if(l3)
+
+        if (l3)
         {
             Cam3.SetActive(true);
             Cam2.SetActive(false);
@@ -110,10 +110,11 @@ public class GameManager : MonoBehaviour
             {
                 RightShoulderPressed = true;
             }
-            else { RightShoulderPressed = false; };
+            else { RightShoulderPressed = false; }
+            ;
         }
 
-            Rigidbody rb2 = Plane.GetComponent<Rigidbody>();
+        Rigidbody rb2 = Plane.GetComponent<Rigidbody>();
         float speed2 = rb2.linearVelocity.magnitude;
 
         float egim = AirplaneController.Pitch;
@@ -122,7 +123,7 @@ public class GameManager : MonoBehaviour
         bool IsGround = AirplaneController.onGround;
 
         planeSpeed = Plane.GetComponent<Rigidbody>().linearVelocity;
-        
+
         if (Input.GetKeyDown(KeyCode.V) & egim < 0.2 & !IsGround || RightShoulderPressed & egim < 0.2 & !IsGround)
         {
             GameObject instantiatedBomb = Instantiate(Bomb, BombLocation.position, BombRotation.rotation);
@@ -130,19 +131,8 @@ public class GameManager : MonoBehaviour
             Rigidbody rb = instantiatedBomb.GetComponent<Rigidbody>();
             if (rb != null)
             {
-
                 rb.linearVelocity = Plane.GetComponent<Rigidbody>().linearVelocity;
-                
-                
-
             }
         }
-
-
-       
-
-
     }
-
-    
 }
