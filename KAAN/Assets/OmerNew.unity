@@ -7569,7 +7569,7 @@ GameObject:
   - component: {fileID: 479231354}
   m_Layer: 0
   m_Name: Terrain_(1000.00, 0.00, -1000.00)
-  m_TagString: Untagged
+  m_TagString: GroundLayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -10829,7 +10829,7 @@ GameObject:
   - component: {fileID: 878199391}
   m_Layer: 0
   m_Name: Terrain_(1000.00, 0.00, 1000.00)
-  m_TagString: Untagged
+  m_TagString: GroundLayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -12859,7 +12859,7 @@ GameObject:
   - component: {fileID: 1275298061}
   m_Layer: 0
   m_Name: Terrain_(0.00, 0.00, 1000.00)
-  m_TagString: Untagged
+  m_TagString: GroundLayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -13719,7 +13719,7 @@ GameObject:
   - component: {fileID: 1322416892}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: GroundLayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -14526,7 +14526,7 @@ GameObject:
   - component: {fileID: 1425327084}
   m_Layer: 0
   m_Name: Terrain_(1000.00, 0.00, 0.00)
-  m_TagString: Untagged
+  m_TagString: GroundLayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -15817,6 +15817,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1655603857
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1655603858}
+  m_Layer: 3
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1655603858
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1655603857}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 10.323, z: 17.122}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2056913773}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1666403305
 GameObject:
@@ -17112,7 +17143,7 @@ GameObject:
   - component: {fileID: 1810449411}
   m_Layer: 0
   m_Name: Terrain_(-1000.00, 0.00, 1000.00)
-  m_TagString: Untagged
+  m_TagString: GroundLayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -18577,7 +18608,7 @@ GameObject:
   - component: {fileID: 2042942806}
   m_Layer: 0
   m_Name: Terrain_(0.00, 0.00, -1000.00)
-  m_TagString: Untagged
+  m_TagString: GroundLayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -23554,6 +23585,27 @@ MonoBehaviour:
   windMinVolume: 0.1
   windMaxVolume: 0.6
   windFadeDuration: 0.5
+--- !u!114 &2056913777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056913768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60e81f842192a7d4883154f41d4d0976, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 7662540647999211470, guid: 5e70da50576cbb14795c913a30d90a6f, type: 3}
+  firePoint: {fileID: 1655603858}
+  bulletSpeed: 150
+  fireRate: 0.2
+  maxAmmo: 100
+  reloadTime: 2.5
+  fireSound: {fileID: 8300000, guid: 0192db39355c4b140bbc06d298d3cbf6, type: 3}
+  reloadSound: {fileID: 0}
+  soundVolume: 1
 --- !u!1 &2060416593
 GameObject:
   m_ObjectHideFlags: 0
@@ -24154,10 +24206,16 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8615747729895437186, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 138775860}
+    - targetCorrespondingSourceObject: {fileID: 8615747729895437186, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1655603858}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6900775217389659585, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2056913776}
+    - targetCorrespondingSourceObject: {fileID: 6900775217389659585, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2056913777}
   m_SourcePrefab: {fileID: 100100000, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
 --- !u!1 &2133286746 stripped
 GameObject:
