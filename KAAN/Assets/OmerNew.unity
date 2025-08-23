@@ -497,7 +497,7 @@ Transform:
   m_GameObject: {fileID: 76541538}
   serializedVersion: 2
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0}
-  m_LocalPosition: {x: 0.25, y: 10.328, z: 12.368}
+  m_LocalPosition: {x: 0.22, y: 10.547, z: 11.961}
   m_LocalScale: {x: 0.21608436, y: 0.21608436, z: 0.21608436}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1540,7 +1540,7 @@ ParticleSystem:
     m_BurstCount: 0
     m_Bursts: []
   SizeModule:
-    enabled: 1
+    enabled: 0
     curve:
       serializedVersion: 2
       minMaxState: 3
@@ -1864,7 +1864,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   ColorModule:
-    enabled: 1
+    enabled: 0
     gradient:
       serializedVersion: 2
       minMaxState: 1
@@ -4115,7 +4115,7 @@ ParticleSystem:
     separateAxes: 0
     range: {x: 0, y: 1}
   ColorBySpeedModule:
-    enabled: 1
+    enabled: 0
     gradient:
       serializedVersion: 2
       minMaxState: 1
@@ -4383,7 +4383,7 @@ ParticleSystem:
       properties: -1
       emitProbability: 1
   LightsModule:
-    enabled: 1
+    enabled: 0
     ratio: 0.6
     light: {fileID: 642735492}
     randomDistribution: 1
@@ -9166,7 +9166,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 3861
   m_UseColorTemperature: 1
-  m_BoundingSphereOverride: {x: 0, y: 0, z: NaN, w: -2.4256105e-28}
+  m_BoundingSphereOverride: {x: 1.0842021e-19, y: 1.285802e-39, z: 2.274e-42, w: -4.281106e+30}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
@@ -9258,7 +9258,7 @@ GameObject:
   - component: {fileID: 673934528}
   - component: {fileID: 673934527}
   m_Layer: 0
-  m_Name: Global Volume (1)
+  m_Name: outsidevolume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16860,7 +16860,7 @@ GameObject:
   - component: {fileID: 1781866075}
   - component: {fileID: 1781866074}
   m_Layer: 0
-  m_Name: Global Volume
+  m_Name: cockpitVolume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19728,7 +19728,7 @@ ParticleSystem:
     m_BurstCount: 0
     m_Bursts: []
   SizeModule:
-    enabled: 1
+    enabled: 0
     curve:
       serializedVersion: 2
       minMaxState: 3
@@ -20052,7 +20052,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   ColorModule:
-    enabled: 1
+    enabled: 0
     gradient:
       serializedVersion: 2
       minMaxState: 1
@@ -22303,7 +22303,7 @@ ParticleSystem:
     separateAxes: 0
     range: {x: 0, y: 1}
   ColorBySpeedModule:
-    enabled: 1
+    enabled: 0
     gradient:
       serializedVersion: 2
       minMaxState: 1
@@ -22571,7 +22571,7 @@ ParticleSystem:
       properties: -1
       emitProbability: 1
   LightsModule:
-    enabled: 1
+    enabled: 0
     ratio: 0.6
     light: {fileID: 642735492}
     randomDistribution: 1
@@ -23517,7 +23517,7 @@ Transform:
   m_GameObject: {fileID: 2050869502}
   serializedVersion: 2
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0}
-  m_LocalPosition: {x: -0.251, y: 10.358, z: 12.368}
+  m_LocalPosition: {x: -0.221, y: 10.555, z: 11.961}
   m_LocalScale: {x: 0.21608436, y: 0.21608436, z: 0.21608436}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23600,7 +23600,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 7662540647999211470, guid: 5e70da50576cbb14795c913a30d90a6f, type: 3}
   firePoint: {fileID: 1655603858}
   bulletSpeed: 150
-  fireRate: 0.2
+  fireRate: 0.1
   maxAmmo: 100
   reloadTime: 2.5
   fireSound: {fileID: 8300000, guid: 0192db39355c4b140bbc06d298d3cbf6, type: 3}
