@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -6,48 +6,34 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class AirplaneController : MonoBehaviour
 {
-    [SerializeField]
-    List<AeroSurface> controlSurfaces = null;
-    [SerializeField]
-    List<WheelCollider> wheels = null;
-    [SerializeField]
-    float rollControlSensitivity = 0.2f;
-    [SerializeField]
-    float pitchControlSensitivity = 0.2f;
-    [SerializeField]
-    float yawControlSensitivity = 0.2f;
-    [SerializeField]
-    float YawAssist = 1000f;
+    [SerializeField] List<AeroSurface> controlSurfaces = null;
+    [SerializeField] List<WheelCollider> wheels = null;
+    [SerializeField] float rollControlSensitivity = 0.2f;
+    [SerializeField] float pitchControlSensitivity = 0.2f;
+    [SerializeField] float yawControlSensitivity = 0.2f;
+    [SerializeField] float YawAssist = 1000f;
 
-    [Range(-1, 1)]
-    public float Pitch;
-    [Range(-1, 1)]
-    public float Yaw;
-    [Range(-1, 1)]
-    public float Roll;
-    [Range(0, 1)]
-    public float Flap;
-    [SerializeField]
-    Text displayText = null;
+    [Range(-1, 1)] public float Pitch;
+    [Range(-1, 1)] public float Yaw;
+    [Range(-1, 1)] public float Roll;
+    [Range(0, 1)] public float Flap;
+    [SerializeField] Text displayText = null;
 
     public float thrustPercent;
     float brakesTorque;
 
     AircraftPhysics aircraftPhysics;
     Rigidbody rb;
-    
+
     bool IsSpace = true;
-    [SerializeField]
-    private Transform IsGround;
-    [SerializeField]
-    public bool onGround;
+    [SerializeField] private Transform IsGround;
+    [SerializeField] public bool onGround;
 
-
-
-
-    // Remove the gamepad field declaration and handle it safely in Update
     private float lastVibrateTime;
-    private const float VIBRATE_COOLDOWN = 0.1f; // Prevent excessive vibration calls
+    private const float VIBRATE_COOLDOWN = 0.1f;
+
+    // 🔥 Patlama prefab’ı
+    [SerializeField] private GameObject explosionPrefab;
 
     private void Start()
     {
@@ -58,74 +44,37 @@ public class AirplaneController : MonoBehaviour
     private void Update()
     {
         float yawKey2 = 0f;
-
-        if (Gamepad.current != null)
-        {
-            yawKey2 = Gamepad.current.rightStick.x.ReadValue();
-        }
-        else {  };
+        if (Gamepad.current != null) yawKey2 = Gamepad.current.rightStick.x.ReadValue();
 
         float pankey2 = 0f;
-
-        if (Gamepad.current != null)
-        {
-            pankey2 = Gamepad.current.leftStick.y.ReadValue();
-        }
-        else {  pankey2 = Input.GetAxis("Vertical"); }
+        if (Gamepad.current != null) pankey2 = Gamepad.current.leftStick.y.ReadValue();
+        else pankey2 = Input.GetAxis("Vertical");
 
         float flap2 = 0f;
+        if (Gamepad.current != null) flap2 = Gamepad.current.rightStick.y.ReadValue();
 
-        if (Gamepad.current != null)
+        float newflap2 = Mathf.Clamp(flap2 * -1f, 0f, 1f);
+
+        if (transform.position.y < 300)
         {
-            flap2 = Gamepad.current.rightStick.y.ReadValue();
+            if (rb.linearVelocity.magnitude > 45) rb.linearVelocity = rb.linearVelocity.normalized * 45f;
         }
-        
 
-        float newflap2 = flap2 * -1f;
-        newflap2 = Mathf.Clamp(newflap2, 0f, 1f);
-
-
-        //hızı 60 dan büyür ise arttırma (savrulmaması için)
-       /* if(rb.linearVelocity.magnitude > 45)
-        {
-            rb.linearVelocity = rb.linearVelocity.normalized * 45f;
-        };*/
-
-
-        if(transform.position.y < 300)
-        {
-            // aircraftPhysics.thrust = 0f;
-            if (rb.linearVelocity.magnitude > 45) { rb.linearVelocity = rb.linearVelocity.normalized * 45f; }
-        }
-       
-        //Pitch = pankey2;
         Roll = Input.GetAxis("Horizontal");
         Yaw = -yawKey2;
         Pitch = Input.GetAxis("Vertical");
 
-
-        float R2 = 0f;
-        float L2 = 0f;
-
+        float R2 = 0f, L2 = 0f;
         if (Gamepad.current != null)
         {
-            R2 = Gamepad.current.rightTrigger.ReadValue(); // 0-1 arası
-            L2 = Gamepad.current.leftTrigger.ReadValue();  // 0-1 arası
+            R2 = Gamepad.current.rightTrigger.ReadValue();
+            L2 = Gamepad.current.leftTrigger.ReadValue();
         }
 
         float mutlakYaw = Mathf.Abs(Yaw);
         onGround = Physics.Raycast(IsGround.position, Vector3.down, 1f);
 
-        if (mutlakYaw > 0.1f || onGround)
-        {
-            rb.AddForce(Vector3.up * YawAssist, ForceMode.Force);
-             
-            
-        }
-        
-        
-
-
+        if (mutlakYaw > 0.1f || onGround) rb.AddForce(Vector3.up * YawAssist, ForceMode.Force);
 
         thrustPercent += R2 * Time.deltaTime;
         thrustPercent -= L2 * Time.deltaTime;
@@ -133,35 +82,16 @@ public class AirplaneController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            
-            if (IsSpace)
-            {
-                thrustPercent = 1;
-            }
-            else
-            {
-                thrustPercent = 0;
-            }
+            thrustPercent = IsSpace ? 1 : 0;
             IsSpace = !IsSpace;
         }
 
-        // Fixed gamepad vibration handling
         HandleGamepadVibration();
-
-        /* if (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("YButton"))
-         {
-             Flap = Flap > 0 ? 0 : 0.3f;
-         }
-     */
-
         Flap = newflap2;
 
         if (Input.GetKeyDown(KeyCode.B) || Input.GetButtonDown("BButton"))
-        {
             brakesTorque = brakesTorque > 0 ? 0 : 100f;
-        }
 
-        // Update display
         if (displayText != null)
         {
             displayText.text = "V: " + ((int)rb.linearVelocity.magnitude).ToString("D3") + " m/s\n";
@@ -173,38 +103,22 @@ public class AirplaneController : MonoBehaviour
 
     private void HandleGamepadVibration()
     {
-        // Only update vibration every VIBRATE_COOLDOWN seconds to prevent excessive calls
         if (Time.time - lastVibrateTime < VIBRATE_COOLDOWN) return;
-
         try
         {
-            // Safely check for gamepad
             Gamepad currentGamepad = Gamepad.current;
             if (currentGamepad != null && currentGamepad.added)
             {
-                float motorSpeed = 0f;
+                float motorSpeed = thrustPercent < 0.5f ? thrustPercent * 0.5f :
+                                   Mathf.Lerp(0.25f, 0.8f, (thrustPercent - 0.5f) * 2f);
 
-                if (thrustPercent < 0.5f)
-                {
-                    motorSpeed = thrustPercent * 0.5f; // Reduced intensity
-                }
-                else
-                {
-                    motorSpeed = Mathf.Lerp(0.25f, 0.8f, (thrustPercent - 0.5f) * 2f); // Clamped max intensity
-                }
-
-                // Clamp to safe values
                 motorSpeed = Mathf.Clamp(motorSpeed, 0f, 0.8f);
 
                 currentGamepad.SetMotorSpeeds(motorSpeed, motorSpeed);
                 lastVibrateTime = Time.time;
             }
         }
-        catch (System.Exception e)
-        {
-            Debug.LogWarning($"Gamepad vibration error: {e.Message}");
-            // Don't let gamepad errors crash the game
-        }
+        catch { }
     }
 
     private void FixedUpdate()
@@ -225,18 +139,10 @@ public class AirplaneController : MonoBehaviour
             if (surface == null || !surface.IsControlSurface) continue;
             switch (surface.InputType)
             {
-                case ControlInputType.Pitch:
-                    surface.SetFlapAngle(pitch * pitchControlSensitivity * surface.InputMultiplyer);
-                    break;
-                case ControlInputType.Roll:
-                    surface.SetFlapAngle(roll * rollControlSensitivity * surface.InputMultiplyer);
-                    break;
-                case ControlInputType.Yaw:
-                    surface.SetFlapAngle(yaw * yawControlSensitivity * surface.InputMultiplyer);
-                    break;
-                case ControlInputType.Flap:
-                    surface.SetFlapAngle(Flap * surface.InputMultiplyer);
-                    break;
+                case ControlInputType.Pitch: surface.SetFlapAngle(pitch * pitchControlSensitivity * surface.InputMultiplyer); break;
+                case ControlInputType.Roll: surface.SetFlapAngle(roll * rollControlSensitivity * surface.InputMultiplyer); break;
+                case ControlInputType.Yaw: surface.SetFlapAngle(yaw * yawControlSensitivity * surface.InputMultiplyer); break;
+                case ControlInputType.Flap: surface.SetFlapAngle(Flap * surface.InputMultiplyer); break;
             }
         }
     }
@@ -247,36 +153,40 @@ public class AirplaneController : MonoBehaviour
             SetControlSurfecesAngles(Pitch, Roll, Yaw, Flap);
     }
 
-    // Clean up gamepad vibration when the object is destroyed
     private void OnDestroy()
     {
         try
         {
             Gamepad currentGamepad = Gamepad.current;
             if (currentGamepad != null && currentGamepad.added)
-            {
                 currentGamepad.SetMotorSpeeds(0f, 0f);
-            }
         }
-        catch (System.Exception e)
-        {
-            Debug.LogWarning($"Error stopping gamepad vibration on destroy: {e.Message}");
-        }
-    }
-    public float GetThrustPercent()
-    {
-        return thrustPercent;
+        catch { }
     }
 
-    //omer
+    public float GetThrustPercent() => thrustPercent;
+
     public void Crash()
     {
-        Debug.Log("U�ak vuruldu ve d���yor!");
-        // U�u� kontrollerini devre d��� b�rak
+        Debug.Log("Uçak vuruldu ve düşüyor!");
         GetComponent<AirplaneController>().enabled = false;
         Rigidbody rb = gameObject.AddComponent<Rigidbody>();
         rb.mass = 300f;
         rb.useGravity = true;
     }
 
+    // 💥 Uçak yere çarpınca tetiklenecek
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("GroundLayer"))
+        {
+            Debug.Log("Uçak yere çarptı!");
+            if (explosionPrefab != null)
+            {
+                Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            }
+            Destroy(gameObject); // uçağı yok et
+            Time.timeScale = 0f; // oyunu durdur
+        }
+    }
 }

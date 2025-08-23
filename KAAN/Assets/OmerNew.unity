@@ -9166,7 +9166,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 3861
   m_UseColorTemperature: 1
-  m_BoundingSphereOverride: {x: 1.3958995e-38, y: 0, z: 4.5e-44, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: NaN, w: -2.4256105e-28}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
@@ -18014,7 +18014,7 @@ GameObject:
   - component: {fileID: 1955437655}
   m_Layer: 0
   m_Name: Terrain_(-1000.00, 0.00, 0.00)
-  m_TagString: Untagged
+  m_TagString: GroundLayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
