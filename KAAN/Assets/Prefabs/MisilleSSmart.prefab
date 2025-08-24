@@ -184,16 +184,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 4929893893617711594}
-  _target: {fileID: 0}
+  _explosionPrefab: {fileID: 0}
+  _explosionSound: {fileID: 8300000, guid: 8c5a2db6205e4b24dae035b9d7c170c0, type: 3}
   searchRadius: 350
-  enemyTag: Enemy
+  HSS: HSS
   _speed: 40
   _rotateSpeed: 400
-  BombLifeTime: 5
-  _maxDistancePredict: 300
-  _minDistancePredict: 5
-  _maxTimePrediction: 5
-  _deviationAmount: 40
-  _deviationSpeed: 0.2
-  buffertime: 0.3
-  Gm: {fileID: 0}
+  lifeTime: 10

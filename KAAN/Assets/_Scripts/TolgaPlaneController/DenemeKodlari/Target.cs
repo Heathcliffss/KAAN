@@ -1,20 +1,28 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Tarodev
 {
     public class Target : MonoBehaviour, IExplode
     {
-        [SerializeField] private Rigidbody _rb;
-     
-        public Rigidbody Rb => _rb;
+        [Header("Explosion Settings")]
+        [SerializeField] private GameObject explosionPrefab;
+        [SerializeField] private AudioClip explosionSound;   // ✅ Patlama sesi
 
-        void Update()
+        public void Explode()
         {
-          // var dir = new Vector3(Mathf.Cos(Time.time * _speed) * _size, Mathf.Sin(Time.time * _speed) * _size);
+            Debug.Log($"{gameObject.name} vuruldu ve yok oldu!");
 
-           // _rb.linearVelocity = dir;
+            // ✅ Patlama efekti
+            if (explosionPrefab != null)
+                Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+
+            // ✅ Patlama sesi
+            if (explosionSound != null)
+                AudioSource.PlayClipAtPoint(explosionSound, transform.position);
+
+            // ✅ Ana objeyi tamamen sahneden kaldır
+            Destroy(transform.root.gameObject);
+            // Eğer sadece bu objeyi silmek istiyorsan -> Destroy(gameObject);
         }
-
-        public void Explode() => Destroy(gameObject);
     }
 }

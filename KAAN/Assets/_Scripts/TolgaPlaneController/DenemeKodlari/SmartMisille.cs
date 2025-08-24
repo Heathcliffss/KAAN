@@ -1,18 +1,16 @@
-using System.Collections;
+﻿using System.Collections;
 using Tarodev;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class SmartMisille : MonoBehaviour
 {
-
     [Header("REFERENCES")]
     [SerializeField] private Rigidbody _rb;
     [SerializeField] private Target _target;
-    //[SerializeField] private GameObject _explosionPrefab;
+    [SerializeField] private GameObject _explosionPrefab;
 
     [SerializeField] private float searchRadius = 30f;
-    [SerializeField] private string enemyTag = "enemy";
+    [SerializeField] private string enemyTag = "HSS";
     private Transform _currentTarget;
 
     [Header("MOVEMENT")]
@@ -31,23 +29,18 @@ public class SmartMisille : MonoBehaviour
     [SerializeField] private float _deviationSpeed = 2;
     public float buffertime = 2f;
 
-
-    private bool _canStart = false;  // ??lem yapmaya ba?lamadan ?nce bekleme kontrol?
-
-    public GameManager Gm;
+    private bool _canStart = false;
+    private GameManager Gm;
 
     private void Start()
     {
-
         Gm = FindObjectOfType<GameManager>();
-        // 3 saniye bekle sonra i?lemlere ba?la
         StartCoroutine(bombbuffer(buffertime));
         StartCoroutine(BombLife(BombLifeTime));
     }
 
     private IEnumerator bombbuffer(float buffertime)
     {
-
         yield return new WaitForSeconds(buffertime);
         _canStart = true;
     }
@@ -57,26 +50,29 @@ public class SmartMisille : MonoBehaviour
         yield return new WaitForSeconds(BombLifeTime);
         Destroy(gameObject);
     }
+
     private void FixedUpdate()
     {
         if (!_canStart) return;
 
-         _rb.linearVelocity = transform.forward * _speed + Gm.planeSpeed;
-        
-        // En yak?n hedefi bul
+        _rb.linearVelocity = transform.forward * _speed + Gm.planeSpeed;
+
+        // En yakın hedefi bul
         FindClosestTarget();
 
         if (_currentTarget != null)
         {
-            // Tahminli takip ve sapma
-            float leadTimePercentage = Mathf.InverseLerp(_minDistancePredict, _maxDistancePredict, Vector3.Distance(transform.position, _currentTarget.position));
+            float leadTimePercentage = Mathf.InverseLerp(
+                _minDistancePredict,
+                _maxDistancePredict,
+                Vector3.Distance(transform.position, _currentTarget.position)
+            );
 
             PredictMovement(leadTimePercentage);
             AddDeviation(leadTimePercentage);
         }
         else
         {
-            // Hedef yoksa rastgele y?n
             _deviatedPrediction = transform.position + (transform.forward + UnityEngine.Random.insideUnitSphere).normalized * 10f;
         }
 
@@ -100,9 +96,7 @@ public class SmartMisille : MonoBehaviour
     private void AddDeviation(float leadTimePercentage)
     {
         var deviation = new Vector3(Mathf.Cos(Time.time * _deviationSpeed), 0, 0);
-
         var predictionOffset = transform.TransformDirection(deviation) * _deviationAmount * leadTimePercentage;
-
         _deviatedPrediction = _standardPrediction + predictionOffset;
     }
 
@@ -127,21 +121,32 @@ public class SmartMisille : MonoBehaviour
 
     private void RotateRocket()
     {
-        var heading = _deviatedPrediction - transform.position;
+        if (_currentTarget == null) return;
 
+        var heading = (_deviatedPrediction - transform.position).normalized;
+
+        // Füze rotasyonu hedefe döndür
         var rotation = Quaternion.LookRotation(heading);
         _rb.MoveRotation(Quaternion.RotateTowards(transform.rotation, rotation, _rotateSpeed * Time.deltaTime));
+
+        // Velocity’yi de aynı heading’e zorla
+        _rb.linearVelocity = heading * _speed + Gm.planeSpeed;
+
     }
+
 
     private void OnCollisionEnter(Collision collision)
     {
-        // if (_explosionPrefab) Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        // Hedefte IExplode varsa patlat
         if (collision.transform.TryGetComponent<IExplode>(out var ex)) ex.Explode();
 
+        // Patlama efekti
+        if (_explosionPrefab)
+            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+
+        // Füze yok olsun
         Destroy(gameObject);
     }
-
-    
 
     private void OnDrawGizmos()
     {
@@ -151,4 +156,3 @@ public class SmartMisille : MonoBehaviour
         Gizmos.DrawLine(_standardPrediction, _deviatedPrediction);
     }
 }
-

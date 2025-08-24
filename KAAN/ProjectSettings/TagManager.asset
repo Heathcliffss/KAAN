@@ -10,6 +10,7 @@ TagManager:
   - b
   - AircraftPart
   - PlayerBullet
+  - HSS
   layers:
   - Default
   - TransparentFX
