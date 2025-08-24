@@ -44,8 +44,17 @@ public class AircraftGun : MonoBehaviour
     {
         if (currentAmmo <= 0) return;
 
+        // 🎯 Önce mouse'un baktığı noktayı bul
+        Vector3 targetPoint;
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // ekran ortası
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+            targetPoint = hit.point;
+        else
+            targetPoint = ray.GetPoint(1000f);
+
         // Mermiyi oluştur
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
 
         // Rigidbody ve collider kontrolü
         var rb = bullet.GetComponent<Rigidbody>();
@@ -53,7 +62,10 @@ public class AircraftGun : MonoBehaviour
         rb.useGravity = false;
         rb.isKinematic = false;
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-        rb.linearVelocity = firePoint.forward * bulletSpeed;
+
+        // 🎯 yönlendirme: hedef noktasına doğru
+        Vector3 dir = (targetPoint - firePoint.position).normalized;
+        rb.linearVelocity = dir * bulletSpeed;
 
         var col = bullet.GetComponent<Collider>();
         if (col == null) col = bullet.AddComponent<SphereCollider>();
@@ -65,7 +77,7 @@ public class AircraftGun : MonoBehaviour
             if (oc != null && col != null)
                 Physics.IgnoreCollision(col, oc, true);
 
-        // Merminin davranışı (tek script içinde)
+        // Mermi davranışı
         Bullet bulletScript = bullet.AddComponent<Bullet>();
         bulletScript.hitSound = hitSound;
         bulletScript.soundVolume = soundVolume;
@@ -105,11 +117,9 @@ public class AircraftGun : MonoBehaviour
         {
             if (collision.gameObject.CompareTag("Enemy"))
             {
-                // Vurma sesi
                 if (hitSound != null && Camera.main != null)
                     AudioSource.PlayClipAtPoint(hitSound, Camera.main.transform.position, soundVolume);
 
-                // Hasar uygula
                 var enemy = collision.gameObject.GetComponent<EnemyChaseAI>();
                 if (enemy != null)
                     enemy.TakeDamage(1);

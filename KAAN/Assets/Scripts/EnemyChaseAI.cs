@@ -27,12 +27,15 @@ public class EnemyChaseAI : MonoBehaviour
 
     [Header("Hasar Sistemi")]
     public int health = 5;
-    public GameObject explosionPrefab; // Patlama efekti prefab
-    public AudioClip hitSound;         // Vurulma sesi
-    public AudioClip deathSound;       // Ölüm sesi
+    public GameObject explosionPrefab;
+    public AudioClip hitSound;
+    public AudioClip deathSound;
     private AudioSource audioSource;
 
     private bool isDead = false;
+
+    // chase sırasında biraz offset ekleyelim
+    private Vector3 chaseOffset;
 
     void Start()
     {
@@ -44,12 +47,20 @@ public class EnemyChaseAI : MonoBehaviour
 
     void Update()
     {
-        if (isDead) return; // öldüyse hareket etmeyecek
+        if (isDead) return;
 
         float distToPlayer = Vector3.Distance(transform.position, player.position);
 
         if (!isChasing && distToPlayer < viewDistance)
+        {
             isChasing = true;
+            // random bir offset seç
+            chaseOffset = new Vector3(
+                Random.Range(-50f, 50f),
+                Random.Range(-20f, 20f),
+                Random.Range(-50f, 50f)
+            );
+        }
 
         if (isChasing && distToPlayer > loseDistance)
             isChasing = false;
@@ -62,10 +73,23 @@ public class EnemyChaseAI : MonoBehaviour
 
     void ChasePlayer()
     {
-        FlyTowards(player.position, chaseSpeed);
+        // Hedef pozisyonu → player + offset
+        Vector3 chaseTarget = player.position + chaseOffset;
+
+        FlyTowards(chaseTarget, chaseSpeed);
 
         if (Vector3.Distance(transform.position, player.position) < 100f)
             FireMissile();
+
+        // belli aralıklarla offseti değiştir ki hareketi doğal olsun
+        if (Random.value < 0.01f)
+        {
+            chaseOffset = new Vector3(
+                Random.Range(-60f, 60f),
+                Random.Range(-30f, 30f),
+                Random.Range(-60f, 60f)
+            );
+        }
     }
 
     void Patrol()
@@ -121,7 +145,6 @@ public class EnemyChaseAI : MonoBehaviour
         if (em != null) em.SetTarget(player);
     }
 
-    // ✅ HASAR ALMA
     public void TakeDamage(int amount)
     {
         if (isDead) return;
@@ -132,16 +155,14 @@ public class EnemyChaseAI : MonoBehaviour
             audioSource.PlayOneShot(hitSound);
 
         if (health <= 0)
-        {
             Die();
-        }
     }
 
     void Die()
     {
         isDead = true;
         rb.useGravity = true;
-        rb.mass += 500f; // ağırlaştırıp düşmesini sağla
+        rb.mass += 200f;
 
         if (explosionPrefab != null)
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
@@ -149,6 +170,6 @@ public class EnemyChaseAI : MonoBehaviour
         if (deathSound != null)
             audioSource.PlayOneShot(deathSound);
 
-        Destroy(gameObject, 5f); // yere düşerken yok olacak
+        Destroy(gameObject, 5f);
     }
 }
