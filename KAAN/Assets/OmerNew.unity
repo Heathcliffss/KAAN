@@ -8173,6 +8173,11 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!4 &522536597 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bfd6f96e047574a17aef8e472638d18f, type: 3}
+  m_PrefabInstance: {fileID: 1004612302}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &523432710
 GameObject:
   m_ObjectHideFlags: 0
@@ -11725,7 +11730,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1709279229}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: bfd6f96e047574a17aef8e472638d18f, type: 3}
       propertyPath: m_LocalScale.x
@@ -11741,15 +11746,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bfd6f96e047574a17aef8e472638d18f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 450.7
+      value: 1.3800049
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bfd6f96e047574a17aef8e472638d18f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 42.9
+      value: -5.0999985
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bfd6f96e047574a17aef8e472638d18f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 388
+      value: 2.7000122
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bfd6f96e047574a17aef8e472638d18f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -11782,6 +11787,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: bfd6f96e047574a17aef8e472638d18f, type: 3}
       propertyPath: m_Name
       value: s400
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bfd6f96e047574a17aef8e472638d18f, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15373,11 +15382,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1547989271}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1551650580 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6452309701679513602, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
-  m_PrefabInstance: {fileID: 2133286745}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1551650581 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1782797648458624681, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
@@ -16267,7 +16271,10 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 1632668415967118390, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 930550250306530541, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 522536597}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
 --- !u!4 &1709279228 stripped
@@ -18424,11 +18431,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa66ec5c20101894f8373ea4c9cd16bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BombLoc1: {fileID: 232825724}
-  Bomblocation1: {fileID: 1551650580}
-  FollowTime: 2
-  followspeed: 0
-  Enemy: {fileID: 4639652661757775640, guid: cbf4403f5e78d0e45b3fa9fcad087490, type: 3}
+  followDelay: 2
+  followForce: 5000
+  explosionEffect: {fileID: 0}
 --- !u!4 &2018489583
 Transform:
   m_ObjectHideFlags: 0
@@ -23599,7 +23604,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 7662540647999211470, guid: 5e70da50576cbb14795c913a30d90a6f, type: 3}
   firePoint: {fileID: 1655603858}
-  bulletSpeed: 150
+  bulletSpeed: 225
   fireRate: 0.1
   maxAmmo: 100
   reloadTime: 2.5
@@ -25083,7 +25088,6 @@ SceneRoots:
   - {fileID: 1641877065}
   - {fileID: 1314758999}
   - {fileID: 1827488833}
-  - {fileID: 1004612302}
   - {fileID: 1725443228}
   - {fileID: 716825303}
   - {fileID: 1666403307}

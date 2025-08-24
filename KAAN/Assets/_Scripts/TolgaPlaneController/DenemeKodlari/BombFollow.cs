@@ -3,48 +3,42 @@ using UnityEngine;
 
 public class BombFollow : MonoBehaviour
 {
-    public Transform BombLoc1;
-    public GameObject Bomblocation1;
-    public float FollowTime = 2f;
-    private bool following;
-    public float followspeed;
-    public Transform Enemy;
+    public float followDelay = 2f;          // Bombanýn takip etmeye baþlamadan önceki bekleme süresi
+    public float followForce = 5000f;       // Takip ederken uygulanan kuvvet
+    public GameObject explosionEffect;      // Patlama efekti prefab
+
+    private Transform enemy;
     private Rigidbody rb;
+    private bool following;
+
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+
+        // Ýlk bulduðu Enemy'yi hedef alýyor
         GameObject targetObj = GameObject.FindGameObjectWithTag("Enemy");
         if (targetObj != null)
         {
-            Enemy = targetObj.transform;
+            enemy = targetObj.transform;
         }
-        StartCoroutine(Follow(FollowTime));
 
+        StartCoroutine(StartFollowingAfterDelay(followDelay));
     }
 
-   
     void Update()
     {
-
-        if (following && Enemy != null)
+        if (following && enemy != null)
         {
-            rb = GetComponent<Rigidbody>();
-
             // Hedefin yönünü hesapla
-            Vector3 directionToEnemy = (Enemy.position - transform.position).normalized;
+            Vector3 directionToEnemy = (enemy.position - transform.position).normalized;
 
             // Füzenin ileri yönü ile hedef arasýndaki açýyý hesapla
             float angleToEnemy = Vector3.Angle(transform.forward, directionToEnemy);
 
-            // Açýnýn belirli bir eþik deðerden küçük olup olmadýðýný kontrol et
-            if (angleToEnemy < 180f) // örnek: 45 derece
+            // Eðer hedef çok dik açýdaysa takip etmeyi býrak
+            if (angleToEnemy < 180f)
             {
-                // Eðer hedef belirli bir görüþ alanýndaysa, takip et
-                rb.AddForce(directionToEnemy * 5000f);
-            }
-            else
-            {
-                // Açý çok büyükse, hedef çok dik veya geride
-                Debug.Log("Hedef görüþ açýsýnýn dýþýnda");
+                rb.AddForce(directionToEnemy * followForce * Time.deltaTime);
             }
         }
     }
@@ -53,16 +47,24 @@ public class BombFollow : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
+            // Düþmaný yok et
             Destroy(other.gameObject);
+
+            // Patlama efekti oluþtur
+            if (explosionEffect != null)
+            {
+                Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            }
+
+            // Bombayý yok et
             Destroy(gameObject);
         }
     }
 
-    IEnumerator Follow(float FollowTime)
+    IEnumerator StartFollowingAfterDelay(float delay)
     {
         following = false;
-        yield return new WaitForSeconds(FollowTime);
+        yield return new WaitForSeconds(delay);
         following = true;
     }
-
 }

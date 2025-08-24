@@ -2,12 +2,27 @@
 
 public class MissileFollowHSS : MonoBehaviour
 {
+    [Header("Hareket Ayarları")]
     public float baseExtraSpeed = 5f; // Uçağın hızına eklenecek sabit miktar
     public float rotateSpeed = 5f;
+
+    [Header("Efektler")]
     public GameObject explosionEffect;
+    public AudioSource missileIdleSound;   // Uçuş sesi
+    public AudioSource explosionSound;     // Patlama sesi
 
     private Transform target;
     private Rigidbody targetRb;
+
+    void Start()
+    {
+        // Idle sesi başlat
+        if (missileIdleSound != null)
+        {
+            missileIdleSound.loop = true;
+            missileIdleSound.Play();
+        }
+    }
 
     public void SetTarget(Transform target)
     {
@@ -51,6 +66,18 @@ public class MissileFollowHSS : MonoBehaviour
         {
             Debug.Log("Çarpılan objede AircraftPart yok.");
         }
+
+        // Idle sesi kapat
+        if (missileIdleSound != null)
+            missileIdleSound.Stop();
+
+        // Patlama efekti
+        if (explosionEffect != null)
+            Instantiate(explosionEffect, transform.position, Quaternion.identity);
+
+        // Patlama sesi
+        if (explosionSound != null)
+            AudioSource.PlayClipAtPoint(explosionSound.clip, transform.position);
 
         Destroy(gameObject);
     }
