@@ -8806,6 +8806,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2056913773}
     - target: {fileID: 2215867018436535506, guid: 2c5f8b6e0f3d14dc5a25696877640f9c, type: 3}
+      propertyPath: hitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 2c53068060f96d44bb3fd72be4c6d487, type: 3}
+    - target: {fileID: 2215867018436535506, guid: 2c5f8b6e0f3d14dc5a25696877640f9c, type: 3}
       propertyPath: chaseSpeed
       value: 60
       objectReference: {fileID: 0}
@@ -8837,6 +8841,18 @@ PrefabInstance:
       propertyPath: _rb
       value: 
       objectReference: {fileID: 888571875}
+    - target: {fileID: 8164206965193290530, guid: 2c5f8b6e0f3d14dc5a25696877640f9c, type: 3}
+      propertyPath: m_Size.x
+      value: 5.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164206965193290530, guid: 2c5f8b6e0f3d14dc5a25696877640f9c, type: 3}
+      propertyPath: m_Size.y
+      value: 3.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164206965193290530, guid: 2c5f8b6e0f3d14dc5a25696877640f9c, type: 3}
+      propertyPath: m_Size.z
+      value: 2.16
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16246,7 +16262,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8415698281501114643, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9194677766089224253, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
       propertyPath: m_Size.x
@@ -23604,12 +23620,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 7662540647999211470, guid: 5e70da50576cbb14795c913a30d90a6f, type: 3}
   firePoint: {fileID: 1655603858}
-  bulletSpeed: 225
+  bulletSpeed: 265
   fireRate: 0.1
   maxAmmo: 100
   reloadTime: 2.5
   fireSound: {fileID: 8300000, guid: 0192db39355c4b140bbc06d298d3cbf6, type: 3}
   reloadSound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: 2c53068060f96d44bb3fd72be4c6d487, type: 3}
   soundVolume: 1
 --- !u!1 &2060416593
 GameObject:

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyChaseAI : MonoBehaviour
 {
@@ -12,7 +12,7 @@ public class EnemyChaseAI : MonoBehaviour
     public float loseDistance = 150f;
     public float waypointReach = 10f;
 
-    [Header("H�zlar")]
+    [Header("Hızlar")]
     public float patrolSpeed = 40f;
     public float chaseSpeed = 60f;
     public float rotationSpeed = 2f;
@@ -25,13 +25,27 @@ public class EnemyChaseAI : MonoBehaviour
     public float missileCooldown = 3f;
     private float lastMissileTime;
 
+    [Header("Hasar Sistemi")]
+    public int health = 5;
+    public GameObject explosionPrefab; // Patlama efekti prefab
+    public AudioClip hitSound;         // Vurulma sesi
+    public AudioClip deathSound;       // Ölüm sesi
+    private AudioSource audioSource;
+
+    private bool isDead = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Update()
     {
+        if (isDead) return; // öldüyse hareket etmeyecek
+
         float distToPlayer = Vector3.Distance(transform.position, player.position);
 
         if (!isChasing && distToPlayer < viewDistance)
@@ -51,9 +65,7 @@ public class EnemyChaseAI : MonoBehaviour
         FlyTowards(player.position, chaseSpeed);
 
         if (Vector3.Distance(transform.position, player.position) < 100f)
-        {          
             FireMissile();
-        }
     }
 
     void Patrol()
@@ -64,9 +76,7 @@ public class EnemyChaseAI : MonoBehaviour
         FlyTowards(targetWp.position, patrolSpeed);
 
         if (Vector3.Distance(transform.position, targetWp.position) <= waypointReach)
-        {
             wpIndex = (wpIndex + 1) % waypoints.Length;
-        }
     }
 
     void FlyTowards(Vector3 targetPos, float speed)
@@ -99,36 +109,46 @@ public class EnemyChaseAI : MonoBehaviour
         if (Time.time - lastMissileTime < missileCooldown) return;
         lastMissileTime = Time.time;
 
-        // Null kontroller
-        if (RocketPool.Instance == null)
-        {
-            Debug.LogError(">>> RocketPool.Instance yok!");
-            return;
-        }
+        if (RocketPool.Instance == null || firePoint == null) return;
 
         GameObject missile = RocketPool.Instance.GetRocket();
-        if (missile == null)
-        {
-            Debug.LogError(">>> F�ze NULL! Pool'dan f�ze al�namad�.");
-            return;
-        }
-
-        if (firePoint == null)
-        {
-            Debug.LogError(">>> FirePoint atanmad�!");
-            return;
-        }
+        if (missile == null) return;
 
         missile.transform.position = firePoint.position;
         missile.transform.rotation = firePoint.rotation;
 
         EnemyMissile em = missile.GetComponent<EnemyMissile>();
-        if (em == null)
-        {
-            Debug.LogError(">>> EnemyMissile script f�ze prefab�nda yok!");
-            return;
-        }
+        if (em != null) em.SetTarget(player);
+    }
 
-        em.SetTarget(player);
+    // ✅ HASAR ALMA
+    public void TakeDamage(int amount)
+    {
+        if (isDead) return;
+
+        health -= amount;
+
+        if (hitSound != null)
+            audioSource.PlayOneShot(hitSound);
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        isDead = true;
+        rb.useGravity = true;
+        rb.mass += 500f; // ağırlaştırıp düşmesini sağla
+
+        if (explosionPrefab != null)
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+
+        if (deathSound != null)
+            audioSource.PlayOneShot(deathSound);
+
+        Destroy(gameObject, 5f); // yere düşerken yok olacak
     }
 }

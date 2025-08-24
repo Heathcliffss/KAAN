@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class AircraftGun : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class AircraftGun : MonoBehaviour
     [Header("Ses Ayarları")]
     public AudioClip fireSound;
     public AudioClip reloadSound;
+    public AudioClip hitSound;
     public float soundVolume = 1f;
 
     private float nextFireTime = 0f;
@@ -26,66 +28,58 @@ public class AircraftGun : MonoBehaviour
 
     void Update()
     {
-        if (isReloading)
-        {
-            // Reload sırasında Mouse 0'a her basıldığında reload sesi
-            if (Input.GetMouseButtonDown(0) && reloadSound != null)
-                AudioSource.PlayClipAtPoint(reloadSound, firePoint.position, soundVolume);
-            return;
-        }
+        if (isReloading) return;
 
-        // Normal ateş
         if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
         {
             Fire();
             nextFireTime = Time.time + fireRate;
         }
 
-        // Mermi biterse reload başlat
         if (currentAmmo <= 0 && !isReloading)
-        {
             StartCoroutine(Reload());
-        }
     }
 
     void Fire()
     {
         if (currentAmmo <= 0) return;
 
-        // Hedef yönü hesapla
-        Vector3 targetPoint;
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // Crosshair ortası
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
-        {
-            targetPoint = hit.point;
-        }
-        else
-        {
-            targetPoint = ray.GetPoint(1000); // 1000 metre ileriye varsayalım
-        }
-
         // Mermiyi oluştur
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 
-        // Yönünü hedefe çevir
-        Vector3 direction = (targetPoint - firePoint.position).normalized;
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        rb.linearVelocity = direction * bulletSpeed;
+        // Rigidbody ve collider kontrolü
+        var rb = bullet.GetComponent<Rigidbody>();
+        if (rb == null) rb = bullet.AddComponent<Rigidbody>();
+        rb.useGravity = false;
+        rb.isKinematic = false;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        rb.linearVelocity = firePoint.forward * bulletSpeed;
+
+        var col = bullet.GetComponent<Collider>();
+        if (col == null) col = bullet.AddComponent<SphereCollider>();
+        col.isTrigger = false;
+
+        // Kendi uçağına çarpmasın
+        var ownerCols = GetComponentsInChildren<Collider>();
+        foreach (var oc in ownerCols)
+            if (oc != null && col != null)
+                Physics.IgnoreCollision(col, oc, true);
+
+        // Merminin davranışı (tek script içinde)
+        Bullet bulletScript = bullet.AddComponent<Bullet>();
+        bulletScript.hitSound = hitSound;
+        bulletScript.soundVolume = soundVolume;
 
         currentAmmo--;
 
-        // Ateş sesi
         if (fireSound != null)
             AudioSource.PlayClipAtPoint(fireSound, firePoint.position, soundVolume);
     }
 
-    System.Collections.IEnumerator Reload()
+    IEnumerator Reload()
     {
         isReloading = true;
 
-        // Reload başlarken ses çal
         if (reloadSound != null)
             AudioSource.PlayClipAtPoint(reloadSound, firePoint.position, soundVolume);
 
@@ -93,5 +87,35 @@ public class AircraftGun : MonoBehaviour
 
         currentAmmo = maxAmmo;
         isReloading = false;
+    }
+
+    // ✅ Mermi davranışı bu scriptin içinde
+    public class Bullet : MonoBehaviour
+    {
+        public AudioClip hitSound;
+        public float soundVolume = 1f;
+        public float lifeTime = 5f;
+
+        void Start()
+        {
+            Destroy(gameObject, lifeTime);
+        }
+
+        void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.CompareTag("Enemy"))
+            {
+                // Vurma sesi
+                if (hitSound != null && Camera.main != null)
+                    AudioSource.PlayClipAtPoint(hitSound, Camera.main.transform.position, soundVolume);
+
+                // Hasar uygula
+                var enemy = collision.gameObject.GetComponent<EnemyChaseAI>();
+                if (enemy != null)
+                    enemy.TakeDamage(1);
+            }
+
+            Destroy(gameObject);
+        }
     }
 }

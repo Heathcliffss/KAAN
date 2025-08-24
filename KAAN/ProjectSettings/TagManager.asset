@@ -9,6 +9,7 @@ TagManager:
   - GroundLayer
   - b
   - AircraftPart
+  - PlayerBullet
   layers:
   - Default
   - TransparentFX
