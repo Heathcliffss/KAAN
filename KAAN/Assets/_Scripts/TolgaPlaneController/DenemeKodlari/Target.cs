@@ -6,23 +6,22 @@ namespace Tarodev
     {
         [Header("Explosion Settings")]
         [SerializeField] private GameObject explosionPrefab;
-        [SerializeField] private AudioClip explosionSound;   // ✅ Patlama sesi
+        [SerializeField] private AudioClip explosionSound;
 
         public void Explode()
         {
             Debug.Log($"{gameObject.name} vuruldu ve yok oldu!");
 
-            // ✅ Patlama efekti
+            // 🔥 Patlama efekti
             if (explosionPrefab != null)
                 Instantiate(explosionPrefab, transform.position, Quaternion.identity);
 
-            // ✅ Patlama sesi
+            // 🔊 Patlama sesi
             if (explosionSound != null)
                 AudioSource.PlayClipAtPoint(explosionSound, transform.position);
 
-            // ✅ Ana objeyi tamamen sahneden kaldır
+            // 💥 Root objeyi tamamen sil
             Destroy(transform.root.gameObject);
-            // Eğer sadece bu objeyi silmek istiyorsan -> Destroy(gameObject);
         }
     }
 }

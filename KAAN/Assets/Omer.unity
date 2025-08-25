@@ -519,7 +519,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6119b8d3222a0cf4a900101282052582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rb: {fileID: 66785256}
+  explosionPrefab: {fileID: 0}
+  explosionSound: {fileID: 0}
 --- !u!65 &66785258
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6966,7 +6967,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6119b8d3222a0cf4a900101282052582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rb: {fileID: 463856330}
+  explosionPrefab: {fileID: 0}
+  explosionSound: {fileID: 0}
 --- !u!65 &463856332
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9211,6 +9213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rb: {fileID: 820894323}
   _target: {fileID: 0}
+  _explosionPrefab: {fileID: 0}
   searchRadius: 30
   enemyTag: Enemy
   _speed: 25
@@ -9222,7 +9225,6 @@ MonoBehaviour:
   _deviationAmount: 50
   _deviationSpeed: 0.2
   buffertime: 0.3
-  Gm: {fileID: 2060416594}
 --- !u!54 &820894323
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9938,7 +9940,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6119b8d3222a0cf4a900101282052582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rb: {fileID: 883156997}
+  explosionPrefab: {fileID: 0}
+  explosionSound: {fileID: 0}
 --- !u!65 &883156999
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12980,11 +12983,6 @@ MeshFilter:
 Transform:
   m_CorrespondingSourceObject: {fileID: 2693932884678259739, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
   m_PrefabInstance: {fileID: 742097556}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1551650580 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6452309701679513602, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
-  m_PrefabInstance: {fileID: 2133286745}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1551650581 stripped
 Transform:
@@ -17991,7 +17989,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6119b8d3222a0cf4a900101282052582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rb: {fileID: 1578644407}
+  explosionPrefab: {fileID: 0}
+  explosionSound: {fileID: 0}
 --- !u!65 &1578644409
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19040,7 +19039,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6119b8d3222a0cf4a900101282052582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rb: {fileID: 1743903344}
+  explosionPrefab: {fileID: 0}
+  explosionSound: {fileID: 0}
 --- !u!65 &1743903346
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19427,7 +19427,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6119b8d3222a0cf4a900101282052582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rb: {fileID: 1804229033}
+  explosionPrefab: {fileID: 0}
+  explosionSound: {fileID: 0}
 --- !u!65 &1804229035
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19911,8 +19912,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 7ce7b629a8aea854f81ce539c1ed9eb9, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ee6c468880943a54985b3724076db43c, type: 3}
+  m_Resource: {fileID: 8300000, guid: ee6c468880943a54985b3724076db43c, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -25255,11 +25256,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa66ec5c20101894f8373ea4c9cd16bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BombLoc1: {fileID: 232825724}
-  Bomblocation1: {fileID: 1551650580}
-  FollowTime: 2
-  followspeed: 0
-  Enemy: {fileID: 4639652661757775640, guid: cbf4403f5e78d0e45b3fa9fcad087490, type: 3}
+  followDelay: 2
+  followForce: 5000
+  explosionEffect: {fileID: 0}
 --- !u!4 &2018489583
 Transform:
   m_ObjectHideFlags: 0

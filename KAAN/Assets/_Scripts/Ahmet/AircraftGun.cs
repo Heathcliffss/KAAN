@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(JetEngineSoundController))]
 public class AircraftGun : MonoBehaviour
 {
     [Header("Ateş Ayarları")]
@@ -11,15 +12,19 @@ public class AircraftGun : MonoBehaviour
     public int maxAmmo = 50;
     public float reloadTime = 3f;
 
-    [Header("Ses Ayarları")]
-    public AudioClip fireSound;
-    public AudioClip reloadSound;
-    public AudioClip hitSound;
-    public float soundVolume = 1f;
-
     private float nextFireTime = 0f;
     private int currentAmmo;
     private bool isReloading = false;
+
+    // Sesleri buradan çalacağız
+    private JetEngineSoundController soundHub;
+
+    void Awake()
+    {
+        // Aynı objede yoksa parent’ta arar
+        soundHub = GetComponent<JetEngineSoundController>();
+        if (soundHub == null) soundHub = GetComponentInParent<JetEngineSoundController>();
+    }
 
     void Start()
     {
@@ -42,58 +47,62 @@ public class AircraftGun : MonoBehaviour
 
     void Fire()
     {
-        if (currentAmmo <= 0) return;
+        if (currentAmmo <= 0 || firePoint == null || bulletPrefab == null) return;
 
-        // 🎯 Önce mouse'un baktığı noktayı bul
+        // 🎯 hedef noktası (ekran ortası crosshair)
         Vector3 targetPoint;
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // ekran ortası
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
-            targetPoint = hit.point;
+        var cam = Camera.main;
+        if (cam != null)
+        {
+            Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            if (Physics.Raycast(ray, out RaycastHit hit))
+                targetPoint = hit.point;
+            else
+                targetPoint = ray.GetPoint(1000f);
+        }
         else
-            targetPoint = ray.GetPoint(1000f);
+        {
+            targetPoint = firePoint.position + firePoint.forward * 1000f;
+        }
 
         // Mermiyi oluştur
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
 
-        // Rigidbody ve collider kontrolü
+        // Rigidbody ayarları
         var rb = bullet.GetComponent<Rigidbody>();
         if (rb == null) rb = bullet.AddComponent<Rigidbody>();
         rb.useGravity = false;
-        rb.isKinematic = false;
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 
-        // 🎯 yönlendirme: hedef noktasına doğru
+        // Yönlendirme
         Vector3 dir = (targetPoint - firePoint.position).normalized;
         rb.linearVelocity = dir * bulletSpeed;
 
+        // Collider ayarları
         var col = bullet.GetComponent<Collider>();
         if (col == null) col = bullet.AddComponent<SphereCollider>();
         col.isTrigger = false;
 
-        // Kendi uçağına çarpmasın
-        var ownerCols = GetComponentsInChildren<Collider>();
-        foreach (var oc in ownerCols)
-            if (oc != null && col != null)
-                Physics.IgnoreCollision(col, oc, true);
+        // Kendi uçak colliderlarını ignore et
+        foreach (var oc in GetComponentsInChildren<Collider>())
+            if (oc != null) Physics.IgnoreCollision(col, oc, true);
 
-        // Mermi davranışı
-        Bullet bulletScript = bullet.AddComponent<Bullet>();
-        bulletScript.hitSound = hitSound;
-        bulletScript.soundVolume = soundVolume;
+        // Bullet davranışı + ses merkezi referansı
+        var bulletScript = bullet.AddComponent<Bullet>();
+        bulletScript.soundHub = soundHub;
 
         currentAmmo--;
 
-        if (fireSound != null)
-            AudioSource.PlayClipAtPoint(fireSound, firePoint.position, soundVolume);
+        // 🔊 Ateş sesi merkezden
+        soundHub?.PlayFireSound(firePoint.position);
     }
 
     IEnumerator Reload()
     {
         isReloading = true;
 
-        if (reloadSound != null)
-            AudioSource.PlayClipAtPoint(reloadSound, firePoint.position, soundVolume);
+        // 🔊 Reload sesi merkezden
+        soundHub?.PlayReloadSound(firePoint.position);
 
         yield return new WaitForSeconds(reloadTime);
 
@@ -104,8 +113,7 @@ public class AircraftGun : MonoBehaviour
     // ✅ Mermi davranışı bu scriptin içinde
     public class Bullet : MonoBehaviour
     {
-        public AudioClip hitSound;
-        public float soundVolume = 1f;
+        public JetEngineSoundController soundHub; // vurma sesini buradan çalacağız
         public float lifeTime = 5f;
 
         void Start()
@@ -117,8 +125,9 @@ public class AircraftGun : MonoBehaviour
         {
             if (collision.gameObject.CompareTag("Enemy"))
             {
-                if (hitSound != null && Camera.main != null)
-                    AudioSource.PlayClipAtPoint(hitSound, Camera.main.transform.position, soundVolume);
+                // 🔊 Vurma sesi oyuncuda (kamera konumunda) çalsın
+                if (Camera.main != null)
+                    soundHub?.PlayHitSound(Camera.main.transform.position);
 
                 var enemy = collision.gameObject.GetComponent<EnemyChaseAI>();
                 if (enemy != null)

@@ -11066,8 +11066,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: f6fccf399211ab542bf88c0f132a11d0, type: 3}
-  m_Resource: {fileID: 8300000, guid: f6fccf399211ab542bf88c0f132a11d0, type: 3}
+  m_audioClip: {fileID: 8300000, guid: db565635783fba846b3f8ff800476588, type: 3}
+  m_Resource: {fileID: 8300000, guid: db565635783fba846b3f8ff800476588, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -14396,8 +14396,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 9575cb69c91249240a211e575a7a9974, type: 3}
+  m_audioClip: {fileID: 8300000, guid: f6fccf399211ab542bf88c0f132a11d0, type: 3}
+  m_Resource: {fileID: 8300000, guid: f6fccf399211ab542bf88c0f132a11d0, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -17336,8 +17336,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 7ce7b629a8aea854f81ce539c1ed9eb9, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 8a16ac6737ec7194a9ad9de7af05e2b5, type: 3}
+  m_Resource: {fileID: 8300000, guid: 8a16ac6737ec7194a9ad9de7af05e2b5, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -23112,14 +23112,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 794924cca5c98f9478a6ed995c8e46c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idleSound: {fileID: 1431594057}
-  runningSound: {fileID: 933779605}
+  idleSound: {fileID: 933779605}
+  runningSound: {fileID: 1431594057}
   windSound: {fileID: 1945364309}
   idleMaxVolume: 0.8
   runningMaxVolume: 0.8
-  windMinVolume: 0.1
-  windMaxVolume: 0.6
+  windMinVolume: 0.4
+  windMaxVolume: 1
   windFadeDuration: 0.5
+  fireSound: {fileID: 8300000, guid: 0192db39355c4b140bbc06d298d3cbf6, type: 3}
+  reloadSound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: 2c53068060f96d44bb3fd72be4c6d487, type: 3}
+  gunSoundVolume: 1
 --- !u!114 &2056913777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23138,10 +23142,6 @@ MonoBehaviour:
   fireRate: 0.1
   maxAmmo: 100
   reloadTime: 2.5
-  fireSound: {fileID: 8300000, guid: 0192db39355c4b140bbc06d298d3cbf6, type: 3}
-  reloadSound: {fileID: 0}
-  hitSound: {fileID: 8300000, guid: 2c53068060f96d44bb3fd72be4c6d487, type: 3}
-  soundVolume: 1
 --- !u!1 &2060416593
 GameObject:
   m_ObjectHideFlags: 0
