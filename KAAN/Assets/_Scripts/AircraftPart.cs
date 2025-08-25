@@ -1,28 +1,31 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class AircraftPart : MonoBehaviour
 {
     public enum PartType { Wing, Body }
     public PartType partType;
 
-    [Tooltip("Bu parça yok edildiğinde birlikte devre dışı bırakılacak objeler (Opsiyonel)")]
+    [Tooltip("Bu parÃ§a yok edildiÄŸinde birlikte devre dÄ±ÅŸÄ± bÄ±rakÄ±lacak objeler (Opsiyonel)")]
     public GameObject[] additionalPartsToDisable; // Birden fazla ek obje
 
     [Header("Yok olma efekti")]
-    public ParticleSystem destroyEffect; // Partikül efekti
+    public ParticleSystem destroyEffect; // PartikÃ¼l efekti
 
-    private int hitCount = 0;
+    private int missileHitCount = 0;       // FÃ¼ze sayacÄ± (Body iÃ§in)
+    private int enemyBulletHitCount = 0;   // Mermi sayacÄ± (Body iÃ§in)
     private bool detached = false;
 
     private void Start()
     {
-        // Başta efekt kapalı olsun
         if (destroyEffect != null)
         {
             destroyEffect.gameObject.SetActive(false);
         }
     }
 
+    /// <summary>
+    /// FÃ¼ze hasarÄ±
+    /// </summary>
     public void TakeDamage()
     {
         if (partType == PartType.Wing && !detached)
@@ -31,10 +34,30 @@ public class AircraftPart : MonoBehaviour
         }
         else if (partType == PartType.Body)
         {
-            hitCount++;
-            if (hitCount >= 2)
+            missileHitCount++;
+            if (missileHitCount >= 2) // GÃ¶vde 2 fÃ¼ze yerse dÃ¼ÅŸ
             {
                 GetComponentInParent<AirplaneController>().Crash();
+            }
+        }
+    }
+
+    /// <summary>
+    /// DÃ¼ÅŸman mermisi hasarÄ±
+    /// </summary>
+    public void TakeEnemyBulletDamage()
+    {
+        if (partType == PartType.Wing && !detached)
+        {
+            // Kanat tek mermiyle bile kopabilir
+            DetachPart();
+        }
+        else if (partType == PartType.Body)
+        {
+            enemyBulletHitCount++;
+            if (enemyBulletHitCount >= 5) // GÃ¶vde 5 mermi yerse dÃ¼ÅŸ
+            {
+                DetachPart(); // FÃ¼ze mantÄ±ÄŸÄ±yla aynÄ± iÅŸlemi uygula
             }
         }
     }
@@ -44,17 +67,17 @@ public class AircraftPart : MonoBehaviour
         if (detached) return;
         detached = true;
 
-        // Efekti çalıştır
+        // Efekti Ã§alÄ±ÅŸtÄ±r
         if (destroyEffect != null)
         {
             destroyEffect.gameObject.SetActive(true);
             destroyEffect.Play();
         }
 
-        // Ana objeyi devre dışı bırak
+        // Ana objeyi devre dÄ±ÅŸÄ± bÄ±rak
         gameObject.SetActive(false);
 
-        // Tüm ek objeleri devre dışı bırak
+        // Ek parÃ§alarÄ± kapat
         if (additionalPartsToDisable != null && additionalPartsToDisable.Length > 0)
         {
             foreach (var part in additionalPartsToDisable)
@@ -64,6 +87,6 @@ public class AircraftPart : MonoBehaviour
             }
         }
 
-        Debug.Log(">> Kanat ve bağlı parçalar devre dışı bırakıldı, efekt oynatıldı.");
+        Debug.Log(">> ParÃ§a yok edildi, efekt oynatÄ±ldÄ±.");
     }
 }

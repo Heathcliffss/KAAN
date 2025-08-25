@@ -20,10 +20,12 @@ public class EnemyChaseAI : MonoBehaviour
     private bool isChasing = false;
     private int wpIndex = 0;
 
-    public GameObject missilePrefab;
+    [Header("Silah Sistemi")]
+    public GameObject bulletPrefab;
     public Transform firePoint;
-    public float missileCooldown = 3f;
-    private float lastMissileTime;
+    public float bulletSpeed = 200f;
+    public float fireCooldown = 0.2f;
+    private float lastFireTime;
 
     [Header("Hasar Sistemi")]
     public int health = 5;
@@ -78,8 +80,12 @@ public class EnemyChaseAI : MonoBehaviour
 
         FlyTowards(chaseTarget, chaseSpeed);
 
-        if (Vector3.Distance(transform.position, player.position) < 100f)
-            FireMissile();
+        // Eğer player görüş açısında ve mesafede ise ateş et
+        Vector3 toPlayer = (player.position - transform.position).normalized;
+        float angle = Vector3.Angle(transform.forward, toPlayer);
+
+        if (angle < 90f && Vector3.Distance(transform.position, player.position) < 400f)
+            FireBullet();
 
         // belli aralıklarla offseti değiştir ki hareketi doğal olsun
         if (Random.value < 0.01f)
@@ -128,22 +134,30 @@ public class EnemyChaseAI : MonoBehaviour
         rb.linearVelocity = transform.forward * speed;
     }
 
-    void FireMissile()
+    void FireBullet()
     {
-        if (Time.time - lastMissileTime < missileCooldown) return;
-        lastMissileTime = Time.time;
+        if (Time.time - lastFireTime < fireCooldown) return;
+        lastFireTime = Time.time;
 
-        if (RocketPool.Instance == null || firePoint == null) return;
+        if (bulletPrefab == null || firePoint == null) return;
 
-        GameObject missile = RocketPool.Instance.GetRocket();
-        if (missile == null) return;
+        // Player yönünü hesapla
+        Vector3 dirToPlayer = (player.position - firePoint.position).normalized;
 
-        missile.transform.position = firePoint.position;
-        missile.transform.rotation = firePoint.rotation;
+        // Player’a bakacak şekilde rotation ver
+        Quaternion lookRot = Quaternion.LookRotation(dirToPlayer);
 
-        EnemyMissile em = missile.GetComponent<EnemyMissile>();
-        if (em != null) em.SetTarget(player);
+        // Bullet oluştur
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, lookRot);
+        Rigidbody brb = bullet.GetComponent<Rigidbody>();
+        if (brb != null)
+        {
+            brb.linearVelocity = dirToPlayer * bulletSpeed;
+        }
+
+        Destroy(bullet, 5f);
     }
+
 
     public void TakeDamage(int amount)
     {
