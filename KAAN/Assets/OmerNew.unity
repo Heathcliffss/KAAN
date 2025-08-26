@@ -5952,6 +5952,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1395444899}
     m_Modifications:
     - target: {fileID: 1983145595212405215, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983145595212405215, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0.36489853
       objectReference: {fileID: 0}
@@ -6022,6 +6026,10 @@ PrefabInstance:
     - target: {fileID: 7836575228590266414, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836575228590266414, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6301,6 +6309,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 138775860}
     m_Modifications:
     - target: {fileID: 1983145595212405215, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983145595212405215, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
       propertyPath: TrailModule.mode
       value: 0
       objectReference: {fileID: 0}
@@ -6443,6 +6455,10 @@ PrefabInstance:
     - target: {fileID: 7836575228590266414, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836575228590266414, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6975,7 +6991,8 @@ MonoBehaviour:
   - {fileID: 138775862}
   - {fileID: 138775861}
   - {fileID: 2133286746}
-  destroyEffect: {fileID: 1718072424}
+  alev1: {fileID: 1395444901}
+  alev2: {fileID: 1718072424}
 --- !u!65 &318322489
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10761,6 +10778,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 138775860}
     m_Modifications:
     - target: {fileID: 1983145595212405215, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983145595212405215, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
       propertyPath: TrailModule.mode
       value: 0
       objectReference: {fileID: 0}
@@ -10903,6 +10924,10 @@ PrefabInstance:
     - target: {fileID: 7836575228590266414, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836575228590266414, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11926,6 +11951,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 351013404}
     m_Modifications:
     - target: {fileID: 1983145595212405215, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983145595212405215, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0.36489853
       objectReference: {fileID: 0}
@@ -11996,6 +12025,10 @@ PrefabInstance:
     - target: {fileID: 7836575228590266414, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7836575228590266414, guid: 6706cae315e2f304ebfe8bacb723a82d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13690,7 +13723,8 @@ MonoBehaviour:
   - {fileID: 1189594502}
   - {fileID: 1931173531}
   - {fileID: 618411183}
-  destroyEffect: {fileID: 1395444901}
+  alev1: {fileID: 1395444901}
+  alev2: {fileID: 1718072424}
 --- !u!65 &1351897208
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23563,15 +23597,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2286225953454242494, guid: 866fd09020e7d694d9b1038923803669, type: 3}
       propertyPath: bulletSpeed
-      value: 500
+      value: 700
       objectReference: {fileID: 0}
     - target: {fileID: 2286225953454242494, guid: 866fd09020e7d694d9b1038923803669, type: 3}
       propertyPath: bulletPrefab
       value: 
-      objectReference: {fileID: 7662540647999211470, guid: 22122147dfd05a243ab82b4508030b83, type: 3}
+      objectReference: {fileID: 7662540647999211470, guid: df2fa466da48ece489b8b6ba528725ce, type: 3}
     - target: {fileID: 2286225953454242494, guid: 866fd09020e7d694d9b1038923803669, type: 3}
       propertyPath: fireCooldown
-      value: 0.12
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2286225953454242494, guid: 866fd09020e7d694d9b1038923803669, type: 3}
       propertyPath: rotationSpeed
@@ -23581,6 +23615,10 @@ PrefabInstance:
       propertyPath: explosionPrefab
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2286225953454242494, guid: 866fd09020e7d694d9b1038923803669, type: 3}
+      propertyPath: playerTargetPoint
+      value: 
+      objectReference: {fileID: 138775860}
     - target: {fileID: 2374020308825845628, guid: 866fd09020e7d694d9b1038923803669, type: 3}
       propertyPath: m_LocalPosition.y
       value: 95

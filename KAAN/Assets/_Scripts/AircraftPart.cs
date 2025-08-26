@@ -6,26 +6,17 @@ public class AircraftPart : MonoBehaviour
     public PartType partType;
 
     [Tooltip("Bu parça yok edildiğinde birlikte devre dışı bırakılacak objeler (Opsiyonel)")]
-    public GameObject[] additionalPartsToDisable; // Birden fazla ek obje
+    public GameObject[] additionalPartsToDisable;
 
-    [Header("Yok olma efekti")]
-    public ParticleSystem destroyEffect; // Partikül efekti
+    [Header("Yok olma efektleri")]
+    public ParticleSystem alev1;
+    public ParticleSystem alev2;
 
-    private int missileHitCount = 0;       // Füze sayacı (Body için)
-    private int enemyBulletHitCount = 0;   // Mermi sayacı (Body için)
+    private int missileHitCount = 0;     // Füze sayacı
+    private int enemyBulletHitCount = 0; // Mermi sayacı
     private bool detached = false;
 
-    private void Start()
-    {
-        if (destroyEffect != null)
-        {
-            destroyEffect.gameObject.SetActive(false);
-        }
-    }
-
-    /// <summary>
     /// Füze hasarı
-    /// </summary>
     public void TakeDamage()
     {
         if (partType == PartType.Wing && !detached)
@@ -42,22 +33,21 @@ public class AircraftPart : MonoBehaviour
         }
     }
 
-    /// <summary>
     /// Düşman mermisi hasarı
-    /// </summary>
     public void TakeEnemyBulletDamage()
     {
-        if (partType == PartType.Wing && !detached)
+        if (detached) return;
+
+        if (partType == PartType.Wing)
         {
-            // Kanat tek mermiyle bile kopabilir
             DetachPart();
         }
         else if (partType == PartType.Body)
         {
             enemyBulletHitCount++;
-            if (enemyBulletHitCount >= 5) // Gövde 5 mermi yerse düş
+            if (enemyBulletHitCount >= 5) // 5 mermi → gövde yok olur
             {
-                DetachPart(); // Füze mantığıyla aynı işlemi uygula
+                DetachPart();
             }
         }
     }
@@ -67,14 +57,11 @@ public class AircraftPart : MonoBehaviour
         if (detached) return;
         detached = true;
 
-        // Efekti çalıştır
-        if (destroyEffect != null)
-        {
-            destroyEffect.gameObject.SetActive(true);
-            destroyEffect.Play();
-        }
+        // Alev efektlerini çalıştır ve parent’tan ayır
+        PlayAndDetachEffect(alev1);
+        PlayAndDetachEffect(alev2);
 
-        // Ana objeyi devre dışı bırak
+        // Ana objeyi kapat
         gameObject.SetActive(false);
 
         // Ek parçaları kapat
@@ -87,6 +74,34 @@ public class AircraftPart : MonoBehaviour
             }
         }
 
-        Debug.Log(">> Parça yok edildi, efekt oynatıldı.");
+        Debug.Log($">> {partType} yok edildi, alev efektleri çalıştı.");
     }
+
+    private void PlayAndDetachEffect(ParticleSystem effect)
+    {
+        if (effect == null) return;
+
+        // Eğer inspector’da disable haldeyse açıyoruz
+        effect.gameObject.SetActive(true);
+
+        // Parent’tan ayır ki kapalı objeyle kapanmasın
+        effect.transform.SetParent(null);
+
+        // Çalıştır
+        effect.Play();
+
+        // Bitince otomatik sil
+        Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
+    }
+
+    // AircraftPart.cs içine ekle
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("EnemyBullet")) // mermi tag'ı bu olmalı
+        {
+            TakeEnemyBulletDamage();
+            Destroy(other.gameObject); // mermiyi yok et
+        }
+    }
+
 }

@@ -3,7 +3,8 @@
 public class EnemyChaseAI : MonoBehaviour
 {
     [Header("Referanslar")]
-    public Transform player;
+    public Transform player;               // Ana oyuncu objesi (pivot)
+    public Transform playerTargetPoint;    // Oyuncunun vurulacak merkezi (örneğin kokpit boş obje)
     public Transform[] waypoints;
     private Rigidbody rb;
 
@@ -36,7 +37,6 @@ public class EnemyChaseAI : MonoBehaviour
 
     private bool isDead = false;
 
-    // chase sırasında biraz offset ekleyelim
     private Vector3 chaseOffset;
 
     void Start()
@@ -51,12 +51,14 @@ public class EnemyChaseAI : MonoBehaviour
     {
         if (isDead) return;
 
-        float distToPlayer = Vector3.Distance(transform.position, player.position);
+        // hedef noktayı seç → eğer atanmışsa targetPoint, yoksa normal player
+        Transform targetTransform = playerTargetPoint != null ? playerTargetPoint : player;
+
+        float distToPlayer = Vector3.Distance(transform.position, targetTransform.position);
 
         if (!isChasing && distToPlayer < viewDistance)
         {
             isChasing = true;
-            // random bir offset seç
             chaseOffset = new Vector3(
                 Random.Range(-50f, 50f),
                 Random.Range(-20f, 20f),
@@ -68,26 +70,23 @@ public class EnemyChaseAI : MonoBehaviour
             isChasing = false;
 
         if (isChasing)
-            ChasePlayer();
+            ChasePlayer(targetTransform);
         else
             Patrol();
     }
 
-    void ChasePlayer()
+    void ChasePlayer(Transform targetTransform)
     {
-        // Hedef pozisyonu → player + offset
-        Vector3 chaseTarget = player.position + chaseOffset;
+        Vector3 chaseTarget = targetTransform.position + chaseOffset;
 
         FlyTowards(chaseTarget, chaseSpeed);
 
-        // Eğer player görüş açısında ve mesafede ise ateş et
-        Vector3 toPlayer = (player.position - transform.position).normalized;
+        Vector3 toPlayer = (targetTransform.position - transform.position).normalized;
         float angle = Vector3.Angle(transform.forward, toPlayer);
 
-        if (angle < 90f && Vector3.Distance(transform.position, player.position) < 400f)
-            FireBullet();
+        if (angle < 60f && Vector3.Distance(transform.position, targetTransform.position) < 400f)
+            FireBullet(targetTransform);
 
-        // belli aralıklarla offseti değiştir ki hareketi doğal olsun
         if (Random.value < 0.01f)
         {
             chaseOffset = new Vector3(
@@ -134,30 +133,23 @@ public class EnemyChaseAI : MonoBehaviour
         rb.linearVelocity = transform.forward * speed;
     }
 
-    void FireBullet()
+    void FireBullet(Transform targetTransform)
     {
         if (Time.time - lastFireTime < fireCooldown) return;
         lastFireTime = Time.time;
 
         if (bulletPrefab == null || firePoint == null) return;
 
-        // Player yönünü hesapla
-        Vector3 dirToPlayer = (player.position - firePoint.position).normalized;
-
-        // Player’a bakacak şekilde rotation ver
+        Vector3 dirToPlayer = (targetTransform.position - firePoint.position).normalized;
         Quaternion lookRot = Quaternion.LookRotation(dirToPlayer);
 
-        // Bullet oluştur
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, lookRot);
         Rigidbody brb = bullet.GetComponent<Rigidbody>();
         if (brb != null)
-        {
             brb.linearVelocity = dirToPlayer * bulletSpeed;
-        }
 
         Destroy(bullet, 5f);
     }
-
 
     public void TakeDamage(int amount)
     {
