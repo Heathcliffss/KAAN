@@ -6991,7 +6991,7 @@ MonoBehaviour:
   - {fileID: 138775862}
   - {fileID: 138775861}
   - {fileID: 2133286746}
-  alev1: {fileID: 1395444901}
+  alev1: {fileID: 1718072424}
   alev2: {fileID: 1718072424}
 --- !u!65 &318322489
 BoxCollider:
@@ -13724,7 +13724,7 @@ MonoBehaviour:
   - {fileID: 1931173531}
   - {fileID: 618411183}
   alev1: {fileID: 1395444901}
-  alev2: {fileID: 1718072424}
+  alev2: {fileID: 1395444901}
 --- !u!65 &1351897208
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15750,7 +15750,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8415698281501114643, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8415698281501114643, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
       propertyPath: m_TagString
@@ -23597,7 +23597,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2286225953454242494, guid: 866fd09020e7d694d9b1038923803669, type: 3}
       propertyPath: bulletSpeed
-      value: 700
+      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 2286225953454242494, guid: 866fd09020e7d694d9b1038923803669, type: 3}
       propertyPath: bulletPrefab
@@ -23609,7 +23609,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2286225953454242494, guid: 866fd09020e7d694d9b1038923803669, type: 3}
       propertyPath: rotationSpeed
-      value: 1
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 2286225953454242494, guid: 866fd09020e7d694d9b1038923803669, type: 3}
       propertyPath: explosionPrefab

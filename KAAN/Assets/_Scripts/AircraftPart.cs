@@ -8,7 +8,7 @@ public class AircraftPart : MonoBehaviour
     [Tooltip("Bu parça yok edildiğinde birlikte devre dışı bırakılacak objeler (Opsiyonel)")]
     public GameObject[] additionalPartsToDisable;
 
-    [Header("Yok olma efektleri")]
+    [Header("Yok olma efektleri (sahnede hazır olan particle objelerini at)")]
     public ParticleSystem alev1;
     public ParticleSystem alev2;
 
@@ -57,9 +57,9 @@ public class AircraftPart : MonoBehaviour
         if (detached) return;
         detached = true;
 
-        // Alev efektlerini çalıştır ve parent’tan ayır
-        PlayAndDetachEffect(alev1);
-        PlayAndDetachEffect(alev2);
+        // Sahnede hazır olan particle objelerini sadece aktif et ve çalıştır
+        ActivateEffect(alev1);
+        ActivateEffect(alev2);
 
         // Ana objeyi kapat
         gameObject.SetActive(false);
@@ -74,27 +74,20 @@ public class AircraftPart : MonoBehaviour
             }
         }
 
-        Debug.Log($">> {partType} yok edildi, alev efektleri çalıştı.");
+        Debug.Log($">> {partType} yok edildi, sahnedeki efektler çalıştı.");
     }
 
-    private void PlayAndDetachEffect(ParticleSystem effect)
+    private void ActivateEffect(ParticleSystem effect)
     {
         if (effect == null) return;
 
-        // Eğer inspector’da disable haldeyse açıyoruz
+        // Objeyi aktif et (sahnede disable ise açılır)
         effect.gameObject.SetActive(true);
 
-        // Parent’tan ayır ki kapalı objeyle kapanmasın
-        effect.transform.SetParent(null);
-
-        // Çalıştır
+        // Particle sistemini oynat
         effect.Play();
-
-        // Bitince otomatik sil
-        Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
     }
 
-    // AircraftPart.cs içine ekle
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("EnemyBullet")) // mermi tag'ı bu olmalı
@@ -103,5 +96,4 @@ public class AircraftPart : MonoBehaviour
             Destroy(other.gameObject); // mermiyi yok et
         }
     }
-
 }
