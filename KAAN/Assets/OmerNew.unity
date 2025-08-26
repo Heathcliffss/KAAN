@@ -15725,6 +15725,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1965502515821978045, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
+      propertyPath: soundArea
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1965502515821978045, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
       propertyPath: SelfPosition
       value: 
       objectReference: {fileID: 1709279229}
@@ -15732,6 +15736,10 @@ PrefabInstance:
       propertyPath: fireInterval
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1965502515821978045, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
+      propertyPath: explosionClip
+      value: 
+      objectReference: {fileID: 8300000, guid: bfb392c659169614ab3c3b2e6a16facc, type: 3}
     - target: {fileID: 1965502515821978045, guid: 16b3b18894f3bad4e9830f07e4d4be6a, type: 3}
       propertyPath: detectionRange
       value: 5000
@@ -15844,7 +15852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 0}
-  explosionSound: {fileID: 8300000, guid: 8c5a2db6205e4b24dae035b9d7c170c0, type: 3}
+  explosionSound: {fileID: 8300000, guid: bfb392c659169614ab3c3b2e6a16facc, type: 3}
 --- !u!65 &1709279233
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22929,6 +22937,8 @@ MonoBehaviour:
   reloadSound: {fileID: 0}
   hitSound: {fileID: 8300000, guid: 2c53068060f96d44bb3fd72be4c6d487, type: 3}
   gunSoundVolume: 1
+  explosionSound: {fileID: 8300000, guid: bfb392c659169614ab3c3b2e6a16facc, type: 3}
+  explosionVolume: 1
 --- !u!114 &2056913777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22943,7 +22953,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 7662540647999211470, guid: 5e70da50576cbb14795c913a30d90a6f, type: 3}
   firePoint: {fileID: 1655603858}
-  bulletSpeed: 265
+  bulletSpeed: 280
   fireRate: 0.1
   maxAmmo: 100
   reloadTime: 2.5
@@ -23406,7 +23416,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3729527407972516659, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
       propertyPath: thrust
-      value: 5500
+      value: 6000
       objectReference: {fileID: 0}
     - target: {fileID: 4050880740003614855, guid: ac12157ffe0f3734bb4fff64ca4d633d, type: 3}
       propertyPath: m_LocalPosition.x

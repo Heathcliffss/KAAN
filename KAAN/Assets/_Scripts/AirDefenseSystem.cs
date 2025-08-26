@@ -7,11 +7,13 @@ public class AirDefenseSystem : MonoBehaviour
     public float fireRate = 2f;
     public float detectionRange = 500f;
 
+    [Header("Ses Ayarları")]
+    public AudioClip explosionClip;   // Patlama sesi (Inspector’dan atayacaksın)
+
     private float fireCooldown;
     private Transform target;
     private bool isFiring = false;
 
-    // Bu iki metot TriggerTest tarafından çağrılıyor — bunların PUBLIC ve doğru imzada olması şart.
     public void StartFiringAt(Transform newTarget)
     {
         if (newTarget == null) return;
@@ -61,21 +63,16 @@ public class AirDefenseSystem : MonoBehaviour
         Debug.Log("AirDefenseSystem: Missile fired at " + (target != null ? target.name : "null"));
     }
 
-    // Bu triggerlar opsiyonel — TriggerTest zaten Start/Stop çağırıyorsa gerek yok.
-    private void OnTriggerStay(Collider other)
+    // --- YENİ EKLENEN KISIM ---
+    public void DestroySystem()
     {
-        if (other.CompareTag("Player"))
+        if (explosionClip != null)
         {
-            // otomatik başlatmak istersen burayı aç
-            // StartFiringAt(other.transform);
+            // Ses doğrudan oynatılır
+            AudioSource.PlayClipAtPoint(explosionClip, transform.position);
+            Debug.Log("AirDefenseSystem: Patlama sesi çaldı.");
         }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            // StopFiring();
-        }
+        Destroy(gameObject);
     }
 }

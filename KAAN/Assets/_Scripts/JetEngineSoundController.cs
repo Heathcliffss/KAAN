@@ -23,6 +23,10 @@ public class JetEngineSoundController : MonoBehaviour
     public AudioClip hitSound;
     public float gunSoundVolume = 1f;
 
+    [Header("Patlama Sesleri")]
+    public AudioClip explosionSound;
+    public float explosionVolume = 1f;
+
     private AirplaneController airplaneController;
     private float thrust;
     private float windFadeTimer = 0f;
@@ -37,7 +41,6 @@ public class JetEngineSoundController : MonoBehaviour
             return;
         }
 
-        // Ses ayarları
         idleSound.playOnAwake = runningSound.playOnAwake = windSound.playOnAwake = false;
         idleSound.loop = runningSound.loop = windSound.loop = true;
 
@@ -56,15 +59,12 @@ public class JetEngineSoundController : MonoBehaviour
 
         thrust = Mathf.Clamp01(airplaneController.GetThrustPercent());
 
-        // Idle sesi
         float idleTarget = Mathf.Lerp(0.1f, idleMaxVolume, 1f - thrust);
         idleSound.volume = Mathf.MoveTowards(idleSound.volume, idleTarget, Time.deltaTime * 2f);
 
-        // Running sesi
         float runningTarget = Mathf.Lerp(0.05f, runningMaxVolume, thrust);
         runningSound.volume = Mathf.MoveTowards(runningSound.volume, runningTarget, Time.deltaTime * 2f);
 
-        // Wind sesi
         windFadeTimer += Time.deltaTime;
         float fadeMultiplier = Mathf.Clamp01(windFadeTimer / windFadeDuration);
 
@@ -73,7 +73,7 @@ public class JetEngineSoundController : MonoBehaviour
         windSound.volume = Mathf.MoveTowards(windSound.volume, windTargetVolume, Time.deltaTime * 3f);
     }
 
-    // 🎯 Silah sesleri için metodlar
+    // 🎯 Silah sesleri
     public void PlayFireSound(Vector3 pos)
     {
         if (fireSound != null)
@@ -90,5 +90,12 @@ public class JetEngineSoundController : MonoBehaviour
     {
         if (hitSound != null)
             AudioSource.PlayClipAtPoint(hitSound, pos, gunSoundVolume);
+    }
+
+    // 🎯 Patlama sesi
+    public void PlayExplosionSound(Vector3 pos)
+    {
+        if (explosionSound != null)
+            AudioSource.PlayClipAtPoint(explosionSound, pos, explosionVolume);
     }
 }
