@@ -176,6 +176,11 @@ public class EnemyChaseAI : MonoBehaviour
         if (deathSound != null)
             audioSource.PlayOneShot(deathSound);
 
+        // === YENİ: skor bildirimi ===
+        GameManager.Instance?.OnEnemyAircraftEliminated();
+
         Destroy(gameObject, 5f);
     }
+
+
 }

@@ -3,8 +3,25 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering;
 
+// Eğer TextMeshPro kullanıyorsan:
+using TMPro;
+// Eğer eski UI Text kullanıyorsan: using UnityEngine.UI;
+
 public class GameManager : MonoBehaviour
 {
+    // =========[ YENİ: Singleton + Skor ]=========
+    public static GameManager Instance { get; private set; }
+
+    [Header("Skor")]
+    public int score = 0;
+
+    // TextMeshPro kullanıyorsan:
+    public TMP_Text scoreText;
+    // Eski UI Text kullanıyorsan yukarıdaki satırı silip bunu aktif et:
+    // public Text scoreText;
+
+    // ============================================
+
     public bool L1 = false;
     public bool l3 = false;
 
@@ -28,19 +45,34 @@ public class GameManager : MonoBehaviour
 
     bool RightShoulderPressed = false;
 
-    // 📌 Yeni eklenen Volume referansları
+    // 📌 Volume referansları
     public Volume cockpitVolume;
     public Volume outsideVolume;
 
+    // =========[ YENİ: Singleton Kurulumu ]=========
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        // İstersen sahneler arası kalsın:
+        // DontDestroyOnLoad(gameObject);
+    }
+    // =============================================
 
     void Start()
     {
         Cam2UI.SetActive(false);
         QualitySettings.vSyncCount = 1;
 
-        // Başlangıçta kokpit volume açık, dış volume kapalı
         cockpitVolume.gameObject.SetActive(true);
         outsideVolume.gameObject.SetActive(false);
+
+        // =========[ YENİ: UI ilk yazdırma ]=========
+        UpdateScoreUI();
     }
 
     void Update()
@@ -80,7 +112,6 @@ public class GameManager : MonoBehaviour
             Cam3.SetActive(false);
             Cam2UI.SetActive(true);
 
-            // 📌 Volume switch
             cockpitVolume.gameObject.SetActive(false);
             outsideVolume.gameObject.SetActive(true);
         }
@@ -92,7 +123,6 @@ public class GameManager : MonoBehaviour
             Cam3.SetActive(false);
             Cam2UI.SetActive(false);
 
-            // 📌 Volume switch
             cockpitVolume.gameObject.SetActive(true);
             outsideVolume.gameObject.SetActive(false);
         }
@@ -111,7 +141,6 @@ public class GameManager : MonoBehaviour
                 RightShoulderPressed = true;
             }
             else { RightShoulderPressed = false; }
-            ;
         }
 
         Rigidbody rb2 = Plane.GetComponent<Rigidbody>();
@@ -135,4 +164,38 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    // =========[ YENİ: Skor API ]=========
+    public void AddScore(int amount)
+    {
+        score += amount;
+        UpdateScoreUI();
+        // Gerekirse burada ses/animasyon/feedback tetikle
+    }
+
+    public void OnEnemyAircraftEliminated()
+    {
+        AddScore(10); // hava hedefi +10
+        Debug.Log("[GameManager] Enemy aircraft destroyed. +10  | Total: " + score);
+    }
+
+    public void OnHSSEliminated()
+    {
+        AddScore(20); // HSS +20
+        Debug.Log("[GameManager] HSS destroyed. +20 | Total: " + score);
+    }
+
+    private void UpdateScoreUI()
+    {
+        if (scoreText != null)
+        {
+            scoreText.text = "PUAN: " + score;
+        }
+        else
+        {
+            // UI atamayı unuttuysan logla:
+            // Debug.LogWarning("GameManager: scoreText atanmadı. (UI’ya yazılamadı)");
+        }
+    }
+    // =====================================
 }

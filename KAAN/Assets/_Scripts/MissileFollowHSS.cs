@@ -11,6 +11,9 @@ public class MissileFollowHSS : MonoBehaviour
     public AudioSource missileIdleSound;   // Uçuş sesi
     public AudioSource explosionSound;     // Patlama sesi
 
+    [Header("Yaşam Süresi")]
+    public float lifetime = 4f; // Füze ömrü (saniye)
+
     private Transform target;
     private Rigidbody targetRb;
 
@@ -22,6 +25,9 @@ public class MissileFollowHSS : MonoBehaviour
             missileIdleSound.loop = true;
             missileIdleSound.Play();
         }
+
+        // 4 saniye sonra otomatik yok et
+        Destroy(gameObject, lifetime);
     }
 
     public void SetTarget(Transform target)

@@ -125,8 +125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b119a9c1191e5504781352421aecf0ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseExtraSpeed: 50
-  rotateSpeed: 5
+  baseExtraSpeed: 40
+  rotateSpeed: 2
   explosionEffect: {fileID: 0}
   missileIdleSound: {fileID: 0}
   explosionSound: {fileID: 6824509236601027414}

@@ -64,15 +64,24 @@ public class AirDefenseSystem : MonoBehaviour
     }
 
     // --- YENİ EKLENEN KISIM ---
+    // --- YENİ EKLENEN KISIM ---
+    private bool isDestroyed = false;
+
     public void DestroySystem()
     {
+        if (isDestroyed) return; // tek tetikleme güvenliği
+        isDestroyed = true;
+
         if (explosionClip != null)
         {
-            // Ses doğrudan oynatılır
             AudioSource.PlayClipAtPoint(explosionClip, transform.position);
             Debug.Log("AirDefenseSystem: Patlama sesi çaldı.");
         }
 
+        // === YENİ: skor bildirimi ===
+        GameManager.Instance?.OnHSSEliminated();
+
         Destroy(gameObject);
     }
+
 }
