@@ -9728,7 +9728,7 @@ MonoBehaviour:
   minimapPanel: {fileID: 1738368614}
   minimapCircle: {fileID: 1452325098}
   enemyBlipPrefab: {fileID: 786238397910689118, guid: 7bd04897792fd024ba3daea78ff9a971, type: 3}
-  radarRange: 175
+  radarRange: 2000
 --- !u!4 &743954309
 Transform:
   m_ObjectHideFlags: 0
@@ -14618,7 +14618,7 @@ RectTransform:
   m_GameObject: {fileID: 1452325097}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 75, y: 75, z: 75}
+  m_LocalScale: {x: 384.32397, y: 384.32397, z: 384.32397}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1738368614}
@@ -16378,7 +16378,7 @@ RectTransform:
   m_GameObject: {fileID: 1738368613}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.24153143, y: 0.24153143, z: 0.24153143}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1452325098}
