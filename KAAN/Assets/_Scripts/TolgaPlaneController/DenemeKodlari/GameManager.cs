@@ -3,24 +3,21 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering;
 
-// Eğer TextMeshPro kullanıyorsan:
+
 using TMPro;
-// Eğer eski UI Text kullanıyorsan: using UnityEngine.UI;
+
 
 public class GameManager : MonoBehaviour
 {
-    // =========[ YENİ: Singleton + Skor ]=========
+  
     public static GameManager Instance { get; private set; }
 
     [Header("Skor")]
     public int score = 0;
 
-    // TextMeshPro kullanıyorsan:
+    
     public TMP_Text scoreText;
-    // Eski UI Text kullanıyorsan yukarıdaki satırı silip bunu aktif et:
-    // public Text scoreText;
-
-    // ============================================
+   
 
     public bool L1 = false;
     public bool l3 = false;
@@ -45,11 +42,11 @@ public class GameManager : MonoBehaviour
 
     bool RightShoulderPressed = false;
 
-    // 📌 Volume referansları
+   
     public Volume cockpitVolume;
     public Volume outsideVolume;
 
-    // =========[ YENİ: Singleton Kurulumu ]=========
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -58,10 +55,9 @@ public class GameManager : MonoBehaviour
             return;
         }
         Instance = this;
-        // İstersen sahneler arası kalsın:
-        // DontDestroyOnLoad(gameObject);
+       
     }
-    // =============================================
+   
 
     void Start()
     {
@@ -71,7 +67,7 @@ public class GameManager : MonoBehaviour
         cockpitVolume.gameObject.SetActive(true);
         outsideVolume.gameObject.SetActive(false);
 
-        // =========[ YENİ: UI ilk yazdırma ]=========
+       
         UpdateScoreUI();
     }
 
@@ -136,7 +132,7 @@ public class GameManager : MonoBehaviour
 
         if (Gamepad.current != null)
         {
-            if (Gamepad.current.rightShoulder.wasPressedThisFrame)
+            if (Gamepad.current.buttonWest.wasPressedThisFrame)
             {
                 RightShoulderPressed = true;
             }

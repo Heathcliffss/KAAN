@@ -202,7 +202,7 @@ Material:
     - _DstBlend: 10
     - _DstBlend2: 10
     - _EmissiveColorMode: 1
-    - _EmissiveExposureWeight: 0.675
+    - _EmissiveExposureWeight: 0.772
     - _EmissiveIntensity: 8.66
     - _EmissiveIntensityUnit: 0
     - _EnableBlendModePreserveSpecularLighting: 1
@@ -287,12 +287,12 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 0.64238226, g: 0.22169799, b: 1, a: 0.043137256}
+    - _Color: {r: 0.7924528, g: 0.48615813, b: 0.13082942, a: 0.23529412}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissiveColor: {r: 0.43845585, g: 0.08720482, b: 1.3676426, a: 8.66}
-    - _EmissiveColorLDR: {r: 0.24938446, g: 0.10030257, b: 0.43396223, a: 0.007843138}
+    - _EmissiveColor: {r: 3.1969566, g: 0.24165963, b: 0.1435874, a: 8.66}
+    - _EmissiveColorLDR: {r: 0.6415094, g: 0.18247713, b: 0.13616946, a: 0.007843138}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
@@ -301,6 +301,6 @@ Material:
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
-    - _UnlitColor: {r: 0.64238226, g: 0.22169802, b: 1, a: 0.043137256}
+    - _UnlitColor: {r: 0.7924528, g: 0.48615816, b: 0.13082945, a: 0.23529412}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

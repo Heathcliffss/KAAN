@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(JetEngineSoundController))]
 public class AircraftGun : MonoBehaviour
@@ -15,6 +16,8 @@ public class AircraftGun : MonoBehaviour
     private float nextFireTime = 0f;
     private int currentAmmo;
     private bool isReloading = false;
+
+    bool PressedFireButton = false;
 
     // Sesleri buradan çalacağız
     private JetEngineSoundController soundHub;
@@ -35,7 +38,16 @@ public class AircraftGun : MonoBehaviour
     {
         if (isReloading) return;
 
-        if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
+        if (Gamepad.current != null)
+        {
+            if (Gamepad.current.rightShoulder.wasPressedThisFrame)
+            {
+                PressedFireButton = true;
+            }
+            else { PressedFireButton = false; }
+        }
+
+        if (Input.GetMouseButton(0) && Time.time >= nextFireTime || PressedFireButton && Time.time >= nextFireTime)
         {
             Fire();
             nextFireTime = Time.time + fireRate;

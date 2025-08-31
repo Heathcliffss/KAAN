@@ -28,11 +28,11 @@ public class CamNoise : MonoBehaviour
 
         if(!onGround || speed < 0.1f)
         {
-            frequency = Mathf.Lerp(1f, 40f, speed / 300f);
+            frequency = Mathf.Lerp(1f, 100f, speed / 300f);
         }
         else
         {
-            frequency = Mathf.Lerp(1f, 60f, speed / 80f);
+            frequency = Mathf.Lerp(1f, 180f, speed / 40f);
 
         }
         perlin.FrequencyGain = frequency;

@@ -11,7 +11,7 @@ public class AirplaneController : MonoBehaviour
     [SerializeField] float rollControlSensitivity = 0.2f;
     [SerializeField] float pitchControlSensitivity = 0.2f;
     [SerializeField] float yawControlSensitivity = 0.2f;
-    [SerializeField] float YawAssist = 1000f;
+    [SerializeField] float YawAssist = 300f;
 
     [Range(-1, 1)] public float Pitch;
     [Range(-1, 1)] public float Yaw;
@@ -32,7 +32,10 @@ public class AirplaneController : MonoBehaviour
     private float lastVibrateTime;
     private const float VIBRATE_COOLDOWN = 0.1f;
 
-    // 🔥 Patlama prefab’ı
+    public float cooldownTime = 2f;
+    private float lastBoostTime = -999f;
+
+   
     [SerializeField] private GameObject explosionPrefab;
 
     private void Start()
@@ -50,15 +53,16 @@ public class AirplaneController : MonoBehaviour
         if (Gamepad.current != null) pankey2 = Gamepad.current.leftStick.y.ReadValue();
         else pankey2 = Input.GetAxis("Vertical");
 
-        float flap2 = 0f;
-        if (Gamepad.current != null) flap2 = Gamepad.current.rightStick.y.ReadValue();
+        //float flap2 = 0f;
+        // if (Gamepad.current != null) flap2 = Gamepad.current.rightStick.y.ReadValue();
 
-        float newflap2 = Mathf.Clamp(flap2 * -1f, 0f, 1f);
+        //float newflap2 = Mathf.Clamp(flap2 * -1f, 0f, 1f);
 
         if (transform.position.y < 300)
         {
-            if (rb.linearVelocity.magnitude > 45) rb.linearVelocity = rb.linearVelocity.normalized * 45f;
+            if (rb.linearVelocity.magnitude > 55) rb.linearVelocity = rb.linearVelocity.normalized * 55f;
         }
+       
 
         Roll = Input.GetAxis("Horizontal");
         Yaw = -yawKey2;
@@ -86,15 +90,37 @@ public class AirplaneController : MonoBehaviour
             IsSpace = !IsSpace;
         }
 
+        if (Gamepad.current != null)
+        {
+            bool l3 = Gamepad.current.leftStickButton.isPressed;
+
+
+            if (l3 && Time.time >= lastBoostTime + cooldownTime && !onGround)
+            {
+                Boost();
+            }
+
+            void Boost()
+            {
+                //rb.AddForce(transform.forward * 50000f, ForceMode.Impulse);
+                rb.linearVelocity = rb.linearVelocity * 1.3f;
+                lastBoostTime = Time.time;
+                Invoke("BoostEndTime", 5f);
+                Debug.Log("boosttt");
+            }
+        }
+
+        float SpeedDisplay = ((int)rb.linearVelocity.magnitude) * 2f;
+
         HandleGamepadVibration();
-        Flap = newflap2;
+        //Flap = newflap2;
 
         if (Input.GetKeyDown(KeyCode.B) || Input.GetButtonDown("BButton"))
             brakesTorque = brakesTorque > 0 ? 0 : 100f;
 
         if (displayText != null)
         {
-            displayText.text = "V: " + ((int)rb.linearVelocity.magnitude).ToString("D3") + " m/s\n";
+            displayText.text = "V: " + ((int)SpeedDisplay).ToString("D3") + " m/s\n";
             displayText.text += "A: " + ((int)transform.position.y).ToString("D4") + " m\n";
             displayText.text += "T: " + (int)(thrustPercent * 100) + "%\n";
             displayText.text += brakesTorque > 0 ? "B: ON" : "B: OFF";
