@@ -127,13 +127,15 @@ public class AircraftGun : MonoBehaviour
     {
         public JetEngineSoundController soundHub; // vurma sesini buradan çalacağız
         public float lifeTime = 5f;
+        public int Damage = 1;
+        public EnemyChaseAI enemyChaseAI;
 
         void Start()
         {
             Destroy(gameObject, lifeTime);
         }
 
-        void OnCollisionEnter(Collision collision)
+     /*   void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.CompareTag("Enemy"))
             {
@@ -141,12 +143,13 @@ public class AircraftGun : MonoBehaviour
                 if (Camera.main != null)
                     soundHub?.PlayHitSound(Camera.main.transform.position);
 
+
                 var enemy = collision.gameObject.GetComponent<EnemyChaseAI>();
                 if (enemy != null)
-                    enemy.TakeDamage(1);
+                    enemy.TakeDamage(Damage);
             }
 
             Destroy(gameObject);
         }
-    }
+ */   }
 }

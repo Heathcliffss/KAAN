@@ -39,6 +39,9 @@ public class EnemyChaseAI : MonoBehaviour
 
     private Vector3 chaseOffset;
 
+    public DusmanUcakKanat DusmanUcakKanatsol;
+    public DusmanUcakKanat DusmanUcakKanatsag;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -50,6 +53,15 @@ public class EnemyChaseAI : MonoBehaviour
     void Update()
     {
         if (isDead) return;
+
+        if (DusmanUcakKanatsol.solKanat == 0)
+        {
+            rb.AddTorque(Vector3.forward * 2f, ForceMode.Impulse);
+        }
+        if (DusmanUcakKanatsag.sagKanat == 0)
+        {
+            rb.AddTorque(-Vector3.forward * 2f, ForceMode.Impulse);
+        }
 
         // hedef noktayı seç → eğer atanmışsa targetPoint, yoksa normal player
         Transform targetTransform = playerTargetPoint != null ? playerTargetPoint : player;
