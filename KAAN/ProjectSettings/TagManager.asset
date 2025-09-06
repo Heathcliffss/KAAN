@@ -12,6 +12,7 @@ TagManager:
   - PlayerBullet
   - HSS
   - EnemyBullet
+  - Missile
   layers:
   - Default
   - TransparentFX

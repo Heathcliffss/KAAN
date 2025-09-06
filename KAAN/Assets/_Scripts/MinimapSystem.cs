@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
@@ -13,43 +13,53 @@ public class MinimapSystem : MonoBehaviour
     [Header("World Settings")]
     public float radarRange = 500f;
 
-    private List<Transform> enemies = new List<Transform>();
+    private List<Transform> targets = new List<Transform>();
 
     void Start()
     {
-        // Etiketi "Enemy" olan t?m d??manlar? bul
-        GameObject[] enemyObjs = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject obj in enemyObjs)
+        // MinimapTarget component'i olan tüm objeleri bul
+        MinimapTargets[] targetObjs = FindObjectsOfType<MinimapTargets>();
+        foreach (MinimapTargets t in targetObjs)
         {
-            enemies.Add(obj.transform);
+            targets.Add(t.transform);
         }
     }
 
     void Update()
     {
-        // ?nce eski blip'leri temizle
+        // Eski blipleri temizle
         foreach (Transform child in minimapCircle)
         {
             Destroy(child.gameObject);
         }
 
-
-
-        foreach (Transform enemy in new List<Transform>(enemies))
+        foreach (Transform target in new List<Transform>(targets))
         {
-            if (enemy == null) // yok edilmi? mi?
+            // 1️⃣ Obje sahnede yok mu?
+            if (target == null)
             {
-                enemies.Remove(enemy);
+                targets.Remove(target);
                 continue;
             }
 
-            Vector3 offset = enemy.position - player.position;
+            // 2️⃣ MinimapTarget component'i çıkarılmış mı?
+            if (target.GetComponent<MinimapTargets>() == null)
+            {
+                targets.Remove(target);
+                continue;
+            }
+
+            // Oyuncuya olan fark
+            Vector3 offset = target.position - player.position;
 
             if (offset.magnitude > radarRange)
                 continue;
 
-            float scaledX = Mathf.Clamp(offset.x / radarRange, -1f, 1f);
-            float scaledZ = Mathf.Clamp(offset.z / radarRange, -1f, 1f);
+            // Oyuncunun yönüne göre döndür
+            Vector3 rotatedOffset = Quaternion.Euler(0, -player.eulerAngles.y, 0) * offset;
+
+            float scaledX = Mathf.Clamp(rotatedOffset.x / radarRange, -1f, 1f);
+            float scaledZ = Mathf.Clamp(rotatedOffset.z / radarRange, -1f, 1f);
 
             Vector2 minimapPos = new Vector2(scaledX, scaledZ) * (minimapCircle.rect.width / 2f);
 
@@ -57,6 +67,5 @@ public class MinimapSystem : MonoBehaviour
             RectTransform blipRect = blip.GetComponent<RectTransform>();
             blipRect.anchoredPosition = minimapPos;
         }
-
     }
 }

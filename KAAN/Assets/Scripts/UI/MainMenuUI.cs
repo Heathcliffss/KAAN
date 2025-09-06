@@ -6,7 +6,14 @@ using UnityEngine.UI;
 public class MainMenuUI : MonoBehaviour
 {
     public TMP_InputField nameInput;
+    public string playerName;
 
+    
+
+    private void Start()
+    {
+        
+    }
     public void OnStartGame()
     {
         string playerName = nameInput.text;
@@ -14,7 +21,9 @@ public class MainMenuUI : MonoBehaviour
         if (string.IsNullOrWhiteSpace(playerName))
             playerName = "Ýsimsiz";
 
+
         PlayerPrefs.SetString("CurrentPlayerName", playerName);
-        SceneManager.LoadScene("Cem"); 
+        NameAndScore.playerNameStatic = playerName;
+        SceneManager.LoadScene("BetaScene"); 
     }
 }

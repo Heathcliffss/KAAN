@@ -16,6 +16,8 @@ public class AircraftPart : MonoBehaviour
     private int enemyBulletHitCount = 0; // Mermi sayacı
     private bool detached = false;
 
+    
+
     /// Füze hasarı
     public void TakeDamage()
     {
@@ -57,9 +59,12 @@ public class AircraftPart : MonoBehaviour
         if (detached) return;
         detached = true;
 
+
         // Sahnede hazır olan particle objelerini sadece aktif et ve çalıştır
         ActivateEffect(alev1);
         ActivateEffect(alev2);
+
+        
 
         // Ana objeyi kapat
         gameObject.SetActive(false);

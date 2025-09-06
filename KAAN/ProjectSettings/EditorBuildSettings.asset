@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/MainMenu.unity
+    guid: 2f92710be0a280b47a38ae6bfdb17b3f
+  - enabled: 1
+    path: Assets/BetaScene.unity
+    guid: c5d92411978619048afc9e92a87e1a8e
+  - enabled: 0
     path: Assets/Tolga.unity
     guid: 7b4c6f164b29148ca93eee6485cda9ee
   - enabled: 0

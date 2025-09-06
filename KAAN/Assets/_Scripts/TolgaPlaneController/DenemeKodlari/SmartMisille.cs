@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Tarodev;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SmartMisille : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class SmartMisille : MonoBehaviour
     [SerializeField] private GameObject _explosionPrefab;
 
     [SerializeField] private float searchRadius = 30f;
-    [SerializeField] private string enemyTag = "HSS";
+    [SerializeField] private string enemyTag = "Enemy";
     private Transform _currentTarget;
 
     [Header("MOVEMENT")]
@@ -32,16 +33,23 @@ public class SmartMisille : MonoBehaviour
     private bool _canStart = false;
     private GameManager Gm;
 
+    public AudioSource MissileGo;
+
+    
+
     private void Start()
     {
         Gm = FindObjectOfType<GameManager>();
         StartCoroutine(bombbuffer(buffertime));
         StartCoroutine(BombLife(BombLifeTime));
+
+        MissileGo = GetComponent<AudioSource>();
     }
 
     private IEnumerator bombbuffer(float buffertime)
     {
         yield return new WaitForSeconds(buffertime);
+        MissileGo.Play();
         _canStart = true;
     }
 
@@ -135,17 +143,19 @@ public class SmartMisille : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter(Collision collision)
+     void OnTriggerEnter(Collider other)
     {
-        // Hedefte IExplode varsa patlat
-        if (collision.transform.TryGetComponent<IExplode>(out var ex)) ex.Explode();
+        if (other.CompareTag("Enemy"))
+        {
+            Debug.Log("Bombacapildi");
+            var enemy = other.GetComponent<EnemyChaseAI>();
+            if (enemy != null)
+                enemy.Die();
 
-        // Patlama efekti
-        if (_explosionPrefab)
-            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-
-        // Füze yok olsun
-        Destroy(gameObject);
+            Gm.ExplosionSound();
+            //Destroy(other.gameObject);
+           // Destroy(gameObject);
+        }
     }
 
     private void OnDrawGizmos()
@@ -155,4 +165,6 @@ public class SmartMisille : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawLine(_standardPrediction, _deviatedPrediction);
     }
+
+
 }

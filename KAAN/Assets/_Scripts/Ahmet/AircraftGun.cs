@@ -19,6 +19,11 @@ public class AircraftGun : MonoBehaviour
 
     bool PressedFireButton = false;
 
+    public GameManager gameManager;
+    public Transform L3FirePosition;
+    private Transform FirePosition;
+
+
     // Sesleri buradan çalacağız
     private JetEngineSoundController soundHub;
 
@@ -78,9 +83,15 @@ public class AircraftGun : MonoBehaviour
         }
 
         // Mermiyi oluştur
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        if (!gameManager.l3)
+        { FirePosition = firePoint; }
+        else {  FirePosition = L3FirePosition; }
+            
+            
+            GameObject bullet = Instantiate(bulletPrefab, FirePosition.position, Quaternion.identity);
+        
 
-        // Rigidbody ayarları
+        
         var rb = bullet.GetComponent<Rigidbody>();
         if (rb == null) rb = bullet.AddComponent<Rigidbody>();
         rb.useGravity = false;
@@ -135,21 +146,22 @@ public class AircraftGun : MonoBehaviour
             Destroy(gameObject, lifeTime);
         }
 
-     /*   void OnCollisionEnter(Collision collision)
+        void OnTriggerEnter(Collider other)
         {
-            if (collision.gameObject.CompareTag("Enemy"))
+            if (other.CompareTag("Enemy"))
             {
-                // 🔊 Vurma sesi oyuncuda (kamera konumunda) çalsın
                 if (Camera.main != null)
                     soundHub?.PlayHitSound(Camera.main.transform.position);
 
-
-                var enemy = collision.gameObject.GetComponent<EnemyChaseAI>();
+                
+                var enemy = other.GetComponent<EnemyChaseAI>();
                 if (enemy != null)
+                {
                     enemy.TakeDamage(Damage);
-            }
+                }
 
-            Destroy(gameObject);
+                Destroy(gameObject);
+            }
         }
- */   }
+    }
 }

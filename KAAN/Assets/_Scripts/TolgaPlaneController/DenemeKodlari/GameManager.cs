@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     public Transform BombRotation;
     public GameObject Plane;
     public float atishizi;
+    public float bombCooldown = 2f;
+    private float lastBombTime = -999f;
 
     public Transform Enemy;
 
@@ -46,7 +48,15 @@ public class GameManager : MonoBehaviour
     public Volume cockpitVolume;
     public Volume outsideVolume;
 
-    
+    public AudioClip Explosion;
+    private AudioSource audioSource;
+
+    public float Health;
+
+
+
+
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -69,6 +79,10 @@ public class GameManager : MonoBehaviour
 
        
         UpdateScoreUI();
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Update()
@@ -149,7 +163,9 @@ public class GameManager : MonoBehaviour
 
         planeSpeed = Plane.GetComponent<Rigidbody>().linearVelocity;
 
-        if (Input.GetKeyDown(KeyCode.V) & egim < 0.2 & !IsGround || RightShoulderPressed & egim < 0.2 & !IsGround)
+        bool dropInput = (Input.GetKeyDown(KeyCode.V) || RightShoulderPressed);
+
+        if (dropInput && egim < 0.2f && !IsGround && Time.time >= lastBombTime + bombCooldown)
         {
             GameObject instantiatedBomb = Instantiate(Bomb, BombLocation.position, BombRotation.rotation);
 
@@ -158,6 +174,8 @@ public class GameManager : MonoBehaviour
             {
                 rb.linearVelocity = Plane.GetComponent<Rigidbody>().linearVelocity;
             }
+
+            lastBombTime = Time.time; // cooldown resetle
         }
     }
 
@@ -194,4 +212,12 @@ public class GameManager : MonoBehaviour
         }
     }
     // =====================================
+
+    public void ExplosionSound()
+    {
+        if (Explosion != null)
+        {
+            audioSource.PlayOneShot(Explosion);
+        }
+    }
 }

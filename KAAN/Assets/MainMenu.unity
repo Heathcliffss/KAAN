@@ -451,6 +451,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 347122166}
   m_CullTransparentMesh: 1
+--- !u!1 &459141875
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 459141877}
+  - component: {fileID: 459141876}
+  m_Layer: 0
+  m_Name: NameAndScore
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &459141876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459141875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2884efef05bf36241b78df4bc0ee56da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 0
+  mainMenu: {fileID: 2057308242}
+--- !u!4 &459141877
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459141875}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1402.3099, y: -1274.8962, z: 2168.6304}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &546965458
 GameObject:
   m_ObjectHideFlags: 0
@@ -1410,7 +1456,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7.821682, y: 0}
+  m_AnchoredPosition: {x: 7.8220143, y: 0}
   m_SizeDelta: {x: -200, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1289466227
@@ -2266,8 +2312,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1680017671}
   m_HandleRect: {fileID: 1680017670}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 0.9999866
+  m_Value: 0
+  m_Size: 0.99980676
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2468,6 +2514,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameInput: {fileID: 14905163}
+  playerName: 
 --- !u!4 &2057308243
 Transform:
   m_ObjectHideFlags: 0
@@ -2492,3 +2539,4 @@ SceneRoots:
   - {fileID: 145575941}
   - {fileID: 606299157}
   - {fileID: 2057308243}
+  - {fileID: 459141877}

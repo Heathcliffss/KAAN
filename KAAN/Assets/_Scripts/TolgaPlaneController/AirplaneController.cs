@@ -19,6 +19,10 @@ public class AirplaneController : MonoBehaviour
     [Range(0, 1)] public float Flap;
     [SerializeField] Text displayText = null;
 
+    public GameObject KaanExplode;
+    public GameObject KaanMesh;
+    public GameObject EngineParticles;
+
     public float thrustPercent;
     float brakesTorque;
 
@@ -42,6 +46,8 @@ public class AirplaneController : MonoBehaviour
     {
         aircraftPhysics = GetComponent<AircraftPhysics>();
         rb = GetComponent<Rigidbody>();
+        KaanExplode.SetActive(false);
+        KaanMesh.SetActive(true);
     }
 
     private void Update()
@@ -90,25 +96,7 @@ public class AirplaneController : MonoBehaviour
             IsSpace = !IsSpace;
         }
 
-        if (Gamepad.current != null)
-        {
-            bool l3 = Gamepad.current.leftStickButton.isPressed;
-
-
-            if (l3 && Time.time >= lastBoostTime + cooldownTime && !onGround)
-            {
-                Boost();
-            }
-
-            void Boost()
-            {
-                //rb.AddForce(transform.forward * 50000f, ForceMode.Impulse);
-                rb.linearVelocity = rb.linearVelocity * 1.3f;
-                lastBoostTime = Time.time;
-                Invoke("BoostEndTime", 5f);
-                Debug.Log("boosttt");
-            }
-        }
+       
 
         float SpeedDisplay = ((int)rb.linearVelocity.magnitude) * 2f;
 
@@ -207,12 +195,11 @@ public class AirplaneController : MonoBehaviour
         if (collision.gameObject.CompareTag("GroundLayer"))
         {
             Debug.Log("Uçak yere çarptı!");
-            if (explosionPrefab != null)
-            {
-                Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-            }
-            Destroy(gameObject); // uçağı yok et
-            Time.timeScale = 0f; // oyunu durdur
+            KaanExplode.SetActive(true);
+            KaanMesh.SetActive(false);
+            EngineParticles.SetActive(false);
+            //Destroy(gameObject); // uçağı yok et
+            //Time.timeScale = 0f; // oyunu durdur
         }
     }
 }
